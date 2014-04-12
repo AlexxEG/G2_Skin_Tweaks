@@ -7,7 +7,17 @@
     <string name="information_header">Information!</string>
     <string name="information_text">You have to reboot after changing a setting before it\'ll take effect.\n\nSoft reboot is fine.</string>
     <string name="enable_replace_switch">Enable replacement switch</string>
-    <string name="enable_square_bubble">Enable square bubble for Messenger</string>
-    <string name="square_bubble_ps">P.S. background is a screengrab from the Hangouts app.</string>
+    <string name="enable_square_bubble">Enable square bubble</string>
+    <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
+    <string name="text_body_size">Size of the body</string>
+    <string name="text_date_size">Size of the date</string>
+    <string name="default_body_size">20</string>
+    <string name="default_date_size">20</string>
+    <string name="messenger_customization">Messenger Customization</string>
+    <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>
+    <string name="enable_text_color">Enable custom text color</string>
+    <string name="text_set_text_color">Click to set text color.</string>
+    <string name="enable_sms_text_size">Enable custom text size</string>
+    <string name="set_sms_text_size">Set Text Size</string>
 
 </resources>
