@@ -125,6 +125,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 							XposedBridge.log("Don't run 'turnOnBacklight'");
 
 							param.setResult(null);
+
+							// Flash rear power led for 1 second.
+							RootFunctions.flashRearPowerLed(1000);
 						} else {
 							XposedBridge.log("Run 'turnOnBacklight'");
 						}
