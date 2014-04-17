@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/default_body_size" />
+            android:text="@null" />
     </RelativeLayout>
 
     <SeekBar
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/default_date_size" />
+            android:text="@null" />
     </RelativeLayout>
 
     <SeekBar

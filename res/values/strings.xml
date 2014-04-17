@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">G2 Skin Tweaks</string>
     <string name="action_reset_default">Reset to default</string>
-    <string name="information_header">Information!</string>
-    <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
+    <string name="app_name">G2 Skin Tweaks</string>
+    <string name="body">Body</string>
+    <string name="cancel">Cancel</string>
+    <string name="date">Date</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
+    <string name="enable_sms_text_size">Enable custom text size</string>
+    <string name="enable_text_color">Enable custom text color</string>
+    <string name="information_header">Information!</string>
+    <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
+    <string name="messenger_customization">Messenger Customization</string>
     <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
+    <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
+    <string name="save">Save</string>
+    <string name="set_sms_text_size">Set font size</string>
     <string name="text_body_size">Size of the body</string>
     <string name="text_date_size">Size of the date</string>
-    <string name="default_body_size">20</string>
-    <string name="default_date_size">20</string>
-    <string name="messenger_customization">Messenger Customization</string>
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors. *</string>
-    <string name="enable_text_color">Enable custom text color</string>
     <string name="text_set_text_color">Click to set text color.</string>
-    <string name="enable_sms_text_size">Enable custom text size</string>
-    <string name="set_sms_text_size">Set Text Size</string>
     <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
-    <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
 
 </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_reset_default">Tilbakestill</string>
+    <string name="app_name">G2 Skin Tweaks</string>
+    <string name="body">Tekst</string>
+    <string name="cancel">Avbryt</string>
+    <string name="date">Dato</string>
+    <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
+    <string name="enable_sms_text_size">Slå på egendefinert tekst størrelse</string>
+    <string name="enable_square_bubble">Slå på firkantet boble *</string>
+    <string name="enable_text_color">Slå på egendefinert tekst farge</string>
+    <string name="information_header">Informasjon!</string>
+    <string name="information_text">Alternativer som slutter med \'*\' må restartes før den tar effekt.\n\n\'Soft reboot\' er nok.</string>
+    <string name="messenger_customization">Meldinger Tilpasning</string>
+    <string name="messenger_customization_ps">P.S. bakgrunnen er fra Hangouts app.</string>
+    <string name="reboot_notice">Du må restarte for at alt skal ta effekt.</string>
+    <string name="save">Lagre</string>
+    <string name="set_sms_text_size">Sett tekst størrelse</string>
+    <string name="text_body_size">Størrelsen på tekst</string>
+    <string name="text_date_size">Størrelsen på dato</string>
+    <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger. *</string>
+    <string name="text_set_text_color">Trykk her for å sette tekst farge.</string>
+    <string name="turn_on_screen_new_sms">Slå på skjermen når en ny SMS kommer</string>
+
+</resources>
