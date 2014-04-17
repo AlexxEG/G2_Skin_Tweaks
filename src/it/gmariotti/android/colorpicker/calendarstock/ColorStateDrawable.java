@@ -30,9 +30,9 @@ import android.graphics.drawable.LayerDrawable;
  */
 public class ColorStateDrawable extends LayerDrawable {
 
-	private static final float	PRESSED_STATE_MULTIPLIER	= 0.70f;
+	private static final float PRESSED_STATE_MULTIPLIER = 0.70f;
 
-	private int					mColor;
+	private int mColor;
 
 	public ColorStateDrawable(Drawable[] layers, int color) {
 		super(layers);

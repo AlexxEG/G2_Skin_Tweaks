@@ -6,8 +6,8 @@ import de.robv.android.xposed.XSharedPreferences;
 
 public class SettingsHelper {
 
-	private SharedPreferences	preferences;
-	private XSharedPreferences	xPreferences;
+	private SharedPreferences preferences;
+	private XSharedPreferences xPreferences;
 
 	public SettingsHelper() {
 		xPreferences = new XSharedPreferences(Prefs.PACKAGE_NAME, Prefs.NAME);

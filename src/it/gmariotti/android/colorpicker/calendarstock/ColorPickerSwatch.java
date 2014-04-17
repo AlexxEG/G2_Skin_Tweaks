@@ -34,10 +34,10 @@ import android.widget.ImageView;
  */
 @SuppressLint("ViewConstructor")
 public class ColorPickerSwatch extends FrameLayout implements View.OnClickListener {
-	private int						mColor;
-	private ImageView				mSwatchImage;
-	private ImageView				mCheckmarkImage;
-	private OnColorSelectedListener	mOnColorSelectedListener;
+	private int mColor;
+	private ImageView mSwatchImage;
+	private ImageView mCheckmarkImage;
+	private OnColorSelectedListener mOnColorSelectedListener;
 
 	/**
 	 * Interface for a callback when a color square is selected.

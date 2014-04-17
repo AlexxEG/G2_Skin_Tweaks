@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	private PlaceholderFragment	fragment	= null;
+	private PlaceholderFragment fragment = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
 
 	public static class PlaceholderFragment extends Fragment {
 
-		private View			rootView	= null;
-		private SettingsHelper	settings	= null;
+		private View rootView = null;
+		private SettingsHelper settings = null;
 
 		public PlaceholderFragment() {
 		}

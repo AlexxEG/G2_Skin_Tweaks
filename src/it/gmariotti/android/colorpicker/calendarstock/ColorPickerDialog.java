@@ -38,27 +38,27 @@ import android.widget.ProgressBar;
  */
 public class ColorPickerDialog extends DialogFragment implements OnColorSelectedListener {
 
-	public static final int				SIZE_LARGE			= 1;
-	public static final int				SIZE_SMALL			= 2;
+	public static final int SIZE_LARGE = 1;
+	public static final int SIZE_SMALL = 2;
 
-	protected AlertDialog				mAlertDialog;
+	protected AlertDialog mAlertDialog;
 
-	protected static final String		KEY_TITLE_ID		= "title_id";
-	protected static final String		KEY_COLORS			= "colors";
-	protected static final String		KEY_SELECTED_COLOR	= "selected_color";
-	protected static final String		KEY_COLUMNS			= "columns";
-	protected static final String		KEY_SIZE			= "size";
+	protected static final String KEY_TITLE_ID = "title_id";
+	protected static final String KEY_COLORS = "colors";
+	protected static final String KEY_SELECTED_COLOR = "selected_color";
+	protected static final String KEY_COLUMNS = "columns";
+	protected static final String KEY_SIZE = "size";
 
-	protected int						mTitleResId			= R.string.color_picker_default_title;
-	protected int[]						mColors				= null;
-	protected int						mSelectedColor;
-	protected int						mColumns;
-	protected int						mSize;
+	protected int mTitleResId = R.string.color_picker_default_title;
+	protected int[] mColors = null;
+	protected int mSelectedColor;
+	protected int mColumns;
+	protected int mSize;
 
-	private ColorPickerPalette			mPalette;
-	private ProgressBar					mProgress;
+	private ColorPickerPalette mPalette;
+	private ProgressBar mProgress;
 
-	protected OnColorSelectedListener	mListener;
+	protected OnColorSelectedListener mListener;
 
 	public ColorPickerDialog() {
 		// Empty constructor required for dialog fragments.

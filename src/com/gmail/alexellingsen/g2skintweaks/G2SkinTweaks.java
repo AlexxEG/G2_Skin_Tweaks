@@ -2,8 +2,6 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import java.lang.reflect.Field;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
 import android.graphics.Color;
@@ -22,13 +20,13 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
-	private static String			MODULE_PATH				= null;
-	private static boolean			ENABLE_REPLACE_SWITCH	= false;
-	private static boolean			ENABLE_SQUARE_BUBBLE	= false;
-	private static int				SQUARE_COLOR_LEFT		= Color.WHITE;
-	private static int				SQUARE_COLOR_RIGHT		= Color.WHITE;
+	private static String MODULE_PATH = null;
+	private static boolean ENABLE_REPLACE_SWITCH = false;
+	private static boolean ENABLE_SQUARE_BUBBLE = false;
+	private static int SQUARE_COLOR_LEFT = Color.WHITE;
+	private static int SQUARE_COLOR_RIGHT = Color.WHITE;
 
-	private static SettingsHelper	settings;
+	private static SettingsHelper settings;
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {

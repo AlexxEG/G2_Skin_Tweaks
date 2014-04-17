@@ -38,14 +38,14 @@ import android.widget.TableRow;
  */
 public class ColorPickerPalette extends TableLayout {
 
-	public OnColorSelectedListener	mOnColorSelectedListener;
+	public OnColorSelectedListener mOnColorSelectedListener;
 
-	private String					mDescription;
-	private String					mDescriptionSelected;
+	private String mDescription;
+	private String mDescriptionSelected;
 
-	private int						mSwatchLength;
-	private int						mMarginSize;
-	private int						mNumColumns;
+	private int mSwatchLength;
+	private int mMarginSize;
+	private int mNumColumns;
 
 	public ColorPickerPalette(Context context, AttributeSet attrs) {
 		super(context, attrs);
