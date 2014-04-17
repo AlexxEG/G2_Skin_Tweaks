@@ -19,5 +19,6 @@
     <string name="text_set_text_color">Click to set text color.</string>
     <string name="enable_sms_text_size">Enable custom text size</string>
     <string name="set_sms_text_size">Set Text Size</string>
+    <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
 
 </resources>
