@@ -7,38 +7,41 @@ import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
-	private static String				MODULE_PATH				= null;
-	private static boolean				ENABLE_REPLACE_SWITCH	= false;
-	private static boolean				ENABLE_SQUARE_BUBBLE	= false;
-	private static int					SQUARE_COLOR_LEFT		= Color.WHITE;
-	private static int					SQUARE_COLOR_RIGHT		= Color.WHITE;
+	private static String			MODULE_PATH				= null;
+	private static boolean			ENABLE_REPLACE_SWITCH	= false;
+	private static boolean			ENABLE_SQUARE_BUBBLE	= false;
+	private static int				SQUARE_COLOR_LEFT		= Color.WHITE;
+	private static int				SQUARE_COLOR_RIGHT		= Color.WHITE;
 
-	private static XSharedPreferences	settings;
+	private static SettingsHelper	settings;
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
 		MODULE_PATH = startupParam.modulePath;
 
-		initializeSettings();
+		settings = new SettingsHelper();
 
-		ENABLE_REPLACE_SWITCH = settings.getBoolean(MainActivity.PREF_ENABLE_REPLACE_SWICTH, ENABLE_REPLACE_SWITCH);
-		ENABLE_SQUARE_BUBBLE = settings.getBoolean(MainActivity.PREF_ENABLE_SQUARE_BUBBLE, ENABLE_SQUARE_BUBBLE);
-		SQUARE_COLOR_LEFT = settings.getInt(MainActivity.PREF_SQUARE_COLOR_LEFT, Color.WHITE);
-		SQUARE_COLOR_RIGHT = settings.getInt(MainActivity.PREF_SQUARE_COLOR_RIGHT, Color.WHITE);
+		ENABLE_REPLACE_SWITCH = settings.getBoolean(Prefs.ENABLE_REPLACE_SWICTH, ENABLE_REPLACE_SWITCH);
+		ENABLE_SQUARE_BUBBLE = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, ENABLE_SQUARE_BUBBLE);
+		SQUARE_COLOR_LEFT = settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
+		SQUARE_COLOR_RIGHT = settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
 		if (ENABLE_REPLACE_SWITCH) {
 			XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, null);
@@ -121,7 +124,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				new XC_MethodHook() {
 					@Override
 					protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-						if (!getTurnOnScreenOnNewSms()) {
+						boolean turnOnScreenNewSms = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
+
+						if (!turnOnScreenNewSms) {
 							XposedBridge.log("Don't run 'turnOnBacklight'");
 
 							param.setResult(null);
@@ -181,19 +186,28 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 							TextView tvBody = (TextView) objBody;
 							TextView tvDate = (TextView) objDate;
 
-							if (getEnableSmsFontSize()) {
-								tvBody.setTextSize(getSmsBodySize());
-								tvDate.setTextSize(getSmsDateSize());
+							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
-								XposedBridge.log("Body Size: " + getSmsBodySize() + "sp");
-								XposedBridge.log("Date Size: " + getSmsDateSize() + "sp");
+							if (enableSmsFontSize) {
+								int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
+								int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
+
+								tvBody.setTextSize(body);
+								tvDate.setTextSize(date);
+
+								XposedBridge.log("Body Size: " + body + "sp");
+								XposedBridge.log("Date Size: " + date + "sp");
 							}
 
-							if (getEnableSmsTextColor()) {
-								tvBody.setTextColor(getSmsTextColor());
-								tvDate.setTextColor(getSmsTextColor());
+							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
-								XposedBridge.log("Color: " + getSmsTextColor());
+							if (enableSmsTextColor) {
+								int color = settings.getInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
+
+								tvBody.setTextColor(color);
+								tvDate.setTextColor(color);
+
+								XposedBridge.log("Color: " + color);
 							}
 						} catch (NoSuchFieldError e) {
 							XposedBridge.log("'mBodyTextView' not found.");
@@ -206,57 +220,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				});
 
 		XposedBridge.log("Hooked 'bind'");
-	}
-
-	public void initializeSettings() {
-		String packageName = "com.gmail.alexellingsen.g2skintweaks";
-
-		if (settings == null) {
-			settings = new XSharedPreferences(packageName, MainActivity.PREF_NAME);
-			settings.makeWorldReadable();
-		}
-
-		settings.reload();
-	}
-
-	public boolean getEnableSmsFontSize() {
-		initializeSettings();
-
-		boolean b = settings.getBoolean(MainActivity.PREF_ENABLE_MESSENGER_FONT_SIZE, false);
-
-		XposedBridge.log("getEnableSmsFontSize: " + b);
-
-		return settings.getBoolean(MainActivity.PREF_ENABLE_MESSENGER_FONT_SIZE, false);
-	}
-
-	public boolean getEnableSmsTextColor() {
-		initializeSettings();
-
-		return settings.getBoolean(MainActivity.PREF_ENABLE_SMS_TEXT_COLOR, false);
-	}
-
-	public int getSmsBodySize() {
-		initializeSettings();
-
-		return settings.getInt(MainActivity.PREF_SMS_BODY_SIZE, 12);
-	}
-
-	public int getSmsDateSize() {
-		initializeSettings();
-
-		return settings.getInt(MainActivity.PREF_SMS_DATE_SIZE, 12);
-	}
-
-	public int getSmsTextColor() {
-		initializeSettings();
-
-		return settings.getInt(MainActivity.PREF_SMS_TEXT_COLOR, Color.BLACK);
-	}
-
-	public boolean getTurnOnScreenOnNewSms() {
-		initializeSettings();
-
-		return settings.getBoolean(MainActivity.PREF_TURN_ON_SCREEN_NEW_SMS, true);
 	}
 
 }

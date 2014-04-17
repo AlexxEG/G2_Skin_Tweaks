@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
@@ -21,27 +20,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	public static final String	PREF_NAME						= "G2SkinTweaks";
-	public static final String	PREF_ENABLE_MESSENGER_FONT_SIZE	= "enableMessengerFontSize";
-	public static final String	PREF_ENABLE_REPLACE_SWICTH		= "enableReplaceSwitch";
-	public static final String	PREF_ENABLE_SMS_TEXT_COLOR		= "enableSmsTextColor";
-	public static final String	PREF_ENABLE_SQUARE_BUBBLE		= "enableSquareBubble";
-	public static final String	PREF_SMS_BODY_SIZE				= "smsBodySize";
-	public static final String	PREF_SMS_DATE_SIZE				= "smsDateSize";
-	public static final String	PREF_SMS_TEXT_COLOR				= "selectedSmsTextColor";
-	public static final String	PREF_SQUARE_COLOR_LEFT			= "selectedSquareColorLeft";
-	public static final String	PREF_SQUARE_COLOR_RIGHT			= "selectedSquareColorString";
-	public static final String	PREF_TURN_ON_SCREEN_NEW_SMS		= "turnOnScreenOnNewSms";
-
-	private PlaceholderFragment	fragment						= null;
+	private PlaceholderFragment	fragment	= null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,19 +63,18 @@ public class MainActivity extends Activity {
 
 	public static class PlaceholderFragment extends Fragment {
 
-		private View				rootView	= null;
-		private SharedPreferences	preferences	= null;
+		private View			rootView	= null;
+		private SettingsHelper	settings	= null;
 
 		public PlaceholderFragment() {
 		}
 
 		@SuppressLint("WorldReadableFiles")
-		@SuppressWarnings("deprecation")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-			preferences = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_WORLD_READABLE);
+			settings = new SettingsHelper(getActivity());
 
 			setupReplaceSwitch();
 			setupMessengerCustomization();
@@ -122,14 +108,11 @@ public class MainActivity extends Activity {
 			((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
 
 			// Listeners will update most preferences
-			SharedPreferences.Editor editor = preferences.edit();
-
-			editor.putInt(PREF_SQUARE_COLOR_LEFT, Color.WHITE);
-			editor.putInt(PREF_SQUARE_COLOR_RIGHT, Color.WHITE);
-			editor.putInt(PREF_SMS_TEXT_COLOR, Color.BLACK);
-			editor.putInt(PREF_SMS_BODY_SIZE, 18);
-			editor.putInt(PREF_SMS_DATE_SIZE, 18);
-			editor.apply();
+			settings.putInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
+			settings.putInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+			settings.putInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
+			settings.putInt(Prefs.SMS_BODY_SIZE, 18);
+			settings.putInt(Prefs.SMS_DATE_SIZE, 18);
 
 			updateFontSizeButton(18, 18);
 
@@ -138,12 +121,12 @@ public class MainActivity extends Activity {
 		}
 
 		private void setupMessengerFontSize() {
-			boolean ENABLE_MESSENGER_FONT_SIZE = preferences.getBoolean(PREF_ENABLE_MESSENGER_FONT_SIZE, false);
+			boolean ENABLE_MESSENGER_FONT_SIZE = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
 
 			final Button btnMessengerSetFontSize = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
 
-			int body_size = preferences.getInt(PREF_SMS_BODY_SIZE, 18);
-			int date_size = preferences.getInt(PREF_SMS_DATE_SIZE, 18);
+			int body_size = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
+			int date_size = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
 			updateFontSizeButton(body_size, date_size);
 
 			btnMessengerSetFontSize.setOnClickListener(new OnClickListener() {
@@ -157,40 +140,30 @@ public class MainActivity extends Activity {
 			chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					SharedPreferences.Editor editor = preferences.edit();
-
 					btnMessengerSetFontSize.setEnabled(isChecked);
-					editor.putBoolean(PREF_ENABLE_MESSENGER_FONT_SIZE, isChecked);
-
-					// Apply the edits!
-					editor.apply();
+					settings.putBoolean(Prefs.ENABLE_SMS_FONT_SIZE, isChecked);
 				}
 			});
 			chbMessengerFontSize.setChecked(ENABLE_MESSENGER_FONT_SIZE);
 		}
 
 		private void setupReplaceSwitch() {
-			boolean ENABLE_REPLACE_SWITCH = preferences.getBoolean(PREF_ENABLE_REPLACE_SWICTH, false);
+			boolean ENABLE_REPLACE_SWITCH = settings.getBoolean(Prefs.ENABLE_REPLACE_SWICTH, false);
 
 			CheckBox chbReplaceSwitch = (CheckBox) rootView.findViewById(R.id.chb_replace_switch);
 			chbReplaceSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putBoolean(PREF_ENABLE_REPLACE_SWICTH, isChecked);
-
-					// Apply the edits!
-					editor.apply();
+					settings.putBoolean(Prefs.ENABLE_REPLACE_SWICTH, isChecked);
 				}
 			});
 			chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
 		}
 
 		private void setupMessengerCustomization() {
-			boolean ENABLE_SQUARE_BUBBLE = preferences.getBoolean(PREF_ENABLE_SQUARE_BUBBLE, false);
-			boolean ENABLE_SMS_TEXT_COLOR = preferences.getBoolean(PREF_ENABLE_SMS_TEXT_COLOR, false);
+			boolean ENABLE_SQUARE_BUBBLE = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+			boolean ENABLE_SMS_TEXT_COLOR = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
 			final Button btnSquareLeftColor = (Button) rootView.findViewById(R.id.btn_square_left_color);
 			final Button btnSquareRightColor = (Button) rootView.findViewById(R.id.btn_square_right_color);
@@ -211,8 +184,8 @@ public class MainActivity extends Activity {
 
 			btnSquareLeftColor.setEnabled(ENABLE_SQUARE_BUBBLE);
 			btnSquareRightColor.setEnabled(ENABLE_SQUARE_BUBBLE);
-			btnSquareLeftColor.setBackgroundColor(preferences.getInt(PREF_SQUARE_COLOR_LEFT, Color.WHITE));
-			btnSquareRightColor.setBackgroundColor(preferences.getInt(PREF_SQUARE_COLOR_RIGHT, Color.WHITE));
+			btnSquareLeftColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE));
+			btnSquareRightColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE));
 
 			btnSmsTextColor.setOnClickListener(new OnClickListener() {
 				@Override
@@ -220,16 +193,13 @@ public class MainActivity extends Activity {
 					showSmsTextColorPicker(v);
 				}
 			});
-			btnSmsTextColor.setBackgroundColor(preferences.getInt(PREF_SMS_TEXT_COLOR, Color.WHITE));
+			btnSmsTextColor.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR, Color.WHITE));
 
 			CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
 			chbSquareBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putBoolean(PREF_ENABLE_SQUARE_BUBBLE, isChecked);
-					editor.apply();
+					settings.putBoolean(Prefs.ENABLE_SQUARE_BUBBLE, isChecked);
 
 					btnSquareLeftColor.setEnabled(isChecked);
 					btnSquareRightColor.setEnabled(isChecked);
@@ -241,10 +211,7 @@ public class MainActivity extends Activity {
 			chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putBoolean(PREF_ENABLE_SMS_TEXT_COLOR, isChecked);
-					editor.apply();
+					settings.putBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, isChecked);
 
 					btnSmsTextColor.setEnabled(isChecked);
 				}
@@ -253,7 +220,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void setupTurnOnScreenNewSMS() {
-			boolean ENABLE_TURN_ON_SCREEN_NEW_SMS = preferences.getBoolean(PREF_TURN_ON_SCREEN_NEW_SMS, true);
+			boolean ENABLE_TURN_ON_SCREEN_NEW_SMS = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
 
 			final CheckBox chbTurnOnScreenNewSMS = (CheckBox) rootView.findViewById(R.id.chb_turn_on_screen);
 
@@ -261,18 +228,14 @@ public class MainActivity extends Activity {
 			chbTurnOnScreenNewSMS.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putBoolean(PREF_TURN_ON_SCREEN_NEW_SMS, isChecked);
-
-					editor.apply();
+					settings.putBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, isChecked);
 				}
 			});
 		}
 
 		private void showSmsTextColorPicker(final View v) {
 			int[] mColor = colorChoice(getActivity());
-			int mSelectedColor = preferences.getInt(PREF_SMS_TEXT_COLOR, Color.BLACK);
+			int mSelectedColor = settings.getInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -284,10 +247,7 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putInt(PREF_SMS_TEXT_COLOR, color);
-					editor.apply();
+					settings.putInt(Prefs.SMS_TEXT_COLOR, color);
 
 					v.setBackgroundColor(color);
 				}
@@ -298,7 +258,7 @@ public class MainActivity extends Activity {
 
 		private void showLeftSquareColorPicker(final View v) {
 			int[] mColor = colorChoice(getActivity());
-			int mSelectedColor = preferences.getInt(PREF_SQUARE_COLOR_LEFT, Color.WHITE);
+			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -310,11 +270,7 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putInt(PREF_SQUARE_COLOR_LEFT, color);
-
-					editor.apply();
+					settings.putInt(Prefs.SQUARE_COLOR_LEFT, color);
 
 					v.setBackgroundColor(color);
 				}
@@ -325,7 +281,7 @@ public class MainActivity extends Activity {
 
 		private void showRightSquareColorPicker(final View v) {
 			int[] mColor = colorChoice(getActivity());
-			int mSelectedColor = preferences.getInt(PREF_SQUARE_COLOR_RIGHT, Color.WHITE);
+			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -337,11 +293,7 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					SharedPreferences.Editor editor = preferences.edit();
-
-					editor.putInt(PREF_SQUARE_COLOR_RIGHT, color);
-
-					editor.apply();
+					settings.putInt(Prefs.SQUARE_COLOR_RIGHT, color);
 
 					v.setBackgroundColor(color);
 				}
@@ -361,10 +313,10 @@ public class MainActivity extends Activity {
 			final SeekBar sms_body_size = (SeekBar) inflator.findViewById(R.id.sms_body_size);
 			final SeekBar sms_date_size = (SeekBar) inflator.findViewById(R.id.sms_date_size);
 
-			txt_sms_body_size.setText(preferences.getInt(PREF_SMS_BODY_SIZE, 18) + "");
-			txt_sms_date_size.setText(preferences.getInt(PREF_SMS_DATE_SIZE, 18) + "");
-			sms_body_size.setProgress(preferences.getInt(PREF_SMS_BODY_SIZE, 18) - 12);
-			sms_date_size.setProgress(preferences.getInt(PREF_SMS_DATE_SIZE, 18) - 12);
+			txt_sms_body_size.setText(settings.getInt(Prefs.SMS_BODY_SIZE, 18) + "");
+			txt_sms_date_size.setText(settings.getInt(Prefs.SMS_DATE_SIZE, 18) + "");
+			sms_body_size.setProgress(settings.getInt(Prefs.SMS_BODY_SIZE, 18) - 12);
+			sms_date_size.setProgress(settings.getInt(Prefs.SMS_DATE_SIZE, 18) - 12);
 
 			sms_body_size.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -409,15 +361,10 @@ public class MainActivity extends Activity {
 							int spBody = sms_body_size.getProgress() + 12;
 							int spDate = sms_date_size.getProgress() + 12;
 
-							SharedPreferences.Editor editor = preferences.edit();
-
-							editor.putInt(PREF_SMS_BODY_SIZE, spBody);
-							editor.putInt(PREF_SMS_DATE_SIZE, spDate);
+							settings.putInt(Prefs.SMS_BODY_SIZE, spBody);
+							settings.putInt(Prefs.SMS_DATE_SIZE, spDate);
 
 							updateFontSizeButton(spBody, spDate);
-
-							// Apply the edits!
-							editor.apply();
 						}
 					})
 					.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
