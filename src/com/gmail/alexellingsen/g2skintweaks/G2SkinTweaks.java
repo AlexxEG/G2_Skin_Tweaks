@@ -2,14 +2,13 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import java.lang.reflect.Field;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -19,7 +18,6 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
-import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
@@ -90,13 +88,10 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-		String packageName = "com.android.mms";
-
-		if (!lpparam.packageName.equals(packageName))
-			return;
-
-		hookMsgText(lpparam);
-		hookTurnOnBacklight(lpparam);
+		if (lpparam.packageName.equals("com.android.mms")) {
+			hookMsgText(lpparam);
+			hookTurnOnBacklight(lpparam);
+		}
 	}
 
 	private void hookTurnOnBacklight(final LoadPackageParam lpparam) {
@@ -114,8 +109,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			return;
 		}
 
-		XposedBridge.log("Begin hooking 'turnOnBacklight'");
-
 		XposedHelpers.findAndHookMethod(
 				finalClass,
 				"turnOnBacklight",
@@ -127,24 +120,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 						boolean turnOnScreenNewSms = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
 
 						if (!turnOnScreenNewSms) {
-							XposedBridge.log("Don't run 'turnOnBacklight'");
-
 							param.setResult(null);
 
-							// Flash rear power led for 1 second.
+							// To-Do: Make SuperSU detect the call from my app,
+							// not the Messaging app
 							RootFunctions.flashRearPowerLed(1000);
-						} else {
-							XposedBridge.log("Run 'turnOnBacklight'");
 						}
 					}
-
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						XposedBridge.log("'turnOnBacklight' ran...");
-					}
 				});
-
-		XposedBridge.log("Hooked 'turnOnBacklight'");
 	}
 
 	private void hookMsgText(final LoadPackageParam lpparam) {
@@ -159,8 +142,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			return;
 		}
-
-		XposedBridge.log("Begin hooking 'bind'");
 
 		// mBodyTextView seems to be initialized after 'bind' method
 		XposedHelpers.findAndHookMethod(
@@ -177,8 +158,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 						try {
-							XposedBridge.log("Finding TextViews!");
-
 							Field fieldBody = XposedHelpers.findField(finalClass, "mBodyTextView");
 							Field fieldDate = XposedHelpers.findField(finalClass, "mSmallTextView");
 							Object objBody = fieldBody.get(param.thisObject);
@@ -194,9 +173,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 								tvBody.setTextSize(body);
 								tvDate.setTextSize(date);
-
-								XposedBridge.log("Body Size: " + body + "sp");
-								XposedBridge.log("Date Size: " + date + "sp");
 							}
 
 							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
@@ -206,8 +182,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 								tvBody.setTextColor(color);
 								tvDate.setTextColor(color);
-
-								XposedBridge.log("Color: " + color);
 							}
 						} catch (NoSuchFieldError e) {
 							XposedBridge.log("'mBodyTextView' not found.");
@@ -218,8 +192,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 						}
 					}
 				});
-
-		XposedBridge.log("Hooked 'bind'");
 	}
 
 }
