@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -40,13 +41,17 @@ public class MainActivity extends Activity {
 	public static final String	PREF_SQUARE_COLOR_RIGHT			= "selectedSquareColorString";
 	public static final String	PREF_TURN_ON_SCREEN_NEW_SMS		= "turnOnScreenOnNewSms";
 
+	private PlaceholderFragment	fragment						= null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
+			fragment = new PlaceholderFragment();
+
+			getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
 		}
 	}
 
@@ -61,9 +66,8 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 
-		if (id == R.id.action_settings) {
-			return true;
-		} else if (id == R.id.action_about) {
+		if (id == R.id.action_reset_default) {
+			fragment.resetToDefault();
 			return true;
 		}
 
@@ -72,13 +76,8 @@ public class MainActivity extends Activity {
 
 	public static class PlaceholderFragment extends Fragment {
 
-		private CheckBox			chbReplaceSwitch		= null;
-		private CheckBox			chbSquareBubble			= null;
-		private CheckBox			chbSmsTextColor			= null;
-		private CheckBox			chbMessengerFontSize	= null;
-		private Button				btnMessengerSetFontSize	= null;
-
-		private SharedPreferences	preferences				= null;
+		private View				rootView	= null;
+		private SharedPreferences	preferences	= null;
 
 		public PlaceholderFragment() {
 		}
@@ -87,14 +86,14 @@ public class MainActivity extends Activity {
 		@SuppressWarnings("deprecation")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+			rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 			preferences = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_WORLD_READABLE);
 
-			setupReplaceSwitch(rootView);
-			setupMessengerCustomization(rootView);
-			setupMessengerFontSize(rootView);
-			setupTurnOnScreenNewSMS(rootView);
+			setupReplaceSwitch();
+			setupMessengerCustomization();
+			setupMessengerFontSize();
+			setupTurnOnScreenNewSMS();
 
 			return rootView;
 		}
@@ -112,24 +111,50 @@ public class MainActivity extends Activity {
 			return mColorChoices;
 		}
 
-		private void setupMessengerFontSize(View rootView) {
+		public void resetToDefault() {
+			((CheckBox) rootView.findViewById(R.id.chb_replace_switch)).setChecked(false);
+			((CheckBox) rootView.findViewById(R.id.chb_square_bubble)).setChecked(false);
+			((Button) rootView.findViewById(R.id.btn_square_left_color)).setBackgroundColor(Color.WHITE);
+			((Button) rootView.findViewById(R.id.btn_square_right_color)).setBackgroundColor(Color.WHITE);
+			((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
+			((Button) rootView.findViewById(R.id.btn_sms_text_color)).setBackgroundColor(Color.BLACK);
+			((CheckBox) rootView.findViewById(R.id.chb_messenger_font_size)).setChecked(false);
+			((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
+
+			// Listeners will update most preferences
+			SharedPreferences.Editor editor = preferences.edit();
+
+			editor.putInt(PREF_SQUARE_COLOR_LEFT, Color.WHITE);
+			editor.putInt(PREF_SQUARE_COLOR_RIGHT, Color.WHITE);
+			editor.putInt(PREF_SMS_TEXT_COLOR, Color.BLACK);
+			editor.putInt(PREF_SMS_BODY_SIZE, 18);
+			editor.putInt(PREF_SMS_DATE_SIZE, 18);
+			editor.apply();
+
+			updateFontSizeButton(18, 18);
+
+			String text = getString(R.string.reboot_notice);
+			Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
+		}
+
+		private void setupMessengerFontSize() {
 			boolean ENABLE_MESSENGER_FONT_SIZE = preferences.getBoolean(PREF_ENABLE_MESSENGER_FONT_SIZE, false);
 
-			this.btnMessengerSetFontSize = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
+			final Button btnMessengerSetFontSize = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
 
 			int body_size = preferences.getInt(PREF_SMS_BODY_SIZE, 18);
 			int date_size = preferences.getInt(PREF_SMS_DATE_SIZE, 18);
 			updateFontSizeButton(body_size, date_size);
 
-			this.btnMessengerSetFontSize.setOnClickListener(new OnClickListener() {
+			btnMessengerSetFontSize.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					showMessengerFontSizePicker();
 				}
 			});
 
-			this.chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_messenger_font_size);
-			this.chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_messenger_font_size);
+			chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					SharedPreferences.Editor editor = preferences.edit();
@@ -141,14 +166,14 @@ public class MainActivity extends Activity {
 					editor.apply();
 				}
 			});
-			this.chbMessengerFontSize.setChecked(ENABLE_MESSENGER_FONT_SIZE);
+			chbMessengerFontSize.setChecked(ENABLE_MESSENGER_FONT_SIZE);
 		}
 
-		private void setupReplaceSwitch(View rootView) {
+		private void setupReplaceSwitch() {
 			boolean ENABLE_REPLACE_SWITCH = preferences.getBoolean(PREF_ENABLE_REPLACE_SWICTH, false);
 
-			this.chbReplaceSwitch = (CheckBox) rootView.findViewById(R.id.chb_replace_switch);
-			this.chbReplaceSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			CheckBox chbReplaceSwitch = (CheckBox) rootView.findViewById(R.id.chb_replace_switch);
+			chbReplaceSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -160,10 +185,10 @@ public class MainActivity extends Activity {
 					editor.apply();
 				}
 			});
-			this.chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
+			chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
 		}
 
-		private void setupMessengerCustomization(View rootView) {
+		private void setupMessengerCustomization() {
 			boolean ENABLE_SQUARE_BUBBLE = preferences.getBoolean(PREF_ENABLE_SQUARE_BUBBLE, false);
 			boolean ENABLE_SMS_TEXT_COLOR = preferences.getBoolean(PREF_ENABLE_SMS_TEXT_COLOR, false);
 
@@ -197,8 +222,8 @@ public class MainActivity extends Activity {
 			});
 			btnSmsTextColor.setBackgroundColor(preferences.getInt(PREF_SMS_TEXT_COLOR, Color.WHITE));
 
-			this.chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
-			this.chbSquareBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
+			chbSquareBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					SharedPreferences.Editor editor = preferences.edit();
@@ -210,10 +235,10 @@ public class MainActivity extends Activity {
 					btnSquareRightColor.setEnabled(isChecked);
 				}
 			});
-			this.chbSquareBubble.setChecked(ENABLE_SQUARE_BUBBLE);
+			chbSquareBubble.setChecked(ENABLE_SQUARE_BUBBLE);
 
-			this.chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
-			this.chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
+			chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					SharedPreferences.Editor editor = preferences.edit();
@@ -224,10 +249,10 @@ public class MainActivity extends Activity {
 					btnSmsTextColor.setEnabled(isChecked);
 				}
 			});
-			this.chbSmsTextColor.setChecked(ENABLE_SMS_TEXT_COLOR);
+			chbSmsTextColor.setChecked(ENABLE_SMS_TEXT_COLOR);
 		}
 
-		private void setupTurnOnScreenNewSMS(View rootView) {
+		private void setupTurnOnScreenNewSMS() {
 			boolean ENABLE_TURN_ON_SCREEN_NEW_SMS = preferences.getBoolean(PREF_TURN_ON_SCREEN_NEW_SMS, true);
 
 			final CheckBox chbTurnOnScreenNewSMS = (CheckBox) rootView.findViewById(R.id.chb_turn_on_screen);
@@ -408,8 +433,9 @@ public class MainActivity extends Activity {
 
 		private void updateFontSizeButton(int body, int date) {
 			String text = "Set font size<br/><small>(Body: " + body + "sp, Date: " + date + "sp)</small>";
+			Button button = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
 
-			this.btnMessengerSetFontSize.setText(Html.fromHtml(text));
+			button.setText(Html.fromHtml(text));
 		}
 	}
 
