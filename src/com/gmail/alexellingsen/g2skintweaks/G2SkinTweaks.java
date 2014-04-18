@@ -1,7 +1,5 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
-import java.lang.reflect.Field;
-
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
 import android.graphics.Color;
@@ -156,14 +154,11 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 						try {
-							Field fieldBody = XposedHelpers.findField(finalClass, "mBodyTextView");
-							Field fieldDate = XposedHelpers.findField(finalClass, "mSmallTextView");
-							Object objBody = fieldBody.get(param.thisObject);
-							Object objDate = fieldDate.get(param.thisObject);
-							TextView tvBody = (TextView) objBody;
-							TextView tvDate = (TextView) objDate;
+							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
 							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
 							if (enableSmsFontSize) {
 								int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
@@ -172,8 +167,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 								tvBody.setTextSize(body);
 								tvDate.setTextSize(date);
 							}
-
-							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
 							if (enableSmsTextColor) {
 								int color = settings.getInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
