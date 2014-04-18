@@ -5,6 +5,7 @@ import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.TextView;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -19,10 +20,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
 	private static String MODULE_PATH = null;
-	private static boolean ENABLE_REPLACE_SWITCH = false;
-	private static boolean ENABLE_SQUARE_BUBBLE = false;
-	private static int SQUARE_COLOR_LEFT = Color.WHITE;
-	private static int SQUARE_COLOR_RIGHT = Color.WHITE;
 
 	private static SettingsHelper settings;
 
@@ -32,12 +29,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		settings = new SettingsHelper();
 
-		ENABLE_REPLACE_SWITCH = settings.getBoolean(Prefs.ENABLE_REPLACE_SWICTH, ENABLE_REPLACE_SWITCH);
-		ENABLE_SQUARE_BUBBLE = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, ENABLE_SQUARE_BUBBLE);
-		SQUARE_COLOR_LEFT = settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
-		SQUARE_COLOR_RIGHT = settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+		boolean enableReplaceSwitch = settings.getBoolean(Prefs.ENABLE_REPLACE_SWICTH, false);
 
-		if (ENABLE_REPLACE_SWITCH) {
+		if (enableReplaceSwitch) {
 			XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, null);
 			XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
 			XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
@@ -46,7 +40,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
-		if (ENABLE_SQUARE_BUBBLE) {
+		boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+
+		if (enableSquareBubble) {
 			String packageName = "com.android.mms";
 
 			if (!resparam.packageName.equals(packageName))
@@ -55,30 +51,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 			final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
 			resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
-			resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", new XResources.DrawableLoader() {
-				@Override
-				public Drawable newDrawable(XResources res, int id) throws Throwable {
-					Drawable mDrawable = modRes.getDrawable(R.drawable.balloon_bg_04_left_normal);
-					mDrawable.setColorFilter(new PorterDuffColorFilter(SQUARE_COLOR_LEFT, android.graphics.PorterDuff.Mode.MULTIPLY));
-					return mDrawable;
-				}
-			});
-			resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", new XResources.DrawableLoader() {
-				@Override
-				public Drawable newDrawable(XResources res, int id) throws Throwable {
-					Drawable mDrawable = modRes.getDrawable(R.drawable.balloon_bg_04_right_normal);
-					mDrawable.setColorFilter(new PorterDuffColorFilter(SQUARE_COLOR_RIGHT, android.graphics.PorterDuff.Mode.MULTIPLY));
-					return mDrawable;
-				}
-			});
-			resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", new XResources.DrawableLoader() {
-				@Override
-				public Drawable newDrawable(XResources res, int id) throws Throwable {
-					Drawable mDrawable = modRes.getDrawable(R.drawable.balloon_bg_04_right_normal);
-					mDrawable.setColorFilter(new PorterDuffColorFilter(SQUARE_COLOR_RIGHT, android.graphics.PorterDuff.Mode.MULTIPLY));
-					return mDrawable;
-				}
-			});
+			resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_left_normal));
+			resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
+			resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
 		}
 	}
 
@@ -159,6 +134,26 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+							boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+
+							if (enableSquareBubble) {
+								boolean isIncomingMessage = isIncomingMessage(param);
+								View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+
+								while (parent != null) {
+									if (parent.getBackground() != null) {
+										Drawable d = parent.getBackground();
+
+										int color = isIncomingMessage ?
+												settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE) :
+												settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+
+										d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+									}
+
+									parent = (View) parent.getParent();
+								}
+							}
 
 							if (enableSmsFontSize) {
 								int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
@@ -174,15 +169,22 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 								tvBody.setTextColor(color);
 								tvDate.setTextColor(color);
 							}
-						} catch (NoSuchFieldError e) {
-							XposedBridge.log("'mBodyTextView' not found.");
-						} catch (IllegalArgumentException e) {
-							XposedBridge.log("Can't get value of 'mBodyTextView'.");
 						} catch (Exception e) {
 							XposedBridge.log(e);
 						}
 					}
+
+					private boolean isIncomingMessage(MethodHookParam param) {
+						Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
+
+						Object returnVal = XposedHelpers.callMethod(
+								param.thisObject,
+								"isLeftItem",
+								new Class<?>[] { messageItem.getClass() },
+								messageItem);
+
+						return (Boolean) returnVal;
+					}
 				});
 	}
-
 }

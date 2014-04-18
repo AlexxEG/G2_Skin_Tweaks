@@ -19,7 +19,7 @@
     <string name="set_sms_text_size">Set font size</string>
     <string name="text_body_size">Size of the body</string>
     <string name="text_date_size">Size of the date</string>
-    <string name="text_set_square_color">Click to set incoming &amp; outgoing colors. *</string>
+    <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>
     <string name="text_set_text_color">Click to set text color.</string>
     <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
 

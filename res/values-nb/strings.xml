@@ -19,7 +19,7 @@
     <string name="set_sms_text_size">Sett tekst størrelse</string>
     <string name="text_body_size">Størrelsen på tekst</string>
     <string name="text_date_size">Størrelsen på dato</string>
-    <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger. *</string>
+    <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger.</string>
     <string name="text_set_text_color">Trykk her for å sette tekst farge.</string>
     <string name="turn_on_screen_new_sms">Slå på skjermen når en ny SMS kommer</string>
 
