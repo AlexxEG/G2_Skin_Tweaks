@@ -87,12 +87,12 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 		if (lpparam.packageName.equals("com.android.mms")) {
-			hookMsgText(lpparam);
-			hookTurnOnBacklight(lpparam);
+			hookMessageListItem(lpparam);
+			hookMessagingNotification(lpparam);
 		}
 	}
 
-	private void hookTurnOnBacklight(final LoadPackageParam lpparam) {
+	private void hookMessagingNotification(final LoadPackageParam lpparam) {
 		final Class<?> finalClass;
 
 		try {
@@ -128,7 +128,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 				});
 	}
 
-	private void hookMsgText(final LoadPackageParam lpparam) {
+	private void hookMessageListItem(final LoadPackageParam lpparam) {
 		final Class<?> finalClass;
 
 		try {
