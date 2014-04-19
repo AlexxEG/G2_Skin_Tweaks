@@ -15,7 +15,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		SettingsHelper settings = new SettingsHelper(context);
 
-		boolean shouldFlash = !settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
+		boolean shouldFlash = !settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true) &&
+				settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
 
 		if (shouldFlash) {
 			// Flash rear power led.

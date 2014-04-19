@@ -6,6 +6,7 @@
     <string name="are_you_sure">Er du sikker?</string>
     <string name="body">Tekst</string>
     <string name="cancel">Avbryt</string>
+    <string name="chb_flash_power_led"><![CDATA[Blink strøm LED når SMS kommer<br /><small>* Root nødvending *</small>]]></string>
     <string name="confirm_reset_message">Er du sikker på at du vil tilbakestille?</string>
     <string name="date">Dato</string>
     <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
@@ -18,6 +19,7 @@
     <string name="messenger_customization_ps">P.S. bakgrunnen er fra Hangouts app.</string>
     <string name="no">Nei</string>
     <string name="reboot_notice">Du må restarte for at alt skal ta effekt.</string>
+    <string name="request_root">Be om root</string>
     <string name="save">Lagre</string>
     <string name="set_sms_text_size">Sett tekst størrelse</string>
     <string name="text_body_size">Størrelsen på tekst</string>

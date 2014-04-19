@@ -186,6 +186,12 @@
             android:enabled="false"
             android:text="@string/set_sms_text_size" />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:background="?android:attr/dividerVertical" />
+
         <CheckBox
             android:id="@+id/chb_turn_on_screen"
             android:layout_width="wrap_content"
@@ -193,6 +199,23 @@
             android:layout_marginBottom="6dip"
             android:checked="true"
             android:text="@string/turn_on_screen_new_sms" />
+
+        <CheckBox
+            android:id="@+id/chb_enable_power_led"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:checked="true"
+            android:enabled="false"
+            android:text="@null" />
+
+        <Button
+            android:id="@+id/btn_request_root"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:enabled="false"
+            android:text="@string/request_root" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -53,8 +53,10 @@ public class RootFunctions {
 		Process process = Runtime.getRuntime().exec("su");
 		DataOutputStream os = new DataOutputStream(process.getOutputStream());
 
-		for (String tmpCmd : cmds) {
-			os.writeBytes(tmpCmd + "\n");
+		if (cmds != null) {
+			for (String tmpCmd : cmds) {
+				os.writeBytes(tmpCmd + "\n");
+			}
 		}
 
 		os.writeBytes("exit\n");
@@ -84,6 +86,14 @@ public class RootFunctions {
 		}
 
 		return sb.toString();
+	}
+
+	public static void requestRoot() {
+		try {
+			runCmds(null);
+		} catch (Exception e) {
+			Log.e("myTag", "Error", e);
+		}
 	}
 
 	public static void turnOffRearPowerLed(Context context) {

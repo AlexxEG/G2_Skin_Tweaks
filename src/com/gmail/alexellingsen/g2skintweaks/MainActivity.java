@@ -240,15 +240,39 @@ public class MainActivity extends Activity {
 		}
 
 		private void setupTurnOnScreenNewSMS() {
-			boolean ENABLE_TURN_ON_SCREEN_NEW_SMS = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
+			boolean enableTurnOnScreenNewSms = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
+			boolean enablePowerLed = settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
 
 			final CheckBox chbTurnOnScreenNewSMS = (CheckBox) rootView.findViewById(R.id.chb_turn_on_screen);
+			final CheckBox chbEnablePowerLed = (CheckBox) rootView.findViewById(R.id.chb_enable_power_led);
+			final Button btnRequestRoot = (Button) rootView.findViewById(R.id.btn_request_root);
 
-			chbTurnOnScreenNewSMS.setChecked(ENABLE_TURN_ON_SCREEN_NEW_SMS);
+			chbTurnOnScreenNewSMS.setChecked(enableTurnOnScreenNewSms);
 			chbTurnOnScreenNewSMS.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					settings.putBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, isChecked);
+
+					chbEnablePowerLed.setEnabled(!isChecked);
+					btnRequestRoot.setEnabled(!isChecked);
+				}
+			});
+
+			chbEnablePowerLed.setChecked(enablePowerLed);
+			chbEnablePowerLed.setEnabled(!enableTurnOnScreenNewSms);
+			chbEnablePowerLed.setText(Html.fromHtml(getString(R.string.chb_flash_power_led)));
+			chbEnablePowerLed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					settings.putBoolean(Prefs.ENABLE_POWER_LED, isChecked);
+				}
+			});
+
+			btnRequestRoot.setEnabled(!enableTurnOnScreenNewSms);
+			btnRequestRoot.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					RootFunctions.requestRoot();
 				}
 			});
 		}

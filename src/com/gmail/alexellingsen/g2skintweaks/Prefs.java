@@ -4,6 +4,7 @@ public class Prefs {
 
 	public static final String PACKAGE_NAME = "com.gmail.alexellingsen.g2skintweaks";
 	public static final String NAME = "G2SkinTweaks";
+	public static final String ENABLE_POWER_LED = "enablePowerLed";
 	public static final String ENABLE_REPLACE_SWICTH = "enableReplaceSwitch";
 	public static final String ENABLE_SMS_FONT_SIZE = "enableMessengerFontSize";
 	public static final String ENABLE_SMS_TEXT_COLOR = "enableSmsTextColor";
