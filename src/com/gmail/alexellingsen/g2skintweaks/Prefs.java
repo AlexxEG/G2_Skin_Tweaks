@@ -2,8 +2,12 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 public class Prefs {
 
-	public static final String PACKAGE_NAME = "com.gmail.alexellingsen.g2skintweaks";
 	public static final String NAME = "G2SkinTweaks";
+	public static final String PACKAGE_NAME = "com.gmail.alexellingsen.g2skintweaks";
+
+	// Settings
+	public static final String CACHED_BACKLIGHT1_PATH = "cachedBacklight1Path";
+	public static final String CACHED_BACKLIGHT2_PATH = "cachedBacklight2Path";
 	public static final String ENABLE_POWER_LED = "enablePowerLed";
 	public static final String ENABLE_REPLACE_SWICTH = "enableReplaceSwitch";
 	public static final String ENABLE_SMS_FONT_SIZE = "enableMessengerFontSize";
@@ -16,7 +20,5 @@ public class Prefs {
 	public static final String SQUARE_COLOR_LEFT = "selectedSquareColorLeft";
 	public static final String SQUARE_COLOR_RIGHT = "selectedSquareColorString";
 	public static final String TURN_ON_SCREEN_NEW_SMS = "turnOnScreenOnNewSms";
-	public static final String CACHED_BACKLIGHT1_PATH = "cachedBacklight1Path";
-	public static final String CACHED_BACKLIGHT2_PATH = "cachedBacklight2Path";
 
 }
