@@ -14,5 +14,7 @@ public class Prefs {
 	public static final String SQUARE_COLOR_LEFT = "selectedSquareColorLeft";
 	public static final String SQUARE_COLOR_RIGHT = "selectedSquareColorString";
 	public static final String TURN_ON_SCREEN_NEW_SMS = "turnOnScreenOnNewSms";
+	public static final String CACHED_BACKLIGHT1_PATH = "cachedBacklight1Path";
+	public static final String CACHED_BACKLIGHT2_PATH = "cachedBacklight2Path";
 
 }

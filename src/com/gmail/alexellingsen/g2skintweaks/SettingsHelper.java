@@ -39,6 +39,16 @@ public class SettingsHelper {
 		}
 	}
 
+	public String getString(String key, String defValue) {
+		if (preferences != null) {
+			return preferences.getString(key, defValue);
+		} else {
+			xPreferences.reload();
+
+			return xPreferences.getString(key, defValue);
+		}
+	}
+
 	public boolean putBoolean(String key, boolean value) {
 		if (preferences != null) {
 			return preferences.edit().putBoolean(key, value).commit();
@@ -52,6 +62,14 @@ public class SettingsHelper {
 			return preferences.edit().putInt(key, value).commit();
 		} else {
 			return xPreferences.edit().putInt(key, value).commit();
+		}
+	}
+
+	public boolean putString(String key, String value) {
+		if (preferences != null) {
+			return preferences.edit().putString(key, value).commit();
+		} else {
+			return xPreferences.edit().putString(key, value).commit();
 		}
 	}
 

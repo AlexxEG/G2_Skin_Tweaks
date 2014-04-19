@@ -92,10 +92,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 						if (!turnOnScreenNewSms) {
 							param.setResult(null);
-
-							// To-Do: Make SuperSU detect the call from my app,
-							// not the Messaging app
-							RootFunctions.flashRearPowerLed(1000);
 						}
 					}
 				});
