@@ -123,14 +123,16 @@ public class MainActivity extends Activity {
 			((Button) rootView.findViewById(R.id.btn_square_left_color)).setBackgroundColor(Color.WHITE);
 			((Button) rootView.findViewById(R.id.btn_square_right_color)).setBackgroundColor(Color.WHITE);
 			((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
-			((Button) rootView.findViewById(R.id.btn_sms_text_color)).setBackgroundColor(Color.BLACK);
+			((Button) rootView.findViewById(R.id.btn_sms_text_color_left)).setBackgroundColor(Color.BLACK);
+			((Button) rootView.findViewById(R.id.btn_sms_text_color_right)).setBackgroundColor(Color.BLACK);
 			((CheckBox) rootView.findViewById(R.id.chb_messenger_font_size)).setChecked(false);
 			((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
 
 			// Listeners will update most preferences
 			settings.putInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
 			settings.putInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
-			settings.putInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
+			settings.putInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
+			settings.putInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
 			settings.putInt(Prefs.SMS_BODY_SIZE, 18);
 			settings.putInt(Prefs.SMS_DATE_SIZE, 18);
 
@@ -187,7 +189,8 @@ public class MainActivity extends Activity {
 
 			final Button btnSquareLeftColor = (Button) rootView.findViewById(R.id.btn_square_left_color);
 			final Button btnSquareRightColor = (Button) rootView.findViewById(R.id.btn_square_right_color);
-			final Button btnSmsTextColor = (Button) rootView.findViewById(R.id.btn_sms_text_color);
+			final Button btnSmsTextColorLeft = (Button) rootView.findViewById(R.id.btn_sms_text_color_left);
+			final Button btnSmsTextColorRight = (Button) rootView.findViewById(R.id.btn_sms_text_color_right);
 
 			btnSquareLeftColor.setOnClickListener(new OnClickListener() {
 				@Override
@@ -207,13 +210,21 @@ public class MainActivity extends Activity {
 			btnSquareLeftColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE));
 			btnSquareRightColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE));
 
-			btnSmsTextColor.setOnClickListener(new OnClickListener() {
+			btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					showSmsTextColorPicker(v);
+					showSmsTextColorPicker(v, true);
 				}
 			});
-			btnSmsTextColor.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR, Color.WHITE));
+			btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
+
+			btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					showSmsTextColorPicker(v, false);
+				}
+			});
+			btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
 
 			CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
 			chbSquareBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -233,7 +244,8 @@ public class MainActivity extends Activity {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					settings.putBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, isChecked);
 
-					btnSmsTextColor.setEnabled(isChecked);
+					btnSmsTextColorLeft.setEnabled(isChecked);
+					btnSmsTextColorRight.setEnabled(isChecked);
 				}
 			});
 			chbSmsTextColor.setChecked(ENABLE_SMS_TEXT_COLOR);
@@ -277,9 +289,11 @@ public class MainActivity extends Activity {
 			});
 		}
 
-		private void showSmsTextColorPicker(final View v) {
+		private void showSmsTextColorPicker(final View v, final boolean left) {
 			int[] mColor = colorChoice(getActivity());
-			int mSelectedColor = settings.getInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
+			int mSelectedColor = settings.getInt(left ?
+					Prefs.SMS_TEXT_COLOR_LEFT :
+					Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -291,7 +305,9 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					settings.putInt(Prefs.SMS_TEXT_COLOR, color);
+					settings.putInt(left ?
+							Prefs.SMS_TEXT_COLOR_LEFT :
+							Prefs.SMS_TEXT_COLOR_RIGHT, color);
 
 					v.setBackgroundColor(color);
 				}

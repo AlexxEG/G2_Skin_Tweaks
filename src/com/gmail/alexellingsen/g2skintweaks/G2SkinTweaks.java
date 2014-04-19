@@ -128,12 +128,12 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
 							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
+							boolean isIncomingMessage = isIncomingMessage(param);
 							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 							boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
 							if (enableSquareBubble) {
-								boolean isIncomingMessage = isIncomingMessage(param);
 								View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
 								while (parent != null) {
@@ -160,7 +160,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 							}
 
 							if (enableSmsTextColor) {
-								int color = settings.getInt(Prefs.SMS_TEXT_COLOR, Color.BLACK);
+								int color = settings.getInt(isIncomingMessage ?
+										Prefs.SMS_TEXT_COLOR_LEFT :
+										Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
 
 								tvBody.setTextColor(color);
 								tvDate.setTextColor(color);

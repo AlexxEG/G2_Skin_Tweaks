@@ -11,7 +11,8 @@ public class Prefs {
 	public static final String ENABLE_SQUARE_BUBBLE = "enableSquareBubble";
 	public static final String SMS_BODY_SIZE = "smsBodySize";
 	public static final String SMS_DATE_SIZE = "smsDateSize";
-	public static final String SMS_TEXT_COLOR = "selectedSmsTextColor";
+	public static final String SMS_TEXT_COLOR_LEFT = "smsTextColorLeft";
+	public static final String SMS_TEXT_COLOR_RIGHT = "smsTextColorRight";
 	public static final String SQUARE_COLOR_LEFT = "selectedSquareColorLeft";
 	public static final String SQUARE_COLOR_RIGHT = "selectedSquareColorString";
 	public static final String TURN_ON_SCREEN_NEW_SMS = "turnOnScreenOnNewSms";
