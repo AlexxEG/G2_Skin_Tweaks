@@ -3,8 +3,10 @@
 
     <string name="action_reset_default">Reset to default</string>
     <string name="app_name">G2 Skin Tweaks</string>
+    <string name="are_you_sure">Are you sure?</string>
     <string name="body">Body</string>
     <string name="cancel">Cancel</string>
+    <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
     <string name="date">Date</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
@@ -14,6 +16,7 @@
     <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
     <string name="messenger_customization">Messenger Customization</string>
     <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
+    <string name="no">No</string>
     <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
     <string name="save">Save</string>
     <string name="set_sms_text_size">Set font size</string>
@@ -22,5 +25,6 @@
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>
     <string name="text_set_text_color">Click to set text color.</string>
     <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
+    <string name="yes">Yes</string>
 
 </resources>

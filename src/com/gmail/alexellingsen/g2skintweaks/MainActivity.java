@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 
 		if (id == R.id.action_reset_default) {
-			fragment.resetToDefault();
+			fragment.askResetToDefault();
 			return true;
 		}
 
@@ -95,6 +95,26 @@ public class MainActivity extends Activity {
 				}
 			}
 			return mColorChoices;
+		}
+
+		public void askResetToDefault() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+			builder.setTitle(getString(R.string.are_you_sure));
+			builder.setMessage(getString(R.string.confirm_reset_message));
+			builder.setPositiveButton(getString(R.string.yes), new AlertDialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					resetToDefault();
+				}
+			});
+			builder.setNegativeButton(getString(R.string.no), new AlertDialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// Do nothing
+				}
+			});
+			builder.show();
 		}
 
 		public void resetToDefault() {
