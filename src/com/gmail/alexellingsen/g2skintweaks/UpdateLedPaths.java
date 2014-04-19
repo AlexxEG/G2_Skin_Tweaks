@@ -8,15 +8,22 @@ public class UpdateLedPaths extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// Cache the path to backlights so it wont have to search for it.
-		final Context finalContext = context;
+		SettingsHelper settings = new SettingsHelper(context);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				RootFunctions.updatePowerLedPaths(finalContext);
-			}
-		}).start();
+		boolean shouldCache = !settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true) &&
+				settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
+
+		if (shouldCache) {
+			// Cache the path to backlights so it wont have to search for it.
+			final Context finalContext = context;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					RootFunctions.updatePowerLedPaths(finalContext);
+				}
+			}).start();
+		}
 	}
 
 }
