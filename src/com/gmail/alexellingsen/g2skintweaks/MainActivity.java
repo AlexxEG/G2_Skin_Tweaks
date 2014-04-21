@@ -29,11 +29,14 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	private PlaceholderFragment fragment = null;
+	private static SettingsHelper settings = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		settings = new SettingsHelper(this);
 
 		if (savedInstanceState == null) {
 			fragment = new PlaceholderFragment();
@@ -56,6 +59,10 @@ public class MainActivity extends Activity {
 		if (id == R.id.action_reset_default) {
 			fragment.askResetToDefault();
 			return true;
+		} else if (id == R.id.action_enable_debugging) {
+			item.setChecked(!item.isChecked());
+			settings.putBoolean(Prefs.ENABLE_DEBUGGING, item.isChecked());
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -64,7 +71,6 @@ public class MainActivity extends Activity {
 	public static class PlaceholderFragment extends Fragment {
 
 		private View rootView = null;
-		private SettingsHelper settings = null;
 
 		public PlaceholderFragment() {
 		}
@@ -73,8 +79,6 @@ public class MainActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-			settings = new SettingsHelper(getActivity());
 
 			setupReplaceSwitch();
 			setupMessengerCustomization();

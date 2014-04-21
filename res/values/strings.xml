@@ -9,6 +9,7 @@
     <string name="chb_flash_power_led"><![CDATA[Flash power LED on new message<br /><small>* Root required *</small>]]></string>
     <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
     <string name="date">Date</string>
+    <string name="enable_debugging">Enable Debugging</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
     <string name="enable_sms_text_size">Enable custom text size</string>

@@ -185,4 +185,16 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 					}
 				});
 	}
+
+	private void log(String text) {
+		boolean debug = false;
+
+		if (settings != null) {
+			debug = settings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
+		}
+
+		if (debug) {
+			XposedBridge.log(String.format("G2SkinTweaks: %s", text));
+		}
+	}
 }
