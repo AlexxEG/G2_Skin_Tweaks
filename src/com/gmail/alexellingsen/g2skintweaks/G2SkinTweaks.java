@@ -140,9 +140,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 									if (parent.getBackground() != null) {
 										Drawable d = parent.getBackground();
 
-										int color = isIncomingMessage ?
-												settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE) :
-												settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+										int color = settings.getInt(isIncomingMessage ?
+												Prefs.SQUARE_COLOR_LEFT :
+												Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
 										d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
 									}
