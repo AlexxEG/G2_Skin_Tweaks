@@ -129,7 +129,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
 							boolean isIncomingMessage = isIncomingMessage(param);
-							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
 							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 							boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
