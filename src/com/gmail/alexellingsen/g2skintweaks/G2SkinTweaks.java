@@ -101,7 +101,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		final Class<?> finalClass;
 
 		try {
-			Class<?> findClass = XposedHelpers.findClass("com.android.mms.ui.MessageListItem", lpparam.classLoader);
+			Class<?> findClass = XposedHelpers.findClass(
+					"com.android.mms.ui.MessageListItem", 
+					lpparam.classLoader);
 
 			finalClass = findClass;
 		} catch (ClassNotFoundError e) {
