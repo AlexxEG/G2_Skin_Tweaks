@@ -5,6 +5,7 @@
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="are_you_sure">Er du sikker?</string>
     <string name="body">Tekst</string>
+    <string name="button_set_font_size"><![CDATA[Sett tekst størrelse<br /><small>(Tekst: %1$ssp, Dato: %2$ssp)</small>]]></string>
     <string name="cancel">Avbryt</string>
     <string name="chb_flash_power_led"><![CDATA[Blink strøm LED når SMS kommer<br /><small>* Root nødvending *</small>]]></string>
     <string name="confirm_reset_message">Er du sikker på at du vil tilbakestille?</string>
@@ -21,7 +22,6 @@
     <string name="reboot_notice">Du må restarte for at alt skal ta effekt.</string>
     <string name="request_root">Be om root</string>
     <string name="save">Lagre</string>
-    <string name="set_sms_text_size">Sett tekst størrelse</string>
     <string name="text_body_size">Størrelsen på tekst</string>
     <string name="text_date_size">Størrelsen på dato</string>
     <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger.</string>

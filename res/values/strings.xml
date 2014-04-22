@@ -5,6 +5,7 @@
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="body">Body</string>
+    <string name="button_set_font_size"><![CDATA[Set font size<br /><small>(Body: %1$ssp, Date: %2$ssp)</small>]]></string>
     <string name="cancel">Cancel</string>
     <string name="chb_flash_power_led"><![CDATA[Flash power LED on new message<br /><small>* Root required *</small>]]></string>
     <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
@@ -22,7 +23,6 @@
     <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
     <string name="request_root">Request root</string>
     <string name="save">Save</string>
-    <string name="set_sms_text_size">Set font size</string>
     <string name="text_body_size">Size of the body</string>
     <string name="text_date_size">Size of the date</string>
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>

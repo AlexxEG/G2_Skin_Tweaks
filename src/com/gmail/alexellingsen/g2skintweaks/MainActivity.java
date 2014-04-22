@@ -419,9 +419,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void updateFontSizeButton(int body, int date) {
-			String format = "%s<br/><small>(%s: %ssp, %s: %ssp)</small>";
-			String text = String.format(format, getString(R.string.set_sms_text_size), getString(R.string.body),
-					body, getString(R.string.date), date);
+			String text = getString(R.string.button_set_font_size, body, date);
 			Button button = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
 
 			button.setText(Html.fromHtml(text));
