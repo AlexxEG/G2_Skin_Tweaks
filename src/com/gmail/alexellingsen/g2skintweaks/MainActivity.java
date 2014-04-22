@@ -197,13 +197,13 @@ public class MainActivity extends Activity {
 			btnSquareLeftColor.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					showLeftSquareColorPicker(v);
+					showSquareColorPicker(v, true);
 				}
 			});
 			btnSquareRightColor.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					showRightSquareColorPicker(v);
+					showSquareColorPicker(v, false);
 				}
 			});
 
@@ -318,9 +318,10 @@ public class MainActivity extends Activity {
 			colorCalendar.show(getFragmentManager(), "cal");
 		}
 
-		private void showLeftSquareColorPicker(final View v) {
+		private void showSquareColorPicker(final View v, boolean left) {
 			int[] mColor = getColorChoice(getActivity());
-			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
+			final String key = left ? Prefs.SQUARE_COLOR_LEFT : Prefs.SQUARE_COLOR_RIGHT;
+			int mSelectedColor = settings.getInt(key, Color.WHITE);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -332,30 +333,7 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					settings.putInt(Prefs.SQUARE_COLOR_LEFT, color);
-
-					v.setBackgroundColor(color);
-				}
-			});
-
-			colorCalendar.show(getFragmentManager(), "cal");
-		}
-
-		private void showRightSquareColorPicker(final View v) {
-			int[] mColor = getColorChoice(getActivity());
-			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
-
-			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
-					R.string.color_picker_default_title,
-					mColor,
-					mSelectedColor,
-					4,
-					ColorPickerDialog.SIZE_SMALL);
-
-			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
-				@Override
-				public void onColorSelected(int color) {
-					settings.putInt(Prefs.SQUARE_COLOR_RIGHT, color);
+					settings.putInt(key, color);
 
 					v.setBackgroundColor(color);
 				}
