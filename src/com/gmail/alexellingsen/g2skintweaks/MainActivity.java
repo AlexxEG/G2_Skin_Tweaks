@@ -2,7 +2,6 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorSelectedListener;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
