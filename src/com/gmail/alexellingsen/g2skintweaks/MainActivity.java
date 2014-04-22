@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
 			return rootView;
 		}
 
-		private int[] colorChoice(Context context) {
+		private int[] getColorChoice(Context context) {
 			int[] mColorChoices = null;
 			String[] color_array = context.getResources().getStringArray(R.array.default_color_choice_values);
 
@@ -293,7 +293,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void showSmsTextColorPicker(final View v, final boolean left) {
-			int[] mColor = colorChoice(getActivity());
+			int[] mColor = getColorChoice(getActivity());
 			int mSelectedColor = settings.getInt(left ?
 					Prefs.SMS_TEXT_COLOR_LEFT :
 					Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
@@ -320,7 +320,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void showLeftSquareColorPicker(final View v) {
-			int[] mColor = colorChoice(getActivity());
+			int[] mColor = getColorChoice(getActivity());
 			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
@@ -343,7 +343,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void showRightSquareColorPicker(final View v) {
-			int[] mColor = colorChoice(getActivity());
+			int[] mColor = getColorChoice(getActivity());
 			int mSelectedColor = settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
