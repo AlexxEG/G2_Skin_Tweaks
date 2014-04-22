@@ -291,11 +291,10 @@ public class MainActivity extends Activity {
 			});
 		}
 
-		private void showSmsTextColorPicker(final View v, final boolean left) {
+		private void showSmsTextColorPicker(final View v, boolean left) {
 			int[] mColor = getColorChoice(getActivity());
-			int mSelectedColor = settings.getInt(left ?
-					Prefs.SMS_TEXT_COLOR_LEFT :
-					Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+			final String key = left ? Prefs.SMS_TEXT_COLOR_LEFT : Prefs.SMS_TEXT_COLOR_RIGHT;
+			int mSelectedColor = settings.getInt(key, Color.BLACK);
 
 			ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
 					R.string.color_picker_default_title,
@@ -307,9 +306,7 @@ public class MainActivity extends Activity {
 			colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
 				@Override
 				public void onColorSelected(int color) {
-					settings.putInt(left ?
-							Prefs.SMS_TEXT_COLOR_LEFT :
-							Prefs.SMS_TEXT_COLOR_RIGHT, color);
+					settings.putInt(key, color);
 
 					v.setBackgroundColor(color);
 				}
