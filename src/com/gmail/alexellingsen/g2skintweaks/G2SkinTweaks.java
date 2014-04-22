@@ -33,6 +33,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		if (enableReplaceSwitch) {
 			XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, null);
+
 			XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
 			XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
 		}
@@ -40,20 +41,19 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 	@Override
 	public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
-		boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+		String packageName = "com.android.mms";
 
-		if (enableSquareBubble) {
-			String packageName = "com.android.mms";
+		if (resparam.packageName.equals("com.android.mms")) {
+			boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
-			if (!resparam.packageName.equals(packageName))
-				return;
+			if (enableSquareBubble) {
+				final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
-			final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
-
-			resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
-			resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_left_normal));
-			resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
-			resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
+				resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
+				resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_left_normal));
+				resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
+				resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
+			}
 		}
 	}
 
@@ -102,7 +102,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		try {
 			Class<?> findClass = XposedHelpers.findClass(
-					"com.android.mms.ui.MessageListItem", 
+					"com.android.mms.ui.MessageListItem",
 					lpparam.classLoader);
 
 			finalClass = findClass;
