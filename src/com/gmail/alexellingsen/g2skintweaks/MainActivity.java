@@ -75,7 +75,6 @@ public class MainActivity extends Activity {
 		public PlaceholderFragment() {
 		}
 
-		@SuppressLint("WorldReadableFiles")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			rootView = inflater.inflate(R.layout.fragment_main, container, false);
