@@ -5,12 +5,10 @@
     <string name="advanced">Advanced</string>
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="body">Body</string>
     <string name="button_set_font_size"><![CDATA[Set font size<br /><small>(Body: %1$ssp, Date: %2$ssp)</small>]]></string>
     <string name="cancel">Cancel</string>
     <string name="chb_flash_power_led"><![CDATA[Flash power LED on new message<br /><small>* Root required *</small>]]></string>
     <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
-    <string name="date">Date</string>
     <string name="enable_debugging">Enable Debugging</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
