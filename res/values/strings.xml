@@ -9,8 +9,8 @@
     <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
     <string name="enable_debugging">Enable Debugging</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
+    <string name="enable_sms_smaller_size">Enable smaller text size (Down to 30px)</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
-    <string name="enable_sms_text_size">Enable custom text size</string>
     <string name="enable_text_color">Enable custom text color</string>
     <string name="information_header">Information!</string>
     <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
