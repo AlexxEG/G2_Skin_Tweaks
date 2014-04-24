@@ -1,5 +1,6 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import android.content.res.XModuleResources;
@@ -109,6 +110,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			finalClass = findClass;
 		} catch (ClassNotFoundError e) {
+			log("Didn't find 'MessageListItem' class");
+
 			XposedBridge.log(e);
 
 			return;
@@ -116,28 +119,26 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 		int fails = 0;
 		// Store exceptions, and only print them if both hooks fail
-		ArrayList<Exception> exceptions = new ArrayList<Exception>();
+		ArrayList<Throwable> exceptions = new ArrayList<Throwable>();
 
 		try {
 			hookMessageListItemOther(lpparam, finalClass);
-
 			return; // No need to continue
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fails++;
 			exceptions.add(e);
 		}
 
 		try {
 			hookMessageListItemSprint(lpparam, finalClass);
-
 			return; // No need to continue
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			fails++;
 			exceptions.add(e);
 		}
 
 		if (fails == 2) { // Both failed
-			for (Exception e : exceptions) {
+			for (Throwable e : exceptions) {
 				XposedBridge.log(e);
 			}
 
@@ -146,157 +147,168 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 	}
 
-	private void hookMessageListItemOther(final LoadPackageParam lpparam, Class<?> finalClass) {
-		XposedHelpers.findAndHookMethod(
-				finalClass,
-				"bind",
-				"com.android.mms.ui.MessageListAdapter$AvatarCache",
-				"com.android.mms.ui.MessageItem",
-				"android.widget.ListView",
-				"int",
-				"boolean",
-				"boolean",
+	private void hookMessageListItemOther(final LoadPackageParam lpparam, Class<?> finalClass) throws Throwable {
+		try {
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"bind",
+					"com.android.mms.ui.MessageListAdapter$AvatarCache",
+					"com.android.mms.ui.MessageItem",
+					"android.widget.ListView",
+					"int",
+					"boolean",
+					"boolean",
 
-				new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						try {
-							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							try {
+								TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+								TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
-							boolean isIncomingMessage = isIncomingMessage(param);
-							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
-							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-							boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+								boolean isIncomingMessage = isIncomingMessage(param);
+								boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
+								boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+								boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
-							if (enableSquareBubble) {
-								View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+								if (enableSquareBubble) {
+									View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-								while (parent != null) {
-									if (parent.getBackground() != null) {
-										Drawable d = parent.getBackground();
+									while (parent != null) {
+										if (parent.getBackground() != null) {
+											Drawable d = parent.getBackground();
 
-										int color = settings.getInt(isIncomingMessage ?
-												Prefs.SQUARE_COLOR_LEFT :
-												Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+											int color = settings.getInt(isIncomingMessage ?
+													Prefs.SQUARE_COLOR_LEFT :
+													Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
-										d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+											d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+										}
+
+										parent = (View) parent.getParent();
 									}
-
-									parent = (View) parent.getParent();
 								}
+
+								if (enableSmsFontSize) {
+									int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
+									int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
+
+									tvBody.setTextSize(body);
+									tvDate.setTextSize(date);
+								}
+
+								if (enableSmsTextColor) {
+									int color = settings.getInt(isIncomingMessage ?
+											Prefs.SMS_TEXT_COLOR_LEFT :
+											Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+
+									tvBody.setTextColor(color);
+									tvDate.setTextColor(color);
+								}
+							} catch (Exception e) {
+								XposedBridge.log(e);
 							}
-
-							if (enableSmsFontSize) {
-								int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
-								int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
-
-								tvBody.setTextSize(body);
-								tvDate.setTextSize(date);
-							}
-
-							if (enableSmsTextColor) {
-								int color = settings.getInt(isIncomingMessage ?
-										Prefs.SMS_TEXT_COLOR_LEFT :
-										Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-
-								tvBody.setTextColor(color);
-								tvDate.setTextColor(color);
-							}
-						} catch (Exception e) {
-							XposedBridge.log(e);
 						}
-					}
 
-					private boolean isIncomingMessage(MethodHookParam param) {
-						Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
+						private boolean isIncomingMessage(MethodHookParam param) {
+							Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
 
-						Object returnVal = XposedHelpers.callMethod(
-								param.thisObject,
-								"isLeftItem",
-								new Class<?>[] { messageItem.getClass() },
-								messageItem);
+							Object returnVal = XposedHelpers.callMethod(
+									param.thisObject,
+									"isLeftItem",
+									new Class<?>[] { messageItem.getClass() },
+									messageItem);
 
-						return (Boolean) returnVal;
-					}
-				});
+							return (Boolean) returnVal;
+						}
+					});
+		} catch (NoSuchMethodError e) {
+			throw e;
+		}
 	}
 
-	private void hookMessageListItemSprint(final LoadPackageParam lpparam, Class<?> finalClass) {
-		XposedHelpers.findAndHookMethod(
-				finalClass,
-				"bind",
-				"com.android.mms.ui.MessageListAdapter$AvatarCache",
-				"com.android.mms.ui.MessageItem",
-				"android.widget.ListView",
-				"int",
-				"boolean",
-				"boolean",
-				"java.util.ArrayList",
+	private void hookMessageListItemSprint(final LoadPackageParam lpparam, Class<?> finalClass) throws Throwable {
+		try {
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"bind",
+					"com.android.mms.ui.MessageListAdapter$AvatarCache",
+					"com.android.mms.ui.MessageItem",
+					"android.widget.ListView",
+					"int",
+					"boolean",
+					"boolean",
+					"java.util.ArrayList",
 
-				new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-						try {
-							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							try {
+								TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+								TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
 
-							boolean isIncomingMessage = isIncomingMessage(param);
-							boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
-							boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-							boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+								log(tvBody == null ? "Didn't find body TextView" : "Found body TextView");
+								log(tvBody == null ? "Didn't find date TextView" : "Found date TextView");
 
-							if (enableSquareBubble) {
-								View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+								boolean isIncomingMessage = isIncomingMessage(param);
+								boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
+								boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+								boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
-								while (parent != null) {
-									if (parent.getBackground() != null) {
-										Drawable d = parent.getBackground();
+								if (enableSquareBubble) {
+									View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-										int color = settings.getInt(isIncomingMessage ?
-												Prefs.SQUARE_COLOR_LEFT :
-												Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+									while (parent != null) {
+										if (parent.getBackground() != null) {
+											Drawable d = parent.getBackground();
 
-										d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+											int color = settings.getInt(isIncomingMessage ?
+													Prefs.SQUARE_COLOR_LEFT :
+													Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+
+											d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+										}
+
+										parent = (View) parent.getParent();
 									}
-
-									parent = (View) parent.getParent();
 								}
+
+								if (enableSmsFontSize) {
+									int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
+									int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
+
+									tvBody.setTextSize(body);
+									tvDate.setTextSize(date);
+								}
+
+								if (enableSmsTextColor) {
+									int color = settings.getInt(isIncomingMessage ?
+											Prefs.SMS_TEXT_COLOR_LEFT :
+											Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+
+									tvBody.setTextColor(color);
+									tvDate.setTextColor(color);
+								}
+							} catch (Exception e) {
+								XposedBridge.log(e);
 							}
-
-							if (enableSmsFontSize) {
-								int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
-								int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
-
-								tvBody.setTextSize(body);
-								tvDate.setTextSize(date);
-							}
-
-							if (enableSmsTextColor) {
-								int color = settings.getInt(isIncomingMessage ?
-										Prefs.SMS_TEXT_COLOR_LEFT :
-										Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-
-								tvBody.setTextColor(color);
-								tvDate.setTextColor(color);
-							}
-						} catch (Exception e) {
-							XposedBridge.log(e);
 						}
-					}
 
-					private boolean isIncomingMessage(MethodHookParam param) {
-						Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
+						private boolean isIncomingMessage(MethodHookParam param) {
+							Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
 
-						Object returnVal = XposedHelpers.callMethod(
-								param.thisObject,
-								"isLeftItem",
-								new Class<?>[] { messageItem.getClass() },
-								messageItem);
+							Object returnVal = XposedHelpers.callMethod(
+									param.thisObject,
+									"isLeftItem",
+									new Class<?>[] { messageItem.getClass() },
+									messageItem);
 
-						return (Boolean) returnVal;
-					}
-				});
+							return (Boolean) returnVal;
+						}
+					});
+		} catch (NoSuchMethodError e) {
+			throw e;
+		}
 	}
 
 	private void log(String text) {
