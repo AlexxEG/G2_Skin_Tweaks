@@ -1,6 +1,5 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import android.content.res.XModuleResources;
