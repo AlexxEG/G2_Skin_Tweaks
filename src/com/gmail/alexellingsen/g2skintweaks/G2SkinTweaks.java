@@ -109,8 +109,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 			finalClass = findClass;
 		} catch (ClassNotFoundError e) {
-			log("Didn't find 'MessageListItem' class");
-
 			XposedBridge.log(e);
 
 			return;
@@ -246,9 +244,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 								TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
 								TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
 
-								log(tvBody == null ? "Didn't find body TextView" : "Found body TextView");
-								log(tvBody == null ? "Didn't find date TextView" : "Found date TextView");
-
 								boolean isIncomingMessage = isIncomingMessage(param);
 								boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
 								boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
@@ -310,6 +305,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void log(String text) {
 		boolean debug = false;
 
