@@ -184,20 +184,12 @@
             android:background="?android:attr/dividerVertical" />
 
         <CheckBox
-            android:id="@+id/chb_messenger_font_size"
+            android:id="@+id/chb_smaller_sms_size"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
             android:text="@string/enable_sms_text_size" />
-
-        <Button
-            android:id="@+id/btn_messenger_set_font_size"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:enabled="false"
-            android:text="@null" />
 
         <View
             android:layout_width="fill_parent"

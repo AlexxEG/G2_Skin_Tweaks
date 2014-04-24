@@ -20,9 +20,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -128,7 +125,7 @@ public class MainActivity extends Activity {
 			((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
 			((Button) rootView.findViewById(R.id.btn_sms_text_color_left)).setBackgroundColor(Color.BLACK);
 			((Button) rootView.findViewById(R.id.btn_sms_text_color_right)).setBackgroundColor(Color.BLACK);
-			((CheckBox) rootView.findViewById(R.id.chb_messenger_font_size)).setChecked(false);
+			((CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size)).setChecked(false);
 			((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
 
 			// Listeners will update most preferences
@@ -136,10 +133,6 @@ public class MainActivity extends Activity {
 			settings.putInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 			settings.putInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
 			settings.putInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-			settings.putInt(Prefs.SMS_BODY_SIZE, 18);
-			settings.putInt(Prefs.SMS_DATE_SIZE, 18);
-
-			updateFontSizeButton(18, 18);
 
 			String text = getString(R.string.reboot_notice);
 			Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
@@ -153,30 +146,17 @@ public class MainActivity extends Activity {
 		}
 
 		private void setupMessengerFontSize() {
-			boolean ENABLE_MESSENGER_FONT_SIZE = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
+			boolean enableSmallerSmsSize = settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false);
 
-			final Button btnMessengerSetFontSize = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
+			CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size);
 
-			int body_size = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
-			int date_size = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
-			updateFontSizeButton(body_size, date_size);
-
-			btnMessengerSetFontSize.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					showMessengerFontSizePicker();
-				}
-			});
-
-			CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_messenger_font_size);
 			chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					btnMessengerSetFontSize.setEnabled(isChecked);
-					settings.putBoolean(Prefs.ENABLE_SMS_FONT_SIZE, isChecked);
+					settings.putBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, isChecked);
 				}
 			});
-			chbMessengerFontSize.setChecked(ENABLE_MESSENGER_FONT_SIZE);
+			chbMessengerFontSize.setChecked(enableSmallerSmsSize);
 		}
 
 		private void setupReplaceSwitch() {
@@ -345,89 +325,6 @@ public class MainActivity extends Activity {
 			});
 
 			colorCalendar.show(getFragmentManager(), "cal");
-		}
-
-		private void showMessengerFontSizePicker() {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			LayoutInflater inflater = LayoutInflater.from(getActivity());
-
-			final View inflator = inflater.inflate(R.layout.text_size_picker, null);
-
-			final TextView txt_sms_body_size = (TextView) inflator.findViewById(R.id.txt_sms_body_size);
-			final TextView txt_sms_date_size = (TextView) inflator.findViewById(R.id.txt_sms_date_size);
-			final SeekBar sms_body_size = (SeekBar) inflator.findViewById(R.id.sms_body_size);
-			final SeekBar sms_date_size = (SeekBar) inflator.findViewById(R.id.sms_date_size);
-
-			txt_sms_body_size.setText(settings.getInt(Prefs.SMS_BODY_SIZE, 18) + "");
-			txt_sms_date_size.setText(settings.getInt(Prefs.SMS_DATE_SIZE, 18) + "");
-			sms_body_size.setProgress(settings.getInt(Prefs.SMS_BODY_SIZE, 18) - 12);
-			sms_date_size.setProgress(settings.getInt(Prefs.SMS_DATE_SIZE, 18) - 12);
-
-			sms_body_size.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-				}
-
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					int sp = progress + 12;
-
-					txt_sms_body_size.setText(sp + "");
-				}
-			});
-
-			sms_date_size.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-				}
-
-				@Override
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					int sp = progress + 12;
-
-					txt_sms_date_size.setText(sp + "");
-				}
-			});
-
-			builder.setView(inflator)
-					.setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							int spBody = sms_body_size.getProgress() + 12;
-							int spDate = sms_date_size.getProgress() + 12;
-
-							settings.putInt(Prefs.SMS_BODY_SIZE, spBody);
-							settings.putInt(Prefs.SMS_DATE_SIZE, spDate);
-
-							updateFontSizeButton(spBody, spDate);
-						}
-					})
-					.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					});
-
-			AlertDialog alertDialog = builder.create();
-
-			alertDialog.show();
-		}
-
-		private void updateFontSizeButton(int body, int date) {
-			String text = getString(R.string.button_set_font_size, body, date);
-			Button button = (Button) rootView.findViewById(R.id.btn_messenger_set_font_size);
-
-			button.setText(Html.fromHtml(text));
 		}
 	}
 

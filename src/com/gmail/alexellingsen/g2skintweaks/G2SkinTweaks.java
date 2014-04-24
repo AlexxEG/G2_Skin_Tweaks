@@ -7,6 +7,7 @@ import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
@@ -62,6 +63,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 	@Override
 	public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 		if (lpparam.packageName.equals("com.android.mms")) {
+			setMinFontSize(lpparam);
 			hookMessageListItem(lpparam);
 			hookMessagingNotification(lpparam);
 		}
@@ -164,7 +166,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 								TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
 								boolean isIncomingMessage = isIncomingMessage(param);
-								boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
 								boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 								boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
@@ -184,14 +185,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 										parent = (View) parent.getParent();
 									}
-								}
-
-								if (enableSmsFontSize) {
-									int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
-									int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
-
-									tvBody.setTextSize(body);
-									tvDate.setTextSize(date);
 								}
 
 								if (enableSmsTextColor) {
@@ -217,6 +210,21 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 									messageItem);
 
 							return (Boolean) returnVal;
+						}
+					});
+
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"resizeFonts",
+					"boolean",
+
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
+
+							tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
 						}
 					});
 		} catch (NoSuchMethodError e) {
@@ -245,7 +253,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 								TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
 
 								boolean isIncomingMessage = isIncomingMessage(param);
-								boolean enableSmsFontSize = settings.getBoolean(Prefs.ENABLE_SMS_FONT_SIZE, false);
 								boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 								boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
@@ -265,14 +272,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
 										parent = (View) parent.getParent();
 									}
-								}
-
-								if (enableSmsFontSize) {
-									int body = settings.getInt(Prefs.SMS_BODY_SIZE, 18);
-									int date = settings.getInt(Prefs.SMS_DATE_SIZE, 18);
-
-									tvBody.setTextSize(body);
-									tvDate.setTextSize(date);
 								}
 
 								if (enableSmsTextColor) {
@@ -298,6 +297,128 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 									messageItem);
 
 							return (Boolean) returnVal;
+						}
+					});
+
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"resizeFonts",
+
+					new XC_MethodHook() {
+						@Override
+						protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+							TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+							TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
+
+							tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
+						}
+					});
+		} catch (NoSuchMethodError e) {
+			throw e;
+		}
+	}
+
+	private void setMinFontSize(LoadPackageParam lpparam) {
+		int fails = 0;
+		ArrayList<Throwable> errors = new ArrayList<Throwable>();
+
+		try {
+			setMinFontSizeOther(lpparam);
+			return;
+		} catch (Throwable e) {
+			fails++;
+			errors.add(e);
+		}
+
+		try {
+			setMinFontSizeSprint(lpparam);
+			return;
+		} catch (Throwable e) {
+			fails++;
+			errors.add(e);
+		}
+
+		if (fails == 2) { // Both failed
+			for (Throwable e : errors) {
+				XposedBridge.log(e);
+			}
+
+			XposedBridge.log("G2 Skin Tweaks couldn't find a proper method to hook.");
+			XposedBridge.log("Please let the developer know your device model if you want to help.");
+		}
+	}
+
+	private void setMinFontSizeOther(final LoadPackageParam lpparam) throws Throwable {
+		try {
+			final Class<?> finalClass;
+
+			try {
+				finalClass = XposedHelpers.findClass(
+						"com.android.mms.pinchApi.PinchDetector",
+						lpparam.classLoader);
+			} catch (ClassNotFoundError e) {
+				XposedBridge.log(e);
+				throw e;
+			}
+
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"processActionMove",
+					"android.view.MotionEvent",
+
+					new XC_MethodHook() {
+						@Override
+						protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+							int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
+
+							if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+								if (min != 30) {
+									XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 30);
+								}
+							} else {
+								if (min != 85) {
+									XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 85);
+								}
+							}
+						}
+					});
+		} catch (NoSuchMethodError e) {
+			throw e;
+		}
+	}
+
+	private void setMinFontSizeSprint(final LoadPackageParam lpparam) throws Throwable {
+		try {
+			final Class<?> finalClass;
+
+			try {
+				finalClass = XposedHelpers.findClass(
+						"com.lge.mms.pinchApi.PinchDetector",
+						lpparam.classLoader);
+			} catch (ClassNotFoundError e) {
+				XposedBridge.log(e);
+				throw e;
+			}
+
+			XposedHelpers.findAndHookMethod(
+					finalClass,
+					"processTouchEvent",
+					"android.view.MotionEvent",
+
+					new XC_MethodHook() {
+						@Override
+						protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+							int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
+
+							if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+								if (min != 30) {
+									XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 30);
+								}
+							} else {
+								if (min != 85) {
+									XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 85);
+								}
+							}
 						}
 					});
 		} catch (NoSuchMethodError e) {
