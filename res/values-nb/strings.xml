@@ -2,14 +2,14 @@
 <resources>
 
     <string name="action_reset_default">Tilbakestill</string>
+    <string name="advanced">Avansert</string>
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="are_you_sure">Er du sikker?</string>
-    <string name="body">Tekst</string>
     <string name="button_set_font_size"><![CDATA[Sett tekst størrelse<br /><small>(Tekst: %1$ssp, Dato: %2$ssp)</small>]]></string>
     <string name="cancel">Avbryt</string>
     <string name="chb_flash_power_led"><![CDATA[Blink strøm LED når SMS kommer<br /><small>* Root nødvending *</small>]]></string>
     <string name="confirm_reset_message">Er du sikker på at du vil tilbakestille?</string>
-    <string name="date">Dato</string>
+    <string name="enable_debugging">Aktiver Debugging</string>
     <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
     <string name="enable_sms_text_size">Slå på egendefinert tekst størrelse</string>
     <string name="enable_square_bubble">Slå på firkantet boble *</string>
@@ -19,9 +19,14 @@
     <string name="messenger_customization">Meldinger Tilpasning</string>
     <string name="messenger_customization_ps">P.S. bakgrunnen er fra Hangouts app.</string>
     <string name="no">Nei</string>
+    <string name="pref_power_led_off">Slå av strøm LED</string>
+    <string name="pref_power_led_off_summary">Trykk her hvis strøm LED har satt seg fast.</string>
+    <string name="pref_power_led_time">Strøm LED tid</string>
+    <string name="pref_power_led_time_summary">Tiden i millisekunder strøm LED står på når en ny SMS/MMS kommer.</string>
     <string name="reboot_notice">Du må restarte for at alt skal ta effekt.</string>
     <string name="request_root">Be om root</string>
     <string name="save">Lagre</string>
+    <string name="settings">Innstillinger</string>
     <string name="text_body_size">Størrelsen på tekst</string>
     <string name="text_date_size">Størrelsen på dato</string>
     <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger.</string>
