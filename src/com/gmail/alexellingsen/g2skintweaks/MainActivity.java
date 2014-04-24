@@ -5,7 +5,6 @@ import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorS
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -103,9 +102,9 @@ public class MainActivity extends Activity {
 			builder.show();
 		}
 
-		private int[] getColorChoice(Context context) {
+		private int[] getColorChoice() {
 			int[] mColorChoices = null;
-			String[] color_array = context.getResources().getStringArray(R.array.default_color_choice_values);
+			String[] color_array = getResources().getStringArray(R.array.default_color_choice_values);
 
 			if (color_array != null && color_array.length > 0) {
 				mColorChoices = new int[color_array.length];
@@ -296,7 +295,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void showSmsTextColorPicker(final View v, boolean left) {
-			int[] mColor = getColorChoice(getActivity());
+			int[] mColor = getColorChoice();
 			final String key = left ? Prefs.SMS_TEXT_COLOR_LEFT : Prefs.SMS_TEXT_COLOR_RIGHT;
 			int mSelectedColor = settings.getInt(key, Color.BLACK);
 
@@ -320,7 +319,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void showSquareColorPicker(final View v, boolean left) {
-			int[] mColor = getColorChoice(getActivity());
+			int[] mColor = getColorChoice();
 			final String key = left ? Prefs.SQUARE_COLOR_LEFT : Prefs.SQUARE_COLOR_RIGHT;
 			int mSelectedColor = settings.getInt(key, Color.WHITE);
 
