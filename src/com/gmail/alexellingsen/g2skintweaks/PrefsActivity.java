@@ -56,7 +56,9 @@ public class PrefsActivity extends PreferenceActivity {
 		public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 			if (preference.getKey().equals("btn_turn_off_power_led")) {
 				RootFunctions.turnOffRearPowerLed(getActivity());
-				Toast.makeText(getActivity(), "Turned power LED off", Toast.LENGTH_SHORT).show();
+
+				Toast.makeText(getActivity(), getString(R.string.turned_power_led_off),
+						Toast.LENGTH_SHORT).show();
 			}
 
 			return true;

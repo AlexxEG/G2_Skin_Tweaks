@@ -32,6 +32,7 @@
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>
     <string name="text_set_text_color">Click to set text color.</string>
     <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
+    <string name="turned_power_led_off">Turned power LED off</string>
     <string name="yes">Yes</string>
 
 </resources>
