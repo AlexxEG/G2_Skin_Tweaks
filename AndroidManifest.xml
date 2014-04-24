@@ -27,6 +27,10 @@
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.gmail.alexellingsen.g2skintweaks.PrefsActivity"
+            android:label="@string/settings" >
+        </activity>
 
         <receiver
             android:name=".SmsReceiver"

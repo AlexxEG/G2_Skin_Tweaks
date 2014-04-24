@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
@@ -60,6 +61,10 @@ public class MainActivity extends Activity {
 		} else if (id == R.id.action_enable_debugging) {
 			item.setChecked(!item.isChecked());
 			settings.putBoolean(Prefs.ENABLE_DEBUGGING, item.isChecked());
+			return true;
+		} else if (id == R.id.action_settings) {
+			Intent i = new Intent(getApplicationContext(), PrefsActivity.class);
+			startActivity(i);
 			return true;
 		}
 

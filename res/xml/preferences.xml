@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/advanced" >
+        <com.gmail.alexellingsen.g2skintweaks.EditIntPreference
+            android:defaultValue="1000"
+            android:inputType="number"
+            android:key="pref_power_led_time"
+            android:numeric="integer"
+            android:summary="@string/pref_power_led_time_summary"
+            android:title="@string/pref_power_led_time" />
+
+        <Preference
+            android:key="btn_turn_off_power_led"
+            android:summary="@string/pref_power_led_off_summary"
+            android:title="@string/pref_power_led_off" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

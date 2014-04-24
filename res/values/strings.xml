@@ -2,6 +2,7 @@
 <resources>
 
     <string name="action_reset_default">Reset to default</string>
+    <string name="advanced">Advanced</string>
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="body">Body</string>
@@ -20,9 +21,14 @@
     <string name="messenger_customization">Messenger Customization</string>
     <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
     <string name="no">No</string>
+    <string name="pref_power_led_off">Force power LED off</string>
+    <string name="pref_power_led_off_summary">Use this if the power LED gets stuck in \'ON\' state.</string>
+    <string name="pref_power_led_time">Power LED time</string>
+    <string name="pref_power_led_time_summary">The amount of time in milliseconds the power LED will stay on after new SMS/MMS.</string>
     <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
     <string name="request_root">Request root</string>
     <string name="save">Save</string>
+    <string name="settings">Settings</string>
     <string name="text_body_size">Size of the body</string>
     <string name="text_date_size">Size of the date</string>
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>

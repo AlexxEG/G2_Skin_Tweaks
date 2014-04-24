@@ -12,5 +12,9 @@
         android:showAsAction="never"
         android:title="@string/enable_debugging"
         android:visible="false"/>
+    <item
+        android:id="@+id/action_settings"
+        android:showAsAction="never"
+        android:title="@string/settings"/>
 
 </menu>

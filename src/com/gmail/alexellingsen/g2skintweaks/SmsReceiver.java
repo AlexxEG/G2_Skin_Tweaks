@@ -20,7 +20,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
 		if (shouldFlash) {
 			// Flash rear power led.
-			RootFunctions.flashRearPowerLed(context, 1000);
+			RootFunctions.flashRearPowerLed(context, settings.getInt(Prefs.POWER_LED_TIME, 1000));
 		}
 	}
 

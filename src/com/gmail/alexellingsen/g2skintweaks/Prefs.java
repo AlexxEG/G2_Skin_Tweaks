@@ -14,6 +14,7 @@ public class Prefs {
 	public static final String ENABLE_SMS_FONT_SIZE = "enableMessengerFontSize";
 	public static final String ENABLE_SMS_TEXT_COLOR = "enableSmsTextColor";
 	public static final String ENABLE_SQUARE_BUBBLE = "enableSquareBubble";
+	public static final String POWER_LED_TIME = "pref_power_led_time";
 	public static final String SMS_BODY_SIZE = "smsBodySize";
 	public static final String SMS_DATE_SIZE = "smsDateSize";
 	public static final String SMS_TEXT_COLOR_LEFT = "smsTextColorLeft";
