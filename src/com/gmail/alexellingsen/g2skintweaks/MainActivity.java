@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
 			return rootView;
 		}
 
-		public void askResetToDefault() {
+		private void askResetToDefault() {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 			builder.setTitle(getString(R.string.are_you_sure));
