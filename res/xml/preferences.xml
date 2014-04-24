@@ -4,6 +4,7 @@
     <PreferenceCategory android:title="@string/advanced" >
         <com.gmail.alexellingsen.g2skintweaks.EditIntPreference
             android:defaultValue="1000"
+            android:icon="@null"
             android:inputType="number"
             android:key="pref_power_led_time"
             android:numeric="integer"
@@ -11,6 +12,7 @@
             android:title="@string/pref_power_led_time" />
 
         <Preference
+            android:icon="@null"
             android:key="btn_turn_off_power_led"
             android:summary="@string/pref_power_led_off_summary"
             android:title="@string/pref_power_led_off" />
