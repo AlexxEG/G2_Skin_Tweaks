@@ -78,25 +78,9 @@ public class MainActivity extends Activity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-			setupReplaceSwitch();
-			setupMessengerCustomization();
-			setupMessengerFontSize();
-			setupTurnOnScreenNewSMS();
+			setup();
 
 			return rootView;
-		}
-
-		private int[] getColorChoice(Context context) {
-			int[] mColorChoices = null;
-			String[] color_array = context.getResources().getStringArray(R.array.default_color_choice_values);
-
-			if (color_array != null && color_array.length > 0) {
-				mColorChoices = new int[color_array.length];
-				for (int i = 0; i < color_array.length; i++) {
-					mColorChoices[i] = Color.parseColor(color_array[i]);
-				}
-			}
-			return mColorChoices;
 		}
 
 		public void askResetToDefault() {
@@ -117,6 +101,19 @@ public class MainActivity extends Activity {
 				}
 			});
 			builder.show();
+		}
+
+		private int[] getColorChoice(Context context) {
+			int[] mColorChoices = null;
+			String[] color_array = context.getResources().getStringArray(R.array.default_color_choice_values);
+
+			if (color_array != null && color_array.length > 0) {
+				mColorChoices = new int[color_array.length];
+				for (int i = 0; i < color_array.length; i++) {
+					mColorChoices[i] = Color.parseColor(color_array[i]);
+				}
+			}
+			return mColorChoices;
 		}
 
 		public void resetToDefault() {
@@ -142,6 +139,13 @@ public class MainActivity extends Activity {
 
 			String text = getString(R.string.reboot_notice);
 			Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
+		}
+
+		private void setup() {
+			setupReplaceSwitch();
+			setupMessengerCustomization();
+			setupMessengerFontSize();
+			setupTurnOnScreenNewSMS();
 		}
 
 		private void setupMessengerFontSize() {
