@@ -38,20 +38,16 @@
             android:id="@+id/chb_replace_switch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
             android:text="@string/enable_replace_switch" />
 
         <ImageView
             android:id="@+id/imageview_replace_switch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
             android:contentDescription="@null"
             android:src="@drawable/image_replace_switch" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:background="@android:color/darker_gray" />
 
         <TextView
             style="?android:attr/textAppearanceLarge"
