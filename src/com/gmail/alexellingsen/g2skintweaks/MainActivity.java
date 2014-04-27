@@ -166,7 +166,7 @@ public class MainActivity extends Activity {
             bottom.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showConversationColorPicker(v, false);
+                    showColorPicker(v, Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
                 }
             });
 
@@ -175,7 +175,7 @@ public class MainActivity extends Activity {
             top.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showConversationColorPicker(v, true);
+                    showColorPicker(v, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
                 }
             });
         }
@@ -220,13 +220,13 @@ public class MainActivity extends Activity {
             btnSquareLeftColor.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSquareColorPicker(v, true);
+                    showColorPicker(v, Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
                 }
             });
             btnSquareRightColor.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSquareColorPicker(v, false);
+                    showColorPicker(v, Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
                 }
             });
 
@@ -238,7 +238,7 @@ public class MainActivity extends Activity {
             btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSmsTextColorPicker(v, true);
+                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
                 }
             });
             btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
@@ -246,7 +246,7 @@ public class MainActivity extends Activity {
             btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSmsTextColorPicker(v, false);
+                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
                 }
             });
             btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
@@ -314,10 +314,9 @@ public class MainActivity extends Activity {
             });
         }
 
-        private void showConversationColorPicker(final View v, boolean top) {
+        private void showColorPicker(final View v, final String key, int defaultColor) {
             int[] mColor = getColorChoice();
-            final String key = top ? Prefs.CONVERSATION_COLOR_TOP : Prefs.CONVERSATION_COLOR_BOTTOM;
-            int mSelectedColor = settings.getInt(key, Color.BLACK);
+            int mSelectedColor = settings.getInt(key, defaultColor);
 
             ColorPickerDialog colorPicker = ColorPickerDialog.newInstance(
                     R.string.color_picker_default_title,
@@ -338,53 +337,6 @@ public class MainActivity extends Activity {
             colorPicker.show(getFragmentManager(), "cal");
         }
 
-        private void showSmsTextColorPicker(final View v, boolean left) {
-            int[] mColor = getColorChoice();
-            final String key = left ? Prefs.SMS_TEXT_COLOR_LEFT : Prefs.SMS_TEXT_COLOR_RIGHT;
-            int mSelectedColor = settings.getInt(key, Color.BLACK);
-
-            ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
-                    R.string.color_picker_default_title,
-                    mColor,
-                    mSelectedColor,
-                    4,
-                    ColorPickerDialog.SIZE_SMALL);
-
-            colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
-                @Override
-                public void onColorSelected(int color) {
-                    settings.putInt(key, color);
-
-                    v.setBackgroundColor(color);
-                }
-            });
-
-            colorCalendar.show(getFragmentManager(), "cal");
-        }
-
-        private void showSquareColorPicker(final View v, boolean left) {
-            int[] mColor = getColorChoice();
-            final String key = left ? Prefs.SQUARE_COLOR_LEFT : Prefs.SQUARE_COLOR_RIGHT;
-            int mSelectedColor = settings.getInt(key, Color.WHITE);
-
-            ColorPickerDialog colorCalendar = ColorPickerDialog.newInstance(
-                    R.string.color_picker_default_title,
-                    mColor,
-                    mSelectedColor,
-                    4,
-                    ColorPickerDialog.SIZE_SMALL);
-
-            colorCalendar.setOnColorSelectedListener(new OnColorSelectedListener() {
-                @Override
-                public void onColorSelected(int color) {
-                    settings.putInt(key, color);
-
-                    v.setBackgroundColor(color);
-                }
-            });
-
-            colorCalendar.show(getFragmentManager(), "cal");
-        }
     }
 
 }
