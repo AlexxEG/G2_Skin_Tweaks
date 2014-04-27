@@ -9,13 +9,13 @@
             android:key="pref_power_led_time"
             android:numeric="integer"
             android:summary="@string/pref_power_led_time_summary"
-            android:title="@string/pref_power_led_time" />
+            android:title="@string/pref_power_led_time"/>
 
         <Preference
             android:icon="@null"
             android:key="btn_turn_off_power_led"
             android:summary="@string/pref_power_led_off_summary"
-            android:title="@string/pref_power_led_off" />
+            android:title="@string/pref_power_led_off"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

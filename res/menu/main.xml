@@ -1,20 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.gmail.alexellingsen.g2theming.MainActivity">
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.gmail.alexellingsen.g2theming.MainActivity">
 
     <item
         android:id="@+id/action_reset_default"
         android:showAsAction="never"
-        android:title="@string/action_reset_default" />
+        android:title="@string/action_reset_default"/>
     <item
         android:id="@+id/action_enable_debugging"
         android:checkable="true"
         android:showAsAction="never"
         android:title="@string/enable_debugging"
-        android:visible="false" />
+        android:visible="false"/>
     <item
         android:id="@+id/action_settings"
         android:showAsAction="never"
-        android:title="@string/settings" />
+        android:title="@string/settings"/>
 
 </menu>
