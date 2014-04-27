@@ -8,6 +8,9 @@ public class Prefs {
     // Settings
     public static final String CACHED_BACKLIGHT1_PATH = "cachedBacklight1Path";
     public static final String CACHED_BACKLIGHT2_PATH = "cachedBacklight2Path";
+    public static final String CONVERSATION_COLOR_BOTTOM = "conversationColorBottom";
+    public static final String CONVERSATION_COLOR_TOP = "conversationColorTop";
+    public static final String ENABLE_CONVERSATION_COLOR = "enableConversationColor";
     public static final String ENABLE_DEBUGGING = "enableDebugging";
     public static final String ENABLE_POWER_LED = "enablePowerLed";
     public static final String ENABLE_REPLACE_SWITCH = "enableReplaceSwitch";

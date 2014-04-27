@@ -139,7 +139,45 @@ public class MainActivity extends Activity {
             setupReplaceSwitch();
             setupMessengerCustomization();
             setupMessengerFontSize();
+            setupConversationColor();
             setupTurnOnScreenNewSMS();
+        }
+
+        private void setupConversationColor() {
+            boolean b = settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false);
+
+            final Button top = (Button) rootView.findViewById(R.id.btn_conversation_color_top);
+            final Button bottom = (Button) rootView.findViewById(R.id.btn_conversation_color_bottom);
+            final CheckBox chbConversationColor = (CheckBox) rootView.findViewById(R.id.chb_conversation_color);
+
+            chbConversationColor.setChecked(b);
+            chbConversationColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_CONVERSATION_COLOR, isChecked);
+
+                    top.setEnabled(isChecked);
+                    bottom.setEnabled(isChecked);
+                }
+            });
+
+            bottom.setEnabled(b);
+            bottom.setBackgroundColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
+            bottom.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showConversationColorPicker(v, false);
+                }
+            });
+
+            top.setEnabled(b);
+            top.setBackgroundColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
+            top.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showConversationColorPicker(v, true);
+                }
+            });
         }
 
         private void setupMessengerFontSize() {
@@ -274,6 +312,30 @@ public class MainActivity extends Activity {
                     RootFunctions.requestRoot();
                 }
             });
+        }
+
+        private void showConversationColorPicker(final View v, boolean top) {
+            int[] mColor = getColorChoice();
+            final String key = top ? Prefs.CONVERSATION_COLOR_TOP : Prefs.CONVERSATION_COLOR_BOTTOM;
+            int mSelectedColor = settings.getInt(key, Color.BLACK);
+
+            ColorPickerDialog colorPicker = ColorPickerDialog.newInstance(
+                    R.string.color_picker_default_title,
+                    mColor,
+                    mSelectedColor,
+                    4,
+                    ColorPickerDialog.SIZE_SMALL);
+
+            colorPicker.setOnColorSelectedListener(new OnColorSelectedListener() {
+                @Override
+                public void onColorSelected(int color) {
+                    settings.putInt(key, color);
+
+                    v.setBackgroundColor(color);
+                }
+            });
+
+            colorPicker.show(getFragmentManager(), "cal");
         }
 
         private void showSmsTextColorPicker(final View v, boolean left) {

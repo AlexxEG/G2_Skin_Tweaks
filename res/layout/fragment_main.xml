@@ -1,9 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context="com.gmail.alexellingsen.g2skintweaks.MainActivity$PlaceholderFragment">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:context="com.gmail.alexellingsen.g2skintweaks.MainActivity$PlaceholderFragment">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -19,27 +19,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/information_header" />
+            android:text="@string/information_header"/>
 
         <TextView
             style="?android:attr/textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/information_text" />
+            android:text="@string/information_text"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"/>
 
         <CheckBox
             android:id="@+id/chb_replace_switch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
-            android:text="@string/enable_replace_switch" />
+            android:text="@string/enable_replace_switch"/>
 
         <ImageView
             android:id="@+id/imageview_replace_switch"
@@ -47,31 +47,31 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
             android:contentDescription="@null"
-            android:src="@drawable/image_replace_switch" />
+            android:src="@drawable/image_replace_switch"/>
 
         <TextView
             style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/messenger_customization" />
+            android:text="@string/messenger_customization"/>
 
         <CheckBox
             android:id="@+id/chb_square_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="@string/enable_square_bubble" />
+            android:text="@string/enable_square_bubble"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_set_square_color" />
+            android:text="@string/text_set_square_color"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical" />
+            android:background="?android:attr/dividerVertical"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -83,7 +83,7 @@
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
 
             <Button
                 android:id="@+id/btn_square_left_color"
@@ -91,12 +91,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ffffff" />
+                android:background="#ffffff"/>
 
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
 
             <Button
                 android:id="@+id/btn_square_right_color"
@@ -104,18 +104,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ffffff" />
+                android:background="#ffffff"/>
 
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
         </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical" />
+            android:background="?android:attr/dividerVertical"/>
 
         <CheckBox
             android:id="@+id/chb_sms_text_color"
@@ -123,17 +123,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
-            android:text="@string/enable_text_color" />
+            android:text="@string/enable_text_color"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_set_text_color" />
+            android:text="@string/text_set_text_color"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical" />
+            android:background="?android:attr/dividerVertical"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -145,7 +145,7 @@
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
 
             <Button
                 android:id="@+id/btn_sms_text_color_left"
@@ -153,12 +153,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ffffff" />
+                android:background="#ffffff"/>
 
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
 
             <Button
                 android:id="@+id/btn_sms_text_color_right"
@@ -166,18 +166,80 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ffffff" />
+                android:background="#ffffff"/>
 
             <View
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical" />
+                android:background="?android:attr/dividerVertical"/>
         </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical" />
+            android:background="?android:attr/dividerVertical"/>
+
+        <CheckBox
+            android:id="@+id/chb_conversation_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:text="@string/enable_conversation_color"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_conversation_color"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:background="?android:attr/dividerVertical"/>
+
+            <Button
+                android:id="@+id/btn_conversation_color_top"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#000000"/>
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:background="?android:attr/dividerVertical"/>
+
+            <Button
+                android:id="@+id/btn_conversation_color_bottom"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#000000"/>
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:background="?android:attr/dividerVertical"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/dividerVertical"/>
 
         <CheckBox
             android:id="@+id/chb_smaller_sms_size"
@@ -185,13 +247,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:layout_marginTop="6dp"
-            android:text="@string/enable_sms_smaller_size" />
+            android:text="@string/enable_sms_smaller_size"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
             android:layout_marginBottom="6dip"
-            android:background="?android:attr/dividerVertical" />
+            android:background="?android:attr/dividerVertical"/>
 
         <CheckBox
             android:id="@+id/chb_turn_on_screen"
@@ -199,7 +261,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
             android:checked="true"
-            android:text="@string/turn_on_screen_new_sms" />
+            android:text="@string/turn_on_screen_new_sms"/>
 
         <CheckBox
             android:id="@+id/chb_enable_power_led"
@@ -208,7 +270,7 @@
             android:layout_marginBottom="6dip"
             android:checked="true"
             android:enabled="false"
-            android:text="@null" />
+            android:text="@null"/>
 
         <Button
             android:id="@+id/btn_request_root"
@@ -216,19 +278,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
             android:enabled="false"
-            android:text="@string/request_root" />
+            android:text="@string/request_root"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/messenger_customization_ps" />
+            android:text="@string/messenger_customization_ps"/>
 
         <ImageView
             android:id="@+id/imageview_square_bubble"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            android:src="@drawable/image_square_bubble" />
+            android:src="@drawable/image_square_bubble"/>
     </LinearLayout>
 
 </ScrollView>

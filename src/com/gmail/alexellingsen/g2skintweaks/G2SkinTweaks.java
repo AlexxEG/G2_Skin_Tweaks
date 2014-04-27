@@ -5,6 +5,7 @@ import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -67,15 +68,15 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void hookConversationListItem(final LoadPackageParam lpparam) {
-        final Class<?> finalClass;
         final Class<?> rootClass;
+        final Class<?> subClass;
 
         try {
             rootClass = XposedHelpers.findClass(
                     "com.android.mms.ui.ConversationListItem",
                     lpparam.classLoader);
 
-            finalClass = XposedHelpers.findClass(
+            subClass = XposedHelpers.findClass(
                     "com.android.mms.ui.ConversationListItem$ConversationListItemRight",
                     lpparam.classLoader);
         } catch (ClassNotFoundError e) {
@@ -84,30 +85,80 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
 
         XposedHelpers.findAndHookMethod(
-                finalClass,
+                subClass,
                 "onDrawBottomline",
                 "android.graphics.Canvas",
                 "int",
                 "boolean",
 
                 new XC_MethodHook() {
+                    int originalFontColor = -1;
                     int originalFontSmall = -1;
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                            originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
 
-                        int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
+                            int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
 
-                        XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
+                            XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
+                        }
+
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                            Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
+                            TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
+
+                            originalFontColor = tp.getColor();
+
+                            tp.setColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
+                        }
                     }
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (originalFontSmall != -1) {
-                            XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                            if (originalFontSmall != -1) {
+                                XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
 
-                            originalFontSmall = -1;
+                                originalFontSmall = -1;
+                            }
+                        }
+
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                            if (originalFontColor != 1) {
+                                Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
+                                TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
+
+                                tp.setColor(originalFontColor);
+
+                                originalFontColor = -1;
+                            }
+                        }
+                    }
+                }
+        );
+
+        XposedHelpers.findAndHookMethod(
+                subClass,
+                "onDrawFailedIcon",
+                "android.graphics.Canvas",
+                "int",
+                "boolean",
+                "int",
+                "android.graphics.drawable.Drawable",
+                "int",
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                            // When this method is called, it means it's safe to set the TextPaint color,
+                            // and it should reset itself in the 'setTextPaintPropertyByTheme' method.
+                            Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
+                            TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
+
+                            tp.setColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
                         }
                     }
                 }
