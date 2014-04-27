@@ -60,9 +60,58 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (lpparam.packageName.equals("com.android.mms")) {
             setMinFontSize(lpparam);
+            hookConversationListItem(lpparam);
             hookMessageListItem(lpparam);
             hookMessagingNotification(lpparam);
         }
+    }
+
+    private void hookConversationListItem(final LoadPackageParam lpparam) {
+        final Class<?> finalClass;
+        final Class<?> rootClass;
+
+        try {
+            rootClass = XposedHelpers.findClass(
+                    "com.android.mms.ui.ConversationListItem",
+                    lpparam.classLoader);
+
+            finalClass = XposedHelpers.findClass(
+                    "com.android.mms.ui.ConversationListItem$ConversationListItemRight",
+                    lpparam.classLoader);
+        } catch (ClassNotFoundError e) {
+            XposedBridge.log(e);
+            return;
+        }
+
+        XposedHelpers.findAndHookMethod(
+                finalClass,
+                "onDrawBottomline",
+                "android.graphics.Canvas",
+                "int",
+                "boolean",
+
+                new XC_MethodHook() {
+                    int originalFontSmall = -1;
+
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
+
+                        int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
+
+                        XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
+                    }
+
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (originalFontSmall != -1) {
+                            XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
+
+                            originalFontSmall = -1;
+                        }
+                    }
+                }
+        );
     }
 
     private void hookMessagingNotification(final LoadPackageParam lpparam) {
