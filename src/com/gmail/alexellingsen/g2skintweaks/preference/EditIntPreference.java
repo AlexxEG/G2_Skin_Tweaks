@@ -1,4 +1,4 @@
-package com.gmail.alexellingsen.g2skintweaks;
+package com.gmail.alexellingsen.g2skintweaks.preference;
 
 import android.content.Context;
 import android.preference.EditTextPreference;
