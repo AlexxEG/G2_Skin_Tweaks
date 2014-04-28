@@ -63,13 +63,13 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (Devices.getDevice() == Devices.SPRINT) {
             hookPaintSetColorSprint(lpparam);
-            log("Detected Sprint version. Wrong? Let the developer know, include this: '" + Build.MODEL + "'");
         }
 
         if (lpparam.packageName.equals("com.android.mms")) {
             setMinFontSize(lpparam);
             if (Devices.getDevice() == Devices.SPRINT) {
                 hookConversationListItemSprint(lpparam);
+                log("Detected Sprint version. Wrong? Let the developer know, include this: '" + Build.MODEL + "'");
             } else if (Devices.getDevice() == Devices.OTHER) {
                 hookConversationListItemOther(lpparam);
             }
