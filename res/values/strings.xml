@@ -18,7 +18,7 @@
     <string name="messenger_customization">Messenger Customization</string>
     <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
     <string name="no">No</string>
-    <string name="pref_minimum_zoom">The minimum zoom level for the LG Messenger app. Stock value is 85px.</string>
+    <string name="pref_minimum_zoom">The minimum zoom level for the LG Messenger app. Default value is 85px.</string>
     <string name="pref_minimum_zoom_summary">Minimum zoom level</string>
     <string name="pref_power_led_off">Force power LED off</string>
     <string name="pref_power_led_off_summary">Use this if the power LED gets stuck in \'ON\' state.</string>
