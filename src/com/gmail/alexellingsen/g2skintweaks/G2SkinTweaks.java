@@ -226,65 +226,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) throws Throwable {
-        final Class<?> findClass;
-
-        try {
-            findClass = XposedHelpers.findClass(
-                    "android.graphics.Paint",
-                    lpparam.classLoader);
-        } catch (ClassNotFoundError e) {
-            XposedBridge.log(e);
-            return;
-        }
-
-        /*Has to hook this method since code can't be injected in middle of a method.
-          Sprint's Messenger app draws top & bottom line in same method, unlike international version,
-          therefore normally only allowing one color.*/
-
-        XposedHelpers.findAndHookMethod(
-                findClass,
-                "setColor",
-                "int",
-
-                new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
-                            return;
-                        }
-
-                        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-
-                        for (StackTraceElement element : elements) {
-                            if (!element.getClassName().contains("Conversation")) {
-                                continue;
-                            }
-
-                            if (element.getClassName().equals("com.android.mms.ui.ConversationListItem$ConversationListItemRight")
-                                    && element.getMethodName().equals("onDraw")) {
-                                switch (element.getLineNumber()) {
-                                    case 789: // Top line
-                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
-                                        break;
-                                    case 853: // Bottom line
-                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
-                                        break;
-                                    // These are not used atm.
-                                    /*case 718:
-                                        param.args[0] = Color.RED;
-                                        break;*/
-                                    /*case 939: //
-                                        param.args[0] = Color.BLUE;
-                                        break;*/
-                                }
-                            }
-                        }
-                    }
-                }
-        );
-    }
-
     private void hookMessagingNotification(final LoadPackageParam lpparam) {
         final Class<?> finalClass;
 
@@ -522,6 +463,65 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
 
                         tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
+                    }
+                }
+        );
+    }
+
+    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) throws Throwable {
+        final Class<?> findClass;
+
+        try {
+            findClass = XposedHelpers.findClass(
+                    "android.graphics.Paint",
+                    lpparam.classLoader);
+        } catch (ClassNotFoundError e) {
+            XposedBridge.log(e);
+            return;
+        }
+
+        /*Has to hook this method since code can't be injected in middle of a method.
+          Sprint's Messenger app draws top & bottom line in same method, unlike international version,
+          therefore normally only allowing one color.*/
+
+        XposedHelpers.findAndHookMethod(
+                findClass,
+                "setColor",
+                "int",
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                            return;
+                        }
+
+                        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+
+                        for (StackTraceElement element : elements) {
+                            if (!element.getClassName().contains("Conversation")) {
+                                continue;
+                            }
+
+                            if (element.getClassName().equals("com.android.mms.ui.ConversationListItem$ConversationListItemRight")
+                                    && element.getMethodName().equals("onDraw")) {
+                                switch (element.getLineNumber()) {
+                                    case 789: // Top line
+                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                                        break;
+                                    case 853: // Bottom line
+                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+                                        break;
+                                    // These are not used atm.
+                                    /*case 718:
+                                        param.args[0] = Color.RED;
+                                        break;*/
+                                    /*case 939: //
+                                        param.args[0] = Color.BLUE;
+                                        break;*/
+                                }
+                            }
+                        }
                     }
                 }
         );
