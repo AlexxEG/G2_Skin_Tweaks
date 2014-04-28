@@ -62,13 +62,15 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (Devices.getDevice() == Devices.SPRINT) {
-            hookConversationListItemSprint(lpparam);
+            hookPaintSetColorSprint(lpparam);
             log("Detected Sprint version. Wrong? Let the developer know, include this: '" + Build.MODEL + "'");
         }
 
         if (lpparam.packageName.equals("com.android.mms")) {
             setMinFontSize(lpparam);
-            if (Devices.getDevice() == Devices.OTHER) {
+            if (Devices.getDevice() == Devices.SPRINT) {
+                hookConversationListItemSprint(lpparam);
+            } else if (Devices.getDevice() == Devices.OTHER) {
                 hookConversationListItemOther(lpparam);
             }
             hookMessageListItem(lpparam);
@@ -175,6 +177,56 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void hookConversationListItemSprint(final LoadPackageParam lpparam) throws Throwable {
+        final Class<?> rootClass;
+        final Class<?> subClass;
+
+        try {
+            rootClass = XposedHelpers.findClass(
+                    "com.android.mms.ui.ConversationListItem",
+                    lpparam.classLoader);
+
+            subClass = XposedHelpers.findClass(
+                    "com.android.mms.ui.ConversationListItem$ConversationListItemRight",
+                    lpparam.classLoader);
+        } catch (ClassNotFoundError e) {
+            XposedBridge.log(e);
+            return;
+        }
+
+        XposedHelpers.findAndHookMethod(
+                subClass,
+                "onDraw",
+                "android.graphics.Canvas",
+
+                new XC_MethodHook() {
+                    int originalFontSmall = -1;
+
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                            originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
+
+                            int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
+
+                            XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
+                        }
+                    }
+
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                            if (originalFontSmall != -1) {
+                                XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
+
+                                originalFontSmall = -1;
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) throws Throwable {
         final Class<?> findClass;
 
         try {
