@@ -45,6 +45,15 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean debugging = settings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
+
+        menu.findItem(R.id.action_enable_debugging).setChecked(debugging);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
