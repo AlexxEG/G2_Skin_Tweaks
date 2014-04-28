@@ -5,10 +5,12 @@ import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import de.robv.android.xposed.*;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
@@ -59,15 +61,22 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+        if (Devices.getDevice() == Devices.SPRINT) {
+            hookConversationListItemSprint(lpparam);
+            log("Detected Sprint version. Wrong? Let the developer know, include this: '" + Build.MODEL + "'");
+        }
+
         if (lpparam.packageName.equals("com.android.mms")) {
             setMinFontSize(lpparam);
-            hookConversationListItem(lpparam);
+            if (Devices.getDevice() == Devices.OTHER) {
+                hookConversationListItemOther(lpparam);
+            }
             hookMessageListItem(lpparam);
             hookMessagingNotification(lpparam);
         }
     }
 
-    private void hookConversationListItem(final LoadPackageParam lpparam) {
+    private void hookConversationListItemOther(final LoadPackageParam lpparam) throws Throwable {
         final Class<?> rootClass;
         final Class<?> subClass;
 
@@ -159,6 +168,61 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
 
                             tp.setColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
+                        }
+                    }
+                }
+        );
+    }
+
+    private void hookConversationListItemSprint(final LoadPackageParam lpparam) throws Throwable {
+        final Class<?> findClass;
+
+        try {
+            findClass = XposedHelpers.findClass(
+                    "android.graphics.Paint",
+                    lpparam.classLoader);
+        } catch (ClassNotFoundError e) {
+            XposedBridge.log(e);
+            return;
+        }
+
+        /*Has to hook this method since code can't be injected in middle of a method.
+          Sprint's Messenger app draws top & bottom line in same method, unlike international version,
+          therefore normally only allowing one color.*/
+
+        XposedHelpers.findAndHookMethod(
+                findClass,
+                "setColor",
+                "int",
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+
+                        for (StackTraceElement element : elements) {
+                            if (!element.getClassName().contains("Conversation")) {
+                                continue;
+                            }
+
+                            if (element.getClassName().equals("com.android.mms.ui.ConversationListItem$ConversationListItemRight")
+                                    && element.getMethodName().equals("onDraw")) {
+                                switch (element.getLineNumber()) {
+                                    case 789: // Top line
+                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                                        break;
+                                    case 853: // Bottom line
+                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+                                        break;
+                                    // These are not used atm.
+                                    /*case 718:
+                                        param.args[0] = Color.RED;
+                                        break;*/
+                                    /*case 939: //
+                                        param.args[0] = Color.BLUE;
+                                        break;*/
+                                }
+                            }
                         }
                     }
                 }
@@ -507,7 +571,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    @SuppressWarnings("unused")
     private void log(String text) {
         boolean debug = false;
 
@@ -517,6 +580,18 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
         if (debug) {
             XposedBridge.log(String.format("G2SkinTweaks: %s", text));
+        }
+    }
+
+    private void log(Throwable e) {
+        boolean debug = false;
+
+        if (settings != null) {
+            debug = settings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
+        }
+
+        if (debug) {
+            XposedBridge.log(e);
         }
     }
 }
