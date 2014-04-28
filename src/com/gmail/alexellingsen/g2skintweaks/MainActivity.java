@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
 
     private static final int PREFERENCE_ACTIVITY = 100;
 
-    private PlaceholderFragment fragment = null;
+    private MainFragment fragment = null;
     private static SettingsHelper settings = null;
 
     @Override
@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
         settings = new SettingsHelper(this);
 
         if (savedInstanceState == null) {
-            fragment = new PlaceholderFragment();
+            fragment = new MainFragment();
 
             getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
         }
@@ -83,11 +83,11 @@ public class MainActivity extends Activity {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static class PlaceholderFragment extends Fragment {
+    public static class MainFragment extends Fragment {
 
         private View rootView = null;
 
-        public PlaceholderFragment() {
+        public MainFragment() {
         }
 
         @Override
