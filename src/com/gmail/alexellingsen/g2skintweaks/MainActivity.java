@@ -154,9 +154,9 @@ public class MainActivity extends Activity {
         }
 
         private void setup() {
-            setupReplaceSwitch();
-            setupSmsTextColor();
-            setupMessengerFontSize();
+            setupReplacementSwitch();
+            setupMessagesColor();
+            setupLowerMinimumZoom();
             setupConversationColor();
             setupTurnOnScreenNewSMS();
             setupSquareBubble();
@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
             });
         }
 
-        private void setupMessengerFontSize() {
+        private void setupLowerMinimumZoom() {
             int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
             boolean enableSmallerSmsSize = settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false);
 
@@ -215,7 +215,44 @@ public class MainActivity extends Activity {
             chbMessengerFontSize.setChecked(enableSmallerSmsSize);
         }
 
-        private void setupReplaceSwitch() {
+        private void setupMessagesColor() {
+            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+
+            final Button btnSmsTextColorLeft = (Button) rootView.findViewById(R.id.btn_sms_text_color_left);
+            final Button btnSmsTextColorRight = (Button) rootView.findViewById(R.id.btn_sms_text_color_right);
+
+            CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
+            chbSmsTextColor.setChecked(enableSmsTextColor);
+            chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, isChecked);
+
+                    btnSmsTextColorLeft.setEnabled(isChecked);
+                    btnSmsTextColorRight.setEnabled(isChecked);
+                }
+            });
+
+            btnSmsTextColorLeft.setEnabled(enableSmsTextColor);
+            btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
+            btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
+                }
+            });
+
+            btnSmsTextColorRight.setEnabled(enableSmsTextColor);
+            btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
+            btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+                }
+            });
+        }
+
+        private void setupReplacementSwitch() {
             boolean ENABLE_REPLACE_SWITCH = settings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
 
             CheckBox chbReplaceSwitch = (CheckBox) rootView.findViewById(R.id.chb_replace_switch);
@@ -262,43 +299,6 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
-                }
-            });
-        }
-
-        private void setupSmsTextColor() {
-            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-
-            final Button btnSmsTextColorLeft = (Button) rootView.findViewById(R.id.btn_sms_text_color_left);
-            final Button btnSmsTextColorRight = (Button) rootView.findViewById(R.id.btn_sms_text_color_right);
-
-            CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
-            chbSmsTextColor.setChecked(enableSmsTextColor);
-            chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, isChecked);
-
-                    btnSmsTextColorLeft.setEnabled(isChecked);
-                    btnSmsTextColorRight.setEnabled(isChecked);
-                }
-            });
-
-            btnSmsTextColorLeft.setEnabled(enableSmsTextColor);
-            btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
-            btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
-                }
-            });
-
-            btnSmsTextColorRight.setEnabled(enableSmsTextColor);
-            btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
-            btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
                 }
             });
         }
