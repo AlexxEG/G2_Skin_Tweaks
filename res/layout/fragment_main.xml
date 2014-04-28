@@ -53,8 +53,13 @@
             style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:text="@string/messenger_customization"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:background="@android:color/darker_gray"/>
 
         <CheckBox
             android:id="@+id/chb_square_bubble"
@@ -115,6 +120,21 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <ImageView
+            android:id="@+id/imageview_square_bubble"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/image_square_bubble"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
             android:background="?android:attr/dividerVertical"/>
 
         <CheckBox
@@ -122,7 +142,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:layout_marginTop="6dp"
             android:text="@string/enable_text_color"/>
 
         <TextView
@@ -179,12 +198,18 @@
             android:layout_height="1dip"
             android:background="?android:attr/dividerVertical"/>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
         <CheckBox
             android:id="@+id/chb_conversation_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
-            android:layout_marginTop="6dip"
             android:text="@string/enable_conversation_color"/>
 
         <TextView
@@ -241,18 +266,24 @@
             android:layout_height="1dip"
             android:background="?android:attr/dividerVertical"/>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
         <CheckBox
             android:id="@+id/chb_smaller_sms_size"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="6dp"
             android:text="@string/enable_sms_smaller_size"/>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"
             android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
             android:background="?android:attr/dividerVertical"/>
 
         <CheckBox
@@ -279,18 +310,6 @@
             android:layout_marginBottom="6dip"
             android:enabled="false"
             android:text="@string/request_root"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/messenger_customization_ps"/>
-
-        <ImageView
-            android:id="@+id/imageview_square_bubble"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:src="@drawable/image_square_bubble"/>
     </LinearLayout>
 
 </ScrollView>
