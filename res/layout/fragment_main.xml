@@ -25,13 +25,21 @@
             style="?android:attr/textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dip"
             android:text="@string/information_text"/>
+
+        <TextView
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dip"
+            android:layout_marginTop="6dip"
+            android:text="@string/title_general"/>
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_height="2dip"
+            android:layout_marginBottom="12dip"
             android:background="@android:color/darker_gray"/>
 
         <CheckBox
@@ -53,12 +61,14 @@
             style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dip"
+            android:layout_marginTop="6dip"
             android:text="@string/messenger_customization"/>
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginBottom="6dip"
+            android:layout_height="2dip"
+            android:layout_marginBottom="12dip"
             android:background="@android:color/darker_gray"/>
 
         <CheckBox
