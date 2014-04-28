@@ -229,8 +229,8 @@ public class MainActivity extends Activity {
         }
 
         private void setupMessengerCustomization() {
-            boolean ENABLE_SQUARE_BUBBLE = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
-            boolean ENABLE_SMS_TEXT_COLOR = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+            boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
             final Button btnSquareLeftColor = (Button) rootView.findViewById(R.id.btn_square_left_color);
             final Button btnSquareRightColor = (Button) rootView.findViewById(R.id.btn_square_right_color);
@@ -243,7 +243,7 @@ public class MainActivity extends Activity {
                     showColorPicker(v, Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
                 }
             });
-            btnSquareLeftColor.setEnabled(ENABLE_SQUARE_BUBBLE);
+            btnSquareLeftColor.setEnabled(enableSquareBubble);
             btnSquareLeftColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE));
 
             btnSquareRightColor.setOnClickListener(new OnClickListener() {
@@ -252,7 +252,7 @@ public class MainActivity extends Activity {
                     showColorPicker(v, Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
                 }
             });
-            btnSquareRightColor.setEnabled(ENABLE_SQUARE_BUBBLE);
+            btnSquareRightColor.setEnabled(enableSquareBubble);
             btnSquareRightColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE));
 
             btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
@@ -261,7 +261,7 @@ public class MainActivity extends Activity {
                     showColorPicker(v, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
                 }
             });
-            btnSmsTextColorLeft.setEnabled(ENABLE_SMS_TEXT_COLOR);
+            btnSmsTextColorLeft.setEnabled(enableSmsTextColor);
             btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
 
             btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
@@ -270,7 +270,7 @@ public class MainActivity extends Activity {
                     showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
                 }
             });
-            btnSmsTextColorRight.setEnabled(ENABLE_SMS_TEXT_COLOR);
+            btnSmsTextColorRight.setEnabled(enableSmsTextColor);
             btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
 
             CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
@@ -283,7 +283,7 @@ public class MainActivity extends Activity {
                     btnSquareRightColor.setEnabled(isChecked);
                 }
             });
-            chbSquareBubble.setChecked(ENABLE_SQUARE_BUBBLE);
+            chbSquareBubble.setChecked(enableSquareBubble);
 
             CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
             chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -295,7 +295,7 @@ public class MainActivity extends Activity {
                     btnSmsTextColorRight.setEnabled(isChecked);
                 }
             });
-            chbSmsTextColor.setChecked(ENABLE_SMS_TEXT_COLOR);
+            chbSmsTextColor.setChecked(enableSmsTextColor);
         }
 
         private void setupTurnOnScreenNewSMS() {
