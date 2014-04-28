@@ -10,7 +10,7 @@
     <string name="enable_conversation_color">Enable conversation color</string>
     <string name="enable_debugging">Enable Debugging</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
-    <string name="enable_sms_smaller_size">Enable smaller text size (Down to 30px)</string>
+    <string name="enable_sms_smaller_size">Enable smaller text size (Down to %1$spx)</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
     <string name="enable_text_color">Enable custom text color</string>
     <string name="information_header">Information!</string>
@@ -18,6 +18,8 @@
     <string name="messenger_customization">Messenger Customization</string>
     <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
     <string name="no">No</string>
+    <string name="pref_minimum_zoom">The minimum zoom level for the LG Messenger app. Stock value is 85px.</string>
+    <string name="pref_minimum_zoom_summary">Minimum zoom level</string>
     <string name="pref_power_led_off">Force power LED off</string>
     <string name="pref_power_led_off_summary">Use this if the power LED gets stuck in \'ON\' state.</string>
     <string name="pref_power_led_time">Power LED time</string>

@@ -17,6 +17,7 @@ public class Prefs {
     public static final String ENABLE_SMALLER_SMS_SIZE = "pref_enable_smaller_sms_size";
     public static final String ENABLE_SMS_TEXT_COLOR = "enableSmsTextColor";
     public static final String ENABLE_SQUARE_BUBBLE = "enableSquareBubble";
+    public static final String MINIMUM_ZOOM_LEVEL = "pref_minimum_zoom";
     public static final String POWER_LED_TIME = "pref_power_led_time";
     public static final String SMS_TEXT_COLOR_LEFT = "smsTextColorLeft";
     public static final String SMS_TEXT_COLOR_RIGHT = "smsTextColorRight";

@@ -21,8 +21,9 @@ import java.util.ArrayList;
 @SuppressWarnings("UnusedDeclaration")
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
-    private static String MODULE_PATH = null;
+    private static final int DEFAULT_MINIMUM_ZOOM = 85;
 
+    private static String MODULE_PATH = null;
     private static SettingsHelper settings;
 
     @Override
@@ -578,13 +579,17 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
 
+                        log("'processActionMove' ran");
+
                         if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
-                            if (min != 30) {
-                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 30);
+                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+
+                            if (min != minimumZoom) {
+                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
                             }
                         } else {
-                            if (min != 85) {
-                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 85);
+                            if (min != DEFAULT_MINIMUM_ZOOM) {
+                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", DEFAULT_MINIMUM_ZOOM);
                             }
                         }
                     }
@@ -613,13 +618,17 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
 
+                        log("'processTouchEvent' ran");
+
                         if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
-                            if (min != 30) {
-                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 30);
+                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+
+                            if (min != minimumZoom) {
+                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
                             }
                         } else {
-                            if (min != 85) {
-                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", 85);
+                            if (min != DEFAULT_MINIMUM_ZOOM) {
+                                XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", DEFAULT_MINIMUM_ZOOM);
                             }
                         }
                     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,10 +16,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
+import de.robv.android.xposed.XposedBridge;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorSelectedListener;
 
 public class MainActivity extends Activity {
+
+    private static final int PREFERENCE_ACTIVITY = 100;
 
     private PlaceholderFragment fragment = null;
     private static SettingsHelper settings = null;
@@ -66,11 +70,18 @@ public class MainActivity extends Activity {
             return true;
         } else if (id == R.id.action_settings) {
             Intent i = new Intent(getApplicationContext(), PrefsActivity.class);
-            startActivity(i);
+            startActivityForResult(i, PREFERENCE_ACTIVITY);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PREFERENCE_ACTIVITY) {
+            // Update text to show new preferences, if any.
+            fragment.updateAfterPreferences();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -190,10 +201,12 @@ public class MainActivity extends Activity {
         }
 
         private void setupMessengerFontSize() {
+            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
             boolean enableSmallerSmsSize = settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false);
 
             CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size);
 
+            chbMessengerFontSize.setText(getString(R.string.enable_sms_smaller_size, minimumZoom));
             chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -344,6 +357,14 @@ public class MainActivity extends Activity {
             });
 
             colorPicker.show(getFragmentManager(), "cal");
+        }
+
+        public void updateAfterPreferences() {
+            CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size);
+
+            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+
+            chbMessengerFontSize.setText(getString(R.string.enable_sms_smaller_size, minimumZoom));
         }
 
     }

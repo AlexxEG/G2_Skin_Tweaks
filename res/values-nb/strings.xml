@@ -10,7 +10,7 @@
     <string name="enable_conversation_color">Slå på samtale liste farger</string>
     <string name="enable_debugging">Aktiver Debugging</string>
     <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
-    <string name="enable_sms_smaller_size">Tillat mindre tekst størrelse. (Ned til 30px)</string>
+    <string name="enable_sms_smaller_size">Tillat mindre tekst størrelse. (Ned til %1$spx)</string>
     <string name="enable_square_bubble">Slå på firkantet boble *</string>
     <string name="enable_text_color">Slå på egendefinert tekst farge</string>
     <string name="information_header">Informasjon!</string>
@@ -18,6 +18,8 @@
     <string name="messenger_customization">Meldinger Tilpasning</string>
     <string name="messenger_customization_ps">P.S. bakgrunnen er fra Hangouts app.</string>
     <string name="no">Nei</string>
+    <string name="pref_minimum_zoom">Det minimum zoom nivået for LG Messenger app. Standard verdien er 85px.</string>
+    <string name="pref_minimum_zoom_summary">Minimum zoom nivå</string>
     <string name="pref_power_led_off">Slå av strøm LED</string>
     <string name="pref_power_led_off_summary">Trykk her hvis strøm LED har satt seg fast.</string>
     <string name="pref_power_led_time">Strøm LED tid</string>
