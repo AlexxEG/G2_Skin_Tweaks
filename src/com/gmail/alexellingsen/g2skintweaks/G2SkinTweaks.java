@@ -198,6 +198,10 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                            return;
+                        }
+
                         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
 
                         for (StackTraceElement element : elements) {
