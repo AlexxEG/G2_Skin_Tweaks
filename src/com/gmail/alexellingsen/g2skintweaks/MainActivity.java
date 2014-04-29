@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorSelectedListener;
 
@@ -311,6 +309,24 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+                }
+            });
+
+            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
+            ArrayAdapter<String> items = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
+
+            items.addAll(getResources().getStringArray(R.array.spinner_bubbles));
+
+            spinnerBubbles.setAdapter(items);
+            spinnerBubbles.setSelection(settings.getInt(Prefs.SELECTED_BUBBLE, 0));
+            spinnerBubbles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    settings.putInt(Prefs.SELECTED_BUBBLE, position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
         }

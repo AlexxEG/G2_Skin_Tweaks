@@ -1,6 +1,7 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
 import android.content.res.XModuleResources;
+import android.content.res.XResForwarder;
 import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuffColorFilter;
@@ -53,9 +54,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
                 resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_left_normal));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", modRes.fwd(R.drawable.balloon_bg_04_right_normal));
+                resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", getSelectedBubble(modRes, true));
+                resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", getSelectedBubble(modRes, false));
+                resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", getSelectedBubble(modRes, false));
             }
         }
     }
@@ -634,6 +635,25 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     }
                 }
         );
+    }
+
+    private XResForwarder getSelectedBubble(XModuleResources modRes, boolean left) {
+        switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
+            case 0:
+                if (left) {
+                    return modRes.fwd(R.drawable.balloon_bg_04_left_normal);
+                } else {
+                    return modRes.fwd(R.drawable.balloon_bg_04_right_normal);
+                }
+            case 1:
+                if (left) {
+                    return modRes.fwd(R.drawable.hangouts_balloon_left);
+                } else {
+                    return modRes.fwd(R.drawable.hangouts_balloon_right);
+                }
+            default:
+                return null;
+        }
     }
 
     private void log(String text) {

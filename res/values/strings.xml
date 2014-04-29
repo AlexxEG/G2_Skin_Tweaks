@@ -13,6 +13,7 @@
     <string name="enable_sms_smaller_size">Enable smaller text size (Down to %1$spx)</string>
     <string name="enable_square_bubble">Enable square bubble *</string>
     <string name="enable_text_color">Enable custom text color</string>
+    <string name="hangouts_bubble">Hangouts Bubble *</string>
     <string name="information_header">Information!</string>
     <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
     <string name="messenger_customization">Messenger Customization</string>
@@ -27,6 +28,7 @@
     <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
     <string name="request_root">Request root</string>
     <string name="settings">Settings</string>
+    <string name="square_bubble">Square Bubble *</string>
     <string name="text_conversation_color">Click to set top &amp; bottom text color respectively.</string>
     <string name="text_set_square_color">Click to set incoming &amp; outgoing colors.</string>
     <string name="text_set_text_color">Click to set text color.</string>

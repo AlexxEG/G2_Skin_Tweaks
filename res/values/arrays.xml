@@ -19,4 +19,8 @@
         <item>#000000</item>
     </string-array>
 
+    <string-array name="spinner_bubbles">
+        <item>@string/square_bubble</item>
+        <item>@string/hangouts_bubble</item>
+    </string-array>
 </resources>
