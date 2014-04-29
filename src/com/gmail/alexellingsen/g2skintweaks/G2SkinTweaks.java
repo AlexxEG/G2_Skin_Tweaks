@@ -546,9 +546,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void removeDividers(final InitPackageResourcesParam reparam) throws Throwable {
+    private void removeDividers(final InitPackageResourcesParam resparam) throws Throwable {
         try {
-            reparam.res.hookLayout(
+            resparam.res.hookLayout(
                     "com.android.settings",
                     "layout",
                     "preference_widget_switch",
