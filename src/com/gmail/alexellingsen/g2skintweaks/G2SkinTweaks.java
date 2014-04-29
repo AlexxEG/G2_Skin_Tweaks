@@ -38,10 +38,11 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         boolean enableReplaceSwitch = settings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
 
         if (enableReplaceSwitch) {
+            String packageName = "com.lge.internal";
             XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, null);
 
-            XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
-            XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
+            XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
+            XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
     }
 
