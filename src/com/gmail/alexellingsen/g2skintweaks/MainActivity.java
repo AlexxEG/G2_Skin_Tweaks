@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -147,6 +146,7 @@ public class MainActivity extends Activity {
             ((CheckBox) rootView.findViewById(R.id.chb_conversation_color)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
+            ((Spinner) rootView.findViewById(R.id.spinner_bubbles)).setSelection(0);
 
             // Listeners will update most preferences
             settings.putInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
