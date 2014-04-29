@@ -698,22 +698,20 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private XResForwarder getSelectedBubble(XModuleResources modRes, boolean left) {
+        int id = -1;
+
         switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
             case 0:
-                if (left) {
-                    return modRes.fwd(R.drawable.balloon_bg_04_left_normal);
-                } else {
-                    return modRes.fwd(R.drawable.balloon_bg_04_right_normal);
-                }
+                id = left ? R.drawable.balloon_bg_04_left_normal : R.drawable.balloon_bg_04_right_normal;
+                break;
             case 1:
-                if (left) {
-                    return modRes.fwd(R.drawable.hangouts_balloon_left);
-                } else {
-                    return modRes.fwd(R.drawable.hangouts_balloon_right);
-                }
+                id = left ? R.drawable.hangouts_balloon_left : R.drawable.hangouts_balloon_right;
+                break;
             default:
                 return null;
         }
+
+        return modRes.fwd(id);
     }
 
     private void log(String text) {
