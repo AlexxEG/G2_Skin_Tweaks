@@ -83,55 +83,11 @@
             android:layout_height="wrap_content"
             android:text="@string/text_set_square_color"/>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical"/>
-
-        <LinearLayout
+        <include
+            android:id="@+id/square_colors"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_square_left_color"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#ffffff"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_square_right_color"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#ffffff"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginBottom="6dip"
-            android:background="?android:attr/dividerVertical"/>
+            layout="@layout/color_picker_buttons"/>
 
         <ImageView
             android:id="@+id/imageview_square_bubble"
@@ -159,54 +115,11 @@
             android:layout_height="wrap_content"
             android:text="@string/text_set_text_color"/>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical"/>
-
-        <LinearLayout
+        <include
+            android:id="@+id/sms_text_colors"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_sms_text_color_left"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#ffffff"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_sms_text_color_right"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#ffffff"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical"/>
+            layout="@layout/color_picker_buttons"/>
 
         <View
             android:layout_width="fill_parent"
@@ -227,54 +140,11 @@
             android:layout_height="wrap_content"
             android:text="@string/text_conversation_color"/>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical"/>
-
-        <LinearLayout
+        <include
+            android:id="@+id/conversation_colors"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_conversation_color_top"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#000000"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-
-            <Button
-                android:id="@+id/btn_conversation_color_bottom"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#000000"/>
-
-            <View
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:background="?android:attr/dividerVertical"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:background="?android:attr/dividerVertical"/>
+            layout="@layout/color_picker_buttons"/>
 
         <View
             android:layout_width="fill_parent"

@@ -133,13 +133,20 @@ public class MainActivity extends Activity {
         }
 
         public void resetToDefault() {
-            rootView.findViewById(R.id.btn_square_left_color).setBackgroundColor(Color.WHITE);
-            rootView.findViewById(R.id.btn_square_right_color).setBackgroundColor(Color.WHITE);
-            rootView.findViewById(R.id.btn_sms_text_color_left).setBackgroundColor(Color.BLACK);
-            rootView.findViewById(R.id.btn_sms_text_color_right).setBackgroundColor(Color.BLACK);
+            View viewSquareBubbleColors = rootView.findViewById(R.id.square_colors);
+            View viewMessagesColors = rootView.findViewById(R.id.sms_text_colors);
+            View viewConversationColors = rootView.findViewById(R.id.conversation_colors);
+
+            viewSquareBubbleColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.WHITE);
+            viewSquareBubbleColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.WHITE);
+            viewMessagesColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
+            viewMessagesColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
+            viewConversationColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
+            viewConversationColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
             ((CheckBox) rootView.findViewById(R.id.chb_replace_switch)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_square_bubble)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
+            ((CheckBox) rootView.findViewById(R.id.chb_conversation_color)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
 
@@ -148,6 +155,8 @@ public class MainActivity extends Activity {
             settings.putInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
             settings.putInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
             settings.putInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+            settings.putInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+            settings.putInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
 
             String text = getString(R.string.reboot_notice);
             Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
@@ -165,8 +174,9 @@ public class MainActivity extends Activity {
         private void setupConversationColor() {
             boolean b = settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false);
 
-            final Button top = (Button) rootView.findViewById(R.id.btn_conversation_color_top);
-            final Button bottom = (Button) rootView.findViewById(R.id.btn_conversation_color_bottom);
+            View view = rootView.findViewById(R.id.conversation_colors);
+            final Button top = (Button) view.findViewById(R.id.btn_color_left);
+            final Button bottom = (Button) view.findViewById(R.id.btn_color_right);
             final CheckBox chbConversationColor = (CheckBox) rootView.findViewById(R.id.chb_conversation_color);
 
             chbConversationColor.setChecked(b);
@@ -218,8 +228,9 @@ public class MainActivity extends Activity {
         private void setupMessagesColor() {
             boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
 
-            final Button btnSmsTextColorLeft = (Button) rootView.findViewById(R.id.btn_sms_text_color_left);
-            final Button btnSmsTextColorRight = (Button) rootView.findViewById(R.id.btn_sms_text_color_right);
+            View view = rootView.findViewById(R.id.sms_text_colors);
+            final Button btnSmsTextColorLeft = (Button) view.findViewById(R.id.btn_color_left);
+            final Button btnSmsTextColorRight = (Button) view.findViewById(R.id.btn_color_right);
 
             CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
             chbSmsTextColor.setChecked(enableSmsTextColor);
@@ -269,8 +280,9 @@ public class MainActivity extends Activity {
         private void setupSquareBubble() {
             boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
-            final Button btnSquareLeftColor = (Button) rootView.findViewById(R.id.btn_square_left_color);
-            final Button btnSquareRightColor = (Button) rootView.findViewById(R.id.btn_square_right_color);
+            View view = rootView.findViewById(R.id.square_colors);
+            final Button btnSquareLeftColor = (Button) view.findViewById(R.id.btn_color_left);
+            final Button btnSquareRightColor = (Button) view.findViewById(R.id.btn_color_right);
 
             CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
             chbSquareBubble.setChecked(enableSquareBubble);
