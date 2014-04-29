@@ -16,7 +16,6 @@
     <string name="information_header">Information!</string>
     <string name="information_text">Options with a \'*\' needs rebooting to take effect.\n\nSoft reboot is fine.</string>
     <string name="messenger_customization">Messenger Customization</string>
-    <string name="messenger_customization_ps">P.S. background is a screengrab from the Hangouts app.</string>
     <string name="minimum_zoom_too_high">Minimum zoom level can\'t be more than default value. (85)</string>
     <string name="no">No</string>
     <string name="pref_minimum_zoom">The minimum zoom level for the LG Messenger app. Default value is 85px.</string>

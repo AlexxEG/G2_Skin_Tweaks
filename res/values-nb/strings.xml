@@ -16,7 +16,6 @@
     <string name="information_header">Informasjon!</string>
     <string name="information_text">Alternativer som slutter med \'*\' må restartes før den tar effekt.\n\n\'Soft reboot\' er nok.</string>
     <string name="messenger_customization">Meldinger Tilpasning</string>
-    <string name="messenger_customization_ps">P.S. bakgrunnen er fra Hangouts app.</string>
     <string name="minimum_zoom_too_high">Minimum zoom nivå kan ikke være høyere enn standard verdien. (85)</string>
     <string name="no">Nei</string>
     <string name="pref_minimum_zoom">Det minimum zoom nivået for LG Messenger app. Standard verdien er 85px.</string>
