@@ -343,20 +343,22 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
                             if (enableSquareBubble) {
-                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+                                if (getSelectedBubbleIndex(param) == 3) {
+                                    View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-                                while (parent != null) {
-                                    if (parent.getBackground() != null) {
-                                        Drawable d = parent.getBackground();
+                                    while (parent != null) {
+                                        if (parent.getBackground() != null) {
+                                            Drawable d = parent.getBackground();
 
-                                        int color = settings.getInt(isIncomingMessage ?
-                                                Prefs.SQUARE_COLOR_LEFT :
-                                                Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+                                            int color = settings.getInt(isIncomingMessage ?
+                                                    Prefs.SQUARE_COLOR_LEFT :
+                                                    Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
-                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+                                            d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+                                        }
+
+                                        parent = (View) parent.getParent();
                                     }
-
-                                    parent = (View) parent.getParent();
                                 }
                             }
 
@@ -371,6 +373,15 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         } catch (Exception e) {
                             XposedBridge.log(e);
                         }
+                    }
+
+                    private int getSelectedBubbleIndex(MethodHookParam param) {
+                        Object conversationSkin = XposedHelpers.getObjectField(param.thisObject, "mConversationSkin");
+                        int selectedBubble = XposedHelpers.getIntField(conversationSkin, "mBubbleIndex");
+
+                        XposedBridge.log("Selected bubble: " + selectedBubble);
+
+                        return selectedBubble;
                     }
 
                     private boolean isIncomingMessage(MethodHookParam param) {
@@ -428,20 +439,22 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
                             if (enableSquareBubble) {
-                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+                                if (getSelectedBubbleIndex(param) == 3) {
+                                    View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-                                while (parent != null) {
-                                    if (parent.getBackground() != null) {
-                                        Drawable d = parent.getBackground();
+                                    while (parent != null) {
+                                        if (parent.getBackground() != null) {
+                                            Drawable d = parent.getBackground();
 
-                                        int color = settings.getInt(isIncomingMessage ?
-                                                Prefs.SQUARE_COLOR_LEFT :
-                                                Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+                                            int color = settings.getInt(isIncomingMessage ?
+                                                    Prefs.SQUARE_COLOR_LEFT :
+                                                    Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
 
-                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+                                            d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+                                        }
+
+                                        parent = (View) parent.getParent();
                                     }
-
-                                    parent = (View) parent.getParent();
                                 }
                             }
 
@@ -456,6 +469,15 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         } catch (Exception e) {
                             XposedBridge.log(e);
                         }
+                    }
+
+                    private int getSelectedBubbleIndex(MethodHookParam param) {
+                        Object conversationSkin = XposedHelpers.getObjectField(param.thisObject, "mConversationSkin");
+                        int selectedBubble = XposedHelpers.getIntField(conversationSkin, "mBubbleIndex");
+
+                        XposedBridge.log("Selected bubble: " + selectedBubble);
+
+                        return selectedBubble;
                     }
 
                     private boolean isIncomingMessage(MethodHookParam param) {
