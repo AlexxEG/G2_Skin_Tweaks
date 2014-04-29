@@ -7,7 +7,7 @@ public enum Devices {
 
     public static Devices getDevice() {
         // Currently only Sprint version need special treatment.
-        if (Build.MODEL == "LG-LS980") {
+        if (Build.MODEL.equals("LG-LS980")) {
             return Devices.SPRINT;
         } else {
             return Devices.OTHER;
