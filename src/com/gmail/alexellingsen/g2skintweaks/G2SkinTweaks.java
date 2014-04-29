@@ -10,11 +10,13 @@ import android.os.Build;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import de.robv.android.xposed.*;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.util.ArrayList;
@@ -41,13 +43,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
             XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
+
+
     }
 
     @Override
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
-        String packageName = "com.android.mms";
-
         if (resparam.packageName.equals("com.android.mms")) {
+            String packageName = "com.android.mms";
             boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
 
             if (enableSquareBubble) {
@@ -57,6 +60,22 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", getSelectedBubble(modRes, true));
                 resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", getSelectedBubble(modRes, false));
                 resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", getSelectedBubble(modRes, false));
+            }
+        }
+
+        if (resparam.packageName.equals("com.android.settings")) {
+            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
+
+            if (enableRemoveDividers) {
+                removeDividers(resparam);
+            }
+        }
+
+        if (resparam.packageName.equals("com.lge.settings.easy")) {
+            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
+
+            if (enableRemoveDividers) {
+                removeDividersEasy(resparam);
             }
         }
     }
@@ -527,6 +546,48 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     }
                 }
         );
+    }
+
+    private void removeDividers(final InitPackageResourcesParam reparam) throws Throwable {
+        try {
+            reparam.res.hookLayout(
+                    "com.android.settings",
+                    "layout",
+                    "preference_widget_switch",
+
+                    new XC_LayoutInflated() {
+                        @Override
+                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+                            ImageView divider = (ImageView) liparam.view.findViewById(
+                                    liparam.res.getIdentifier("switchImage", "id", "com.android.settings"));
+                            divider.setVisibility(View.INVISIBLE);
+                        }
+                    }
+            );
+        } catch (Throwable e) {
+            XposedBridge.log(e);
+        }
+    }
+
+    private void removeDividersEasy(final InitPackageResourcesParam resparam) {
+        try {
+            resparam.res.hookLayout(
+                    "com.lge.settings.easy",
+                    "layout",
+                    "easy_preference",
+
+                    new XC_LayoutInflated() {
+                        @Override
+                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+                            ImageView divider = (ImageView) liparam.view.findViewById(
+                                    liparam.res.getIdentifier("easy_vertical_divider", "id", "com.lge.settings.easy"));
+                            divider.setVisibility(View.INVISIBLE);
+                        }
+                    }
+            );
+        } catch (Throwable e) {
+            XposedBridge.log(e);
+        }
     }
 
     private void setMinFontSize(LoadPackageParam lpparam) {

@@ -13,6 +13,7 @@ public class Prefs {
     public static final String ENABLE_CONVERSATION_COLOR = "enableConversationColor";
     public static final String ENABLE_DEBUGGING = "enableDebugging";
     public static final String ENABLE_POWER_LED = "enablePowerLed";
+    public static final String ENABLE_REMOVE_DIVIDERS = "enable_remove_dividers";
     public static final String ENABLE_REPLACE_SWITCH = "enableReplaceSwitch";
     public static final String ENABLE_SMALLER_SMS_SIZE = "pref_enable_smaller_sms_size";
     public static final String ENABLE_SMS_TEXT_COLOR = "enableSmsTextColor";
@@ -25,5 +26,4 @@ public class Prefs {
     public static final String SQUARE_COLOR_LEFT = "selectedSquareColorLeft";
     public static final String SQUARE_COLOR_RIGHT = "selectedSquareColorString";
     public static final String TURN_ON_SCREEN_NEW_SMS = "turnOnScreenOnNewSms";
-
 }

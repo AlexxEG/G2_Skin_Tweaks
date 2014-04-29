@@ -166,6 +166,7 @@ public class MainActivity extends Activity {
             setupLowerMinimumZoom();
             setupConversationColor();
             setupTurnOnScreenNewSMS();
+            setupRemoveDividers();
             setupSquareBubble();
         }
 
@@ -257,6 +258,19 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+                }
+            });
+        }
+
+        private void setupRemoveDividers() {
+            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
+
+            CheckBox chbRemoveDividers = (CheckBox) rootView.findViewById(R.id.chb_remove_dividers);
+            chbRemoveDividers.setChecked(enableRemoveDividers);
+            chbRemoveDividers.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, isChecked);
                 }
             });
         }

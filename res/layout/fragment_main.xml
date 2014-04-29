@@ -43,15 +43,18 @@
             android:background="@android:color/darker_gray"/>
 
         <CheckBox
+            android:id="@+id/chb_remove_dividers"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:text="@string/enable_remove_dividers"/>
+
+        <CheckBox
             android:id="@+id/chb_replace_switch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
             android:text="@string/enable_replace_switch"/>
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_bubbles"/>
 
         <ImageView
             android:id="@+id/imageview_replace_switch"
@@ -92,6 +95,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/color_picker_buttons"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_bubbles"/>
 
         <ImageView
             android:id="@+id/imageview_square_bubble"
