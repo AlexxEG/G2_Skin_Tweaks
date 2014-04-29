@@ -43,8 +43,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
             XResources.setSystemWideReplacement("com.lge.internal", "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
-
-
     }
 
     @Override
