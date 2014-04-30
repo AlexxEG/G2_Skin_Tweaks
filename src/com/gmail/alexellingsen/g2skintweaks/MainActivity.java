@@ -130,18 +130,19 @@ public class MainActivity extends Activity {
         }
 
         public void resetToDefault() {
-            View viewSquareBubbleColors = rootView.findViewById(R.id.square_colors);
+            View viewCustomBubbleColors = rootView.findViewById(R.id.custom_bubble_colors);
             View viewMessagesColors = rootView.findViewById(R.id.sms_text_colors);
             View viewConversationColors = rootView.findViewById(R.id.conversation_colors);
 
-            viewSquareBubbleColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.WHITE);
-            viewSquareBubbleColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.WHITE);
+            viewCustomBubbleColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.WHITE);
+            viewCustomBubbleColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.WHITE);
             viewMessagesColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
             viewMessagesColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
             viewConversationColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
             viewConversationColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
             ((CheckBox) rootView.findViewById(R.id.chb_replace_switch)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_square_bubble)).setChecked(false);
+            ((CheckBox) rootView.findViewById(R.id.chb_custom_bubble)).setChecked(false);
+            ((CheckBox) rootView.findViewById(R.id.chb_custom_bubble_color)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_conversation_color)).setChecked(false);
             ((CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size)).setChecked(false);
@@ -149,8 +150,8 @@ public class MainActivity extends Activity {
             ((Spinner) rootView.findViewById(R.id.spinner_bubbles)).setSelection(0);
 
             // Listeners will update most preferences
-            settings.putInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
-            settings.putInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+            settings.putInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+            settings.putInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
             settings.putInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
             settings.putInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
             settings.putInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
@@ -161,13 +162,14 @@ public class MainActivity extends Activity {
         }
 
         private void setup() {
-            setupReplacementSwitch();
-            setupMessagesColor();
-            setupLowerMinimumZoom();
             setupConversationColor();
-            setupTurnOnScreenNewSMS();
+            setupCustomBubble();
+            setupCustomBubbleColor();
+            setupLowerMinimumZoom();
+            setupMessagesColor();
             setupRemoveDividers();
-            setupSquareBubble();
+            setupReplacementSwitch();
+            setupTurnOnScreenNewSMS();
         }
 
         private void setupConversationColor() {
@@ -204,6 +206,44 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                }
+            });
+        }
+
+        private void setupCustomBubbleColor() {
+            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
+
+            CheckBox chbCustomBubbleColor = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble_color);
+            View view = rootView.findViewById(R.id.custom_bubble_colors);
+            final Button btnBubbleLeftColor = (Button) view.findViewById(R.id.btn_color_left);
+            final Button btnBubbleRightColor = (Button) view.findViewById(R.id.btn_color_right);
+
+            chbCustomBubbleColor.setChecked(enableCustomBubbleColor);
+            chbCustomBubbleColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, isChecked);
+
+                    btnBubbleLeftColor.setEnabled(isChecked);
+                    btnBubbleRightColor.setEnabled(isChecked);
+                }
+            });
+
+            btnBubbleLeftColor.setEnabled(enableCustomBubbleColor);
+            btnBubbleLeftColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE));
+            btnBubbleLeftColor.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showColorPicker(v, Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+                }
+            });
+
+            btnBubbleRightColor.setEnabled(enableCustomBubbleColor);
+            btnBubbleRightColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE));
+            btnBubbleRightColor.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showColorPicker(v, Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
                 }
             });
         }
@@ -289,44 +329,21 @@ public class MainActivity extends Activity {
             chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
         }
 
-        private void setupSquareBubble() {
-            boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+        private void setupCustomBubble() {
+            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
 
-            View view = rootView.findViewById(R.id.square_colors);
-            final Button btnSquareLeftColor = (Button) view.findViewById(R.id.btn_color_left);
-            final Button btnSquareRightColor = (Button) view.findViewById(R.id.btn_color_right);
+            CheckBox chbCustomBubble = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble);
+            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
 
-            CheckBox chbSquareBubble = (CheckBox) rootView.findViewById(R.id.chb_square_bubble);
-            chbSquareBubble.setChecked(enableSquareBubble);
-            chbSquareBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            chbCustomBubble.setText(Html.fromHtml(getString(R.string.enable_custom_bubble)));
+            chbCustomBubble.setChecked(enableCustomBubble);
+            chbCustomBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_SQUARE_BUBBLE, isChecked);
-
-                    btnSquareLeftColor.setEnabled(isChecked);
-                    btnSquareRightColor.setEnabled(isChecked);
+                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, isChecked);
                 }
             });
 
-            btnSquareLeftColor.setEnabled(enableSquareBubble);
-            btnSquareLeftColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_LEFT, Color.WHITE));
-            btnSquareLeftColor.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SQUARE_COLOR_LEFT, Color.WHITE);
-                }
-            });
-
-            btnSquareRightColor.setEnabled(enableSquareBubble);
-            btnSquareRightColor.setBackgroundColor(settings.getInt(Prefs.SQUARE_COLOR_RIGHT, Color.WHITE));
-            btnSquareRightColor.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
-                }
-            });
-
-            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
             ArrayAdapter<String> items = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
 
             items.addAll(getResources().getStringArray(R.array.spinner_bubbles));

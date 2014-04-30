@@ -50,9 +50,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
         if (resparam.packageName.equals("com.android.mms")) {
             String packageName = "com.android.mms";
-            boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
 
-            if (enableSquareBubble) {
+            if (enableCustomBubble) {
                 final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
                 resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
@@ -340,25 +340,23 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                             boolean isIncomingMessage = isIncomingMessage(param);
                             boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-                            boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+                            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
 
-                            if (enableSquareBubble) {
-                                if (getSelectedBubbleIndex(param) == 3) {
-                                    View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+                            if (enableCustomBubbleColor) {
+                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-                                    while (parent != null) {
-                                        if (parent.getBackground() != null) {
-                                            Drawable d = parent.getBackground();
+                                while (parent != null) {
+                                    if (parent.getBackground() != null) {
+                                        Drawable d = parent.getBackground();
 
-                                            int color = settings.getInt(isIncomingMessage ?
-                                                    Prefs.SQUARE_COLOR_LEFT :
-                                                    Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+                                        int color = settings.getInt(isIncomingMessage ?
+                                                Prefs.BUBBLE_COLOR_LEFT :
+                                                Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
 
-                                            d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
-                                        }
-
-                                        parent = (View) parent.getParent();
+                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
                                     }
+
+                                    parent = (View) parent.getParent();
                                 }
                             }
 
@@ -373,15 +371,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         } catch (Exception e) {
                             XposedBridge.log(e);
                         }
-                    }
-
-                    private int getSelectedBubbleIndex(MethodHookParam param) {
-                        Object conversationSkin = XposedHelpers.getObjectField(param.thisObject, "mConversationSkin");
-                        int selectedBubble = XposedHelpers.getIntField(conversationSkin, "mBubbleIndex");
-
-                        XposedBridge.log("Selected bubble: " + selectedBubble);
-
-                        return selectedBubble;
                     }
 
                     private boolean isIncomingMessage(MethodHookParam param) {
@@ -436,25 +425,23 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                             boolean isIncomingMessage = isIncomingMessage(param);
                             boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-                            boolean enableSquareBubble = settings.getBoolean(Prefs.ENABLE_SQUARE_BUBBLE, false);
+                            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
 
-                            if (enableSquareBubble) {
-                                if (getSelectedBubbleIndex(param) == 3) {
-                                    View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+                            if (enableCustomBubbleColor) {
+                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
 
-                                    while (parent != null) {
-                                        if (parent.getBackground() != null) {
-                                            Drawable d = parent.getBackground();
+                                while (parent != null) {
+                                    if (parent.getBackground() != null) {
+                                        Drawable d = parent.getBackground();
 
-                                            int color = settings.getInt(isIncomingMessage ?
-                                                    Prefs.SQUARE_COLOR_LEFT :
-                                                    Prefs.SQUARE_COLOR_RIGHT, Color.WHITE);
+                                        int color = settings.getInt(isIncomingMessage ?
+                                                Prefs.BUBBLE_COLOR_LEFT :
+                                                Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
 
-                                            d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
-                                        }
-
-                                        parent = (View) parent.getParent();
+                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
                                     }
+
+                                    parent = (View) parent.getParent();
                                 }
                             }
 
@@ -469,15 +456,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         } catch (Exception e) {
                             XposedBridge.log(e);
                         }
-                    }
-
-                    private int getSelectedBubbleIndex(MethodHookParam param) {
-                        Object conversationSkin = XposedHelpers.getObjectField(param.thisObject, "mConversationSkin");
-                        int selectedBubble = XposedHelpers.getIntField(conversationSkin, "mBubbleIndex");
-
-                        XposedBridge.log("Selected bubble: " + selectedBubble);
-
-                        return selectedBubble;
                     }
 
                     private boolean isIncomingMessage(MethodHookParam param) {
@@ -720,7 +698,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private XResForwarder getSelectedBubble(XModuleResources modRes, boolean left) {
-        int id = -1;
+        int id;
 
         switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
             case 0:

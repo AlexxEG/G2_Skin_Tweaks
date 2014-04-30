@@ -8,11 +8,12 @@
     <string name="chb_flash_power_led"><![CDATA[Blink strøm LED når SMS kommer<br /><small>* Root nødvending *</small>]]></string>
     <string name="confirm_reset_message">Er du sikker på at du vil tilbakestille?</string>
     <string name="enable_conversation_color">Slå på samtale liste farger</string>
+    <string name="enable_custom_bubble"><![CDATA[Slå på ny boble<br/><small>Erstatter fjerde eksisterende boble.</small>]]></string>
+    <string name="enable_custom_bubble_color">Enable custom bubble colors</string>
     <string name="enable_debugging">Aktiver Debugging</string>
     <string name="enable_remove_dividers">Fjern separatorer</string>
     <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
     <string name="enable_sms_smaller_size">Tillat mindre tekst størrelse. (Ned til %1$spx)</string>
-    <string name="enable_square_bubble">Slå på firkantet boble</string>
     <string name="enable_text_color">Slå på egendefinert tekst farge</string>
     <string name="hangouts_bubble">Hangouts Bubble</string>
     <string name="information_header">Informasjon!</string>
@@ -31,7 +32,7 @@
     <string name="settings">Innstillinger</string>
     <string name="square_bubble">Square Bubble</string>
     <string name="text_conversation_color">Trykk for å sette topp &amp; bunn farge.</string>
-    <string name="text_set_square_color">Trykk her for å sette innkommende &amp; utgående farger.</string>
+    <string name="text_set_custom_color">Trykk her for å sette innkommende &amp; utgående farger.</string>
     <string name="text_set_text_color">Trykk her for å sette tekst farge.</string>
     <string name="title_general">Generelt</string>
     <string name="turn_on_screen_new_sms">Slå på skjermen når en ny SMS kommer</string>

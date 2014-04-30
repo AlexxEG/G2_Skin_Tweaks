@@ -79,30 +79,45 @@
             android:background="@android:color/darker_gray"/>
 
         <CheckBox
-            android:id="@+id/chb_square_bubble"
+            android:id="@+id/chb_custom_bubble_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="@string/enable_square_bubble"/>
+            android:text="@string/enable_custom_bubble_color"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_set_square_color"/>
+            android:text="@string/text_set_custom_color"/>
 
         <include
-            android:id="@+id/square_colors"
+            android:id="@+id/custom_bubble_colors"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/color_picker_buttons"/>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <CheckBox
+            android:id="@+id/chb_custom_bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:text="@string/enable_custom_bubble"/>
+
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dip"
             android:id="@+id/spinner_bubbles"/>
 
         <ImageView
-            android:id="@+id/imageview_square_bubble"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
