@@ -1,6 +1,5 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
-import android.bluetooth.BluetoothClass;
 import android.content.res.XModuleResources;
 import android.content.res.XResForwarder;
 import android.content.res.XResources;
