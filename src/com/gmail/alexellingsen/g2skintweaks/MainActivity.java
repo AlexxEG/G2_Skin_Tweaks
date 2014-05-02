@@ -211,6 +211,39 @@ public class MainActivity extends Activity {
             });
         }
 
+        private void setupCustomBubble() {
+            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
+
+            CheckBox chbCustomBubble = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble);
+            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
+
+            chbCustomBubble.setText(Html.fromHtml(getString(R.string.enable_custom_bubble)));
+            chbCustomBubble.setChecked(enableCustomBubble);
+            chbCustomBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, isChecked);
+                }
+            });
+
+            ArrayAdapter<String> items = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
+
+            items.addAll(getResources().getStringArray(R.array.spinner_bubbles));
+
+            spinnerBubbles.setAdapter(items);
+            spinnerBubbles.setSelection(settings.getInt(Prefs.SELECTED_BUBBLE, 0));
+            spinnerBubbles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    settings.putInt(Prefs.SELECTED_BUBBLE, position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
+
         private void setupCustomBubbleColor() {
             boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
 
@@ -369,39 +402,6 @@ public class MainActivity extends Activity {
                 }
             });
             chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
-        }
-
-        private void setupCustomBubble() {
-            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
-
-            CheckBox chbCustomBubble = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble);
-            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
-
-            chbCustomBubble.setText(Html.fromHtml(getString(R.string.enable_custom_bubble)));
-            chbCustomBubble.setChecked(enableCustomBubble);
-            chbCustomBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, isChecked);
-                }
-            });
-
-            ArrayAdapter<String> items = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
-
-            items.addAll(getResources().getStringArray(R.array.spinner_bubbles));
-
-            spinnerBubbles.setAdapter(items);
-            spinnerBubbles.setSelection(settings.getInt(Prefs.SELECTED_BUBBLE, 0));
-            spinnerBubbles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    settings.putInt(Prefs.SELECTED_BUBBLE, position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
         }
 
         private void setupTurnOnScreenNewSMS() {
