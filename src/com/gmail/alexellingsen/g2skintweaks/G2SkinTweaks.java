@@ -4,6 +4,7 @@ import android.content.res.XModuleResources;
 import android.content.res.XResForwarder;
 import android.content.res.XResources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
@@ -350,21 +352,34 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
 
                             if (enableCustomBubbleColor) {
-                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
+                                TextView txtBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+                                View parent = (View) txtBody.getParent();
+                                ArrayList<View> parents = new ArrayList<View>();
 
                                 while (parent != null) {
-                                    if (parent.getBackground() != null) {
-                                        Drawable d = parent.getBackground();
-
-                                        int color = settings.getInt(isIncomingMessage ?
-                                                Prefs.BUBBLE_COLOR_LEFT :
-                                                Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-
-                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
-                                    }
-
+                                    parents.add(parent);
                                     parent = (View) parent.getParent();
                                 }
+
+                                int selectedColor;
+
+                                if (isIncomingMessage) {
+                                    selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+                                } else {
+                                    selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                                }
+
+                                LinearLayout ll = (LinearLayout) param.thisObject;
+                                // Looking for the second parent, index 1
+                                Drawable bd = parents.get(1).getBackground();
+                                int color = Color.argb(
+                                        Color.alpha(bd.getOpacity()),
+                                        Color.red(selectedColor),
+                                        Color.green(selectedColor),
+                                        Color.blue(selectedColor)
+                                );
+
+                                bd.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                             }
 
                             if (enableSmsTextColor) {
