@@ -3,12 +3,13 @@ package com.gmail.alexellingsen.g2skintweaks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import de.robv.android.xposed.XposedBridge;
 
 public class UpdateLedPaths extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        SettingsHelper settings = new SettingsHelper(context);
+        final SettingsHelper settings = new SettingsHelper(context);
 
         boolean shouldCache = !settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true) &&
                 settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
@@ -21,6 +22,10 @@ public class UpdateLedPaths extends BroadcastReceiver {
                 @Override
                 public void run() {
                     RootFunctions.updatePowerLedPaths(finalContext);
+
+                    if (settings.getBoolean(Prefs.ENABLE_DEBUGGING, false)) {
+                        XposedBridge.log("Updated LED paths.");
+                    }
                 }
             }).start();
         }
