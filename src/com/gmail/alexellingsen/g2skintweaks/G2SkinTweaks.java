@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
@@ -96,18 +95,21 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
         if (lpparam.packageName.equals("com.android.mms")) {
             setMinFontSize(lpparam);
-            if (Devices.getDevice() == Devices.SPRINT) {
-                hookConversationListItemSprint(lpparam);
-                log("Detected Sprint version. Wrong? Let the developer know, include this: '" + Build.MODEL + "'");
-            } else if (Devices.getDevice() == Devices.OTHER) {
-                hookConversationListItemOther(lpparam);
-            }
+            hookConversationListItem(lpparam);
             hookMessageListItem(lpparam);
             hookMessagingNotification(lpparam);
         }
     }
 
-    private void hookConversationListItemOther(final LoadPackageParam lpparam) throws Throwable {
+    private void hookConversationListItem(final LoadPackageParam lpparam) {
+        if (Devices.getDevice() == Devices.SPRINT) {
+            hookConversationListItemSprint(lpparam);
+        } else {
+            hookConversationListItemOther(lpparam);
+        }
+    }
+
+    private void hookConversationListItemOther(final LoadPackageParam lpparam) {
         final Class<?> rootClass;
         final Class<?> subClass;
 
@@ -205,7 +207,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void hookConversationListItemSprint(final LoadPackageParam lpparam) throws Throwable {
+    private void hookConversationListItemSprint(final LoadPackageParam lpparam) {
         final Class<?> rootClass;
         final Class<?> subClass;
 
@@ -564,36 +566,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void setMinFontSize(LoadPackageParam lpparam) {
-        int fails = 0;
-        ArrayList<Throwable> errors = new ArrayList<Throwable>();
-
-        try {
-            setMinFontSizeOther(lpparam);
-            return;
-        } catch (Throwable e) {
-            fails++;
-            errors.add(e);
-        }
-
-        try {
+        if (Devices.getDevice() == Devices.SPRINT) {
             setMinFontSizeSprint(lpparam);
-            return;
-        } catch (Throwable e) {
-            fails++;
-            errors.add(e);
-        }
-
-        if (fails == 2) { // Both failed
-            for (Throwable e : errors) {
-                XposedBridge.log(e);
-            }
-
-            XposedBridge.log("G2 Skin Tweaks couldn't find a proper method to hook.");
-            XposedBridge.log("Please let the developer know your device model if you want to help.");
+        } else {
+            setMinFontSizeOther(lpparam);
         }
     }
 
-    private void setMinFontSizeOther(final LoadPackageParam lpparam) throws Throwable {
+    private void setMinFontSizeOther(final LoadPackageParam lpparam) {
         final Class<?> finalClass;
         try {
             finalClass = XposedHelpers.findClass(
@@ -632,7 +612,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void setMinFontSizeSprint(final LoadPackageParam lpparam) throws Throwable {
+    private void setMinFontSizeSprint(final LoadPackageParam lpparam) {
         final Class<?> finalClass;
         try {
             finalClass = XposedHelpers.findClass(
