@@ -17,8 +17,8 @@
             android:inputType="number"
             android:key="pref_date_offset_size"
             android:numeric="integer"
-            android:summary="Set the size offset for date text in pixels (px)."
-            android:title="Date Size Offset"/>
+            android:summary="@string/pref_date_offset_size_summary"
+            android:title="@string/pref_date_offset_size"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/advanced">
