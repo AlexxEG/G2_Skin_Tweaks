@@ -11,6 +11,7 @@
     <string name="enable_custom_bubble"><![CDATA[Enable custom bubble<br/><small>Replaces fourth existing bubble.</small>]]></string>
     <string name="enable_custom_bubble_color">Enable custom bubble colors</string>
     <string name="enable_debugging">Enable Debugging</string>
+    <string name="enable_recent_apps_opacity">Custom opacity in Recent Apps list</string>
     <string name="enable_remove_dividers">Remove dividers</string>
     <string name="enable_replace_switch">Enable replacement switch *</string>
     <string name="enable_sms_smaller_size">Enable smaller text size (Down to %1$spx)</string>

@@ -1,5 +1,6 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
+import android.content.Intent;
 import android.content.res.XModuleResources;
 import android.content.res.XResForwarder;
 import android.content.res.XResources;
@@ -11,7 +12,9 @@ import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import de.robv.android.xposed.*;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
@@ -44,10 +47,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_dark", modRes.fwd(R.drawable.replacement_switch));
             XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
+
+        RecentAppsHook.init(settings);
     }
 
     @Override
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+        RecentAppsHook.handleInitPackageResources(resparam);
+
         if (resparam.packageName.equals("com.android.mms")) {
             String packageName = "com.android.mms";
             boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
@@ -79,8 +86,12 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
     }
 
+    private boolean doOnce = false;
+
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+        RecentAppsHook.handleLoadPackage(lpparam);
+
         if (Devices.getDevice() == Devices.SPRINT) {
             hookPaintSetColorSprint(lpparam);
         }
@@ -295,7 +306,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         ArrayList<Throwable> exceptions = new ArrayList<Throwable>();
 
         try {
-            hookMessageListItemOther(finalClass);
+            hookMessageListItemOther(finalClass, lpparam);
             return; // No need to continue
         } catch (Throwable e) {
             fails++;
@@ -320,7 +331,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
     }
 
-    private void hookMessageListItemOther(Class<?> finalClass) throws Throwable {
+    private void hookMessageListItemOther(Class<?> finalClass, final LoadPackageParam lpparam) throws Throwable {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
@@ -399,6 +410,20 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
 
                         tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
+
+                        if (!doOnce) {
+                            Class<?> findClass2 = XposedHelpers.findClass(
+                                    "com.android.mms.util.PopupManager",
+                                    lpparam.classLoader);
+                            XposedHelpers.callStaticMethod(
+                                    findClass2,
+                                    "startNormalNewMessage",
+                                    ((LinearLayout) param.thisObject).getContext(),
+                                    new Intent(),
+                                    (long) 0);
+                            XposedBridge.log("Called static method.");
+                            doOnce = true;
+                        }
                     }
                 }
         );

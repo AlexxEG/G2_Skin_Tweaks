@@ -167,6 +167,7 @@ public class MainActivity extends Activity {
             setupCustomBubbleColor();
             setupLowerMinimumZoom();
             setupMessagesColor();
+            setupRecentAppsOpacity();
             setupRemoveDividers();
             setupReplacementSwitch();
             setupTurnOnScreenNewSMS();
@@ -298,6 +299,47 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+                }
+            });
+        }
+
+        private void setupRecentAppsOpacity() {
+            boolean enableOpacity = settings.getBoolean(Prefs.RECENT_APPS_CUSTOM_OPACITY, false);
+            int opacity = settings.getInt(Prefs.RECENT_APPS_CUSTOM_OPACITY_VALUE, 0);
+
+            CheckBox chbOpacity = (CheckBox) rootView.findViewById(R.id.chb_recent_apps_opacity);
+            final TextView txtOpacity = (TextView) rootView.findViewById(R.id.txt_recent_apps_opacity);
+            final SeekBar seekOpacity = (SeekBar) rootView.findViewById(R.id.seek_recent_apps_opacity);
+
+            chbOpacity.setChecked(enableOpacity);
+            chbOpacity.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.RECENT_APPS_CUSTOM_OPACITY, isChecked);
+                    txtOpacity.setEnabled(isChecked);
+                    seekOpacity.setEnabled(isChecked);
+                }
+            });
+
+            txtOpacity.setText(opacity + "");
+            txtOpacity.setEnabled(enableOpacity);
+
+            seekOpacity.setProgress(opacity);
+            seekOpacity.setEnabled(enableOpacity);
+            seekOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    txtOpacity.setText(progress + "");
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    txtOpacity.setText(seekBar.getProgress() + "");
+                    settings.putInt(Prefs.RECENT_APPS_CUSTOM_OPACITY_VALUE, seekBar.getProgress());
                 }
             });
         }

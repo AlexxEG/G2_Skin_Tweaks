@@ -11,6 +11,7 @@
     <string name="enable_custom_bubble"><![CDATA[Slå på ny boble<br/><small>Erstatter fjerde eksisterende boble.</small>]]></string>
     <string name="enable_custom_bubble_color">Enable custom bubble colors</string>
     <string name="enable_debugging">Aktiver Debugging</string>
+    <string name="enable_recent_apps_opacity">Tilpasset opasitet for nylige apps</string>
     <string name="enable_remove_dividers">Fjern separatorer</string>
     <string name="enable_replace_switch">Slå på alternativ \'switch\' *</string>
     <string name="enable_sms_smaller_size">Tillat mindre tekst størrelse. (Ned til %1$spx)</string>

@@ -23,6 +23,8 @@ public class Prefs {
     public static final String ENABLE_SMS_TEXT_COLOR = "enableSmsTextColor";
     public static final String MINIMUM_ZOOM_LEVEL = "pref_minimum_zoom";
     public static final String POWER_LED_TIME = "pref_power_led_time";
+    public static final String RECENT_APPS_CUSTOM_OPACITY = "recent_apps_custom_opacity";
+    public static final String RECENT_APPS_CUSTOM_OPACITY_VALUE = "recent_apps_custom_opacity_value";
     public static final String SELECTED_BUBBLE = "selected_bubble";
     public static final String SMS_TEXT_COLOR_LEFT = "smsTextColorLeft";
     public static final String SMS_TEXT_COLOR_RIGHT = "smsTextColorRight";

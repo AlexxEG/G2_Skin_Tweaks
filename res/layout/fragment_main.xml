@@ -64,6 +64,35 @@
             android:contentDescription="@null"
             android:src="@drawable/image_replace_switch"/>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:layout_marginTop="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <CheckBox
+            android:id="@+id/chb_recent_apps_opacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:text="@string/enable_recent_apps_opacity"/>
+
+        <TextView
+            android:id="@+id/txt_recent_apps_opacity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dip"
+            android:gravity="right"
+            android:text="@null"/>
+
+        <SeekBar
+            android:id="@+id/seek_recent_apps_opacity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:max="255"/>
+
         <TextView
             style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
