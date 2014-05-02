@@ -10,6 +10,15 @@
             android:numeric="integer"
             android:summary="@string/pref_minimum_zoom"
             android:title="@string/pref_minimum_zoom_summary"/>
+
+        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+            android:defaultValue="0"
+            android:icon="@null"
+            android:inputType="number"
+            android:key="pref_date_offset_size"
+            android:numeric="integer"
+            android:summary="Set the size offset for date text."
+            android:title="Date Size Offset"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/advanced">

@@ -299,12 +299,113 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             return;
         }
 
+        // Create hooks
+        XC_MethodHook hook = new XC_MethodHook() {
+            private final String DATE_TEXT_VIEW_NAME_OTHER = "mSmallTextView";
+            private final String DATE_TEXT_VIEW_NAME_SPRINT = "mBodySubTextView";
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                try {
+                    TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+                    TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, getDateTextViewName());
+
+                    boolean isIncomingMessage = isIncomingMessage(param);
+                    boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+                    boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
+
+                    if (enableCustomBubbleColor) {
+                        View parent = (View) tvBody.getParent();
+                        ArrayList<View> parents = new ArrayList<View>();
+
+                        while (parent != null) {
+                            parents.add(parent);
+                            parent = (View) parent.getParent();
+                        }
+
+                        int selectedColor;
+
+                        if (isIncomingMessage) {
+                            selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+                        } else {
+                            selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                        }
+
+                        LinearLayout ll = (LinearLayout) param.thisObject;
+                        // Looking for the second parent, index 1
+                        Drawable bd = parents.get(1).getBackground();
+                        int color = Color.argb(
+                                Color.alpha(bd.getOpacity()),
+                                Color.red(selectedColor),
+                                Color.green(selectedColor),
+                                Color.blue(selectedColor)
+                        );
+
+                        bd.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                    }
+
+                    if (enableSmsTextColor) {
+                        int color = settings.getInt(isIncomingMessage ?
+                                Prefs.SMS_TEXT_COLOR_LEFT :
+                                Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+
+                        tvBody.setTextColor(color);
+                        tvDate.setTextColor(color);
+                    }
+                } catch (Exception e) {
+                    XposedBridge.log(e);
+                }
+            }
+
+            private String getDateTextViewName() {
+                if (Devices.getDevice() == Devices.SPRINT) {
+                    return DATE_TEXT_VIEW_NAME_SPRINT;
+                } else {
+                    return DATE_TEXT_VIEW_NAME_OTHER;
+                }
+            }
+
+            private boolean isIncomingMessage(MethodHookParam param) {
+                Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
+
+                Object returnVal = XposedHelpers.callMethod(
+                        param.thisObject,
+                        "isLeftItem",
+                        new Class<?>[]{messageItem.getClass()},
+                        messageItem);
+
+                return (Boolean) returnVal;
+            }
+        };
+        XC_MethodHook resizeHook = new XC_MethodHook() {
+            private final String DATE_TEXT_VIEW_NAME_OTHER = "mSmallTextView";
+            private final String DATE_TEXT_VIEW_NAME_SPRINT = "mBodySubTextView";
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
+                TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, getDateTextViewName());
+
+                int offset = settings.getInt(Prefs.DATE_SIZE_OFFSET, 0);
+
+                tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize() - offset);
+            }
+
+            private String getDateTextViewName() {
+                if (Devices.getDevice() == Devices.SPRINT) {
+                    return DATE_TEXT_VIEW_NAME_SPRINT;
+                } else {
+                    return DATE_TEXT_VIEW_NAME_OTHER;
+                }
+            }
+        };
+
         int fails = 0;
         // Store exceptions, and only print them if both hooks fail
         ArrayList<Throwable> exceptions = new ArrayList<Throwable>();
 
         try {
-            hookMessageListItemOther(finalClass);
+            hookMessageListItemOther(finalClass, hook, resizeHook);
             return; // No need to continue
         } catch (Throwable e) {
             fails++;
@@ -312,7 +413,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
 
         try {
-            hookMessageListItemSprint(lpparam, finalClass);
+            hookMessageListItemSprint(finalClass, hook, resizeHook);
             return; // No need to continue
         } catch (Throwable e) {
             fails++;
@@ -329,7 +430,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
     }
 
-    private void hookMessageListItemOther(Class<?> finalClass) throws Throwable {
+    private void hookMessageListItemOther(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) throws Throwable {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
@@ -340,73 +441,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 "boolean",
                 "boolean",
 
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        try {
-                            TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                            TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
-
-                            boolean isIncomingMessage = isIncomingMessage(param);
-                            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-                            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
-
-                            if (enableCustomBubbleColor) {
-                                TextView txtBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                                View parent = (View) txtBody.getParent();
-                                ArrayList<View> parents = new ArrayList<View>();
-
-                                while (parent != null) {
-                                    parents.add(parent);
-                                    parent = (View) parent.getParent();
-                                }
-
-                                int selectedColor;
-
-                                if (isIncomingMessage) {
-                                    selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
-                                } else {
-                                    selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-                                }
-
-                                LinearLayout ll = (LinearLayout) param.thisObject;
-                                // Looking for the second parent, index 1
-                                Drawable bd = parents.get(1).getBackground();
-                                int color = Color.argb(
-                                        Color.alpha(bd.getOpacity()),
-                                        Color.red(selectedColor),
-                                        Color.green(selectedColor),
-                                        Color.blue(selectedColor)
-                                );
-
-                                bd.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                            }
-
-                            if (enableSmsTextColor) {
-                                int color = settings.getInt(isIncomingMessage ?
-                                        Prefs.SMS_TEXT_COLOR_LEFT :
-                                        Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-
-                                tvBody.setTextColor(color);
-                                tvDate.setTextColor(color);
-                            }
-                        } catch (Exception e) {
-                            XposedBridge.log(e);
-                        }
-                    }
-
-                    private boolean isIncomingMessage(MethodHookParam param) {
-                        Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
-
-                        Object returnVal = XposedHelpers.callMethod(
-                                param.thisObject,
-                                "isLeftItem",
-                                new Class<?>[]{messageItem.getClass()},
-                                messageItem);
-
-                        return (Boolean) returnVal;
-                    }
-                }
+                hook
         );
 
         XposedHelpers.findAndHookMethod(
@@ -414,19 +449,11 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 "resizeFonts",
                 "boolean",
 
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                        TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mSmallTextView");
-
-                        tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
-                    }
-                }
+                resizeHook
         );
     }
 
-    private void hookMessageListItemSprint(final LoadPackageParam lpparam, Class<?> finalClass) throws Throwable {
+    private void hookMessageListItemSprint(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) throws Throwable {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
@@ -438,75 +465,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 "boolean",
                 "java.util.ArrayList",
 
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        try {
-                            TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                            TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
-
-                            boolean isIncomingMessage = isIncomingMessage(param);
-                            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-                            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
-
-                            if (enableCustomBubbleColor) {
-                                View parent = (View) ((TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView")).getParent();
-
-                                while (parent != null) {
-                                    if (parent.getBackground() != null) {
-                                        Drawable d = parent.getBackground();
-
-                                        int color = settings.getInt(isIncomingMessage ?
-                                                Prefs.BUBBLE_COLOR_LEFT :
-                                                Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-
-                                        d.setColorFilter(new PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
-                                    }
-
-                                    parent = (View) parent.getParent();
-                                }
-                            }
-
-                            if (enableSmsTextColor) {
-                                int color = settings.getInt(isIncomingMessage ?
-                                        Prefs.SMS_TEXT_COLOR_LEFT :
-                                        Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-
-                                tvBody.setTextColor(color);
-                                tvDate.setTextColor(color);
-                            }
-                        } catch (Exception e) {
-                            XposedBridge.log(e);
-                        }
-                    }
-
-                    private boolean isIncomingMessage(MethodHookParam param) {
-                        Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
-
-                        Object returnVal = XposedHelpers.callMethod(
-                                param.thisObject,
-                                "isLeftItem",
-                                new Class<?>[]{messageItem.getClass()},
-                                messageItem);
-
-                        return (Boolean) returnVal;
-                    }
-                }
+                hook
         );
 
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "resizeFonts",
 
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                        TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodySubTextView");
-
-                        tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize());
-                    }
-                }
+                resizeHook
         );
     }
 
