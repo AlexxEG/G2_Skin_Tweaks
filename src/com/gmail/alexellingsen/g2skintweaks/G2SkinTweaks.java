@@ -62,7 +62,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             if (enableCustomBubble) {
                 final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
-                resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", modRes.fwd(R.drawable.message_set_bubble_04));
+                resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", getSelectedBubbleSet(modRes));
                 resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", getSelectedBubble(modRes, true));
                 resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", getSelectedBubble(modRes, false));
                 resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", getSelectedBubble(modRes, false));
@@ -680,6 +680,23 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 break;
             case 1:
                 id = left ? R.drawable.hangouts_balloon_left : R.drawable.hangouts_balloon_right;
+                break;
+            default:
+                return null;
+        }
+
+        return modRes.fwd(id);
+    }
+
+    private XResForwarder getSelectedBubbleSet(XModuleResources modRes) {
+        int id;
+
+        switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
+            case 0:
+                id = R.drawable.message_set_bubble_04;
+                break;
+            case 1:
+                id = R.drawable.message_set_hangouts;
                 break;
             default:
                 return null;
