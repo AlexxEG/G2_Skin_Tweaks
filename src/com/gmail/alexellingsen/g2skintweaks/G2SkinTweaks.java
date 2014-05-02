@@ -1,5 +1,6 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
+import android.bluetooth.BluetoothClass;
 import android.content.res.XModuleResources;
 import android.content.res.XResForwarder;
 import android.content.res.XResources;
@@ -299,16 +300,21 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             return;
         }
 
+        final String dateTextViewName;
+
+        if (Devices.getDevice() == Devices.SPRINT) {
+            dateTextViewName = "mBodySubTextView";
+        } else {
+            dateTextViewName = "mSmallTextView";
+        }
+
         // Create hooks
         XC_MethodHook hook = new XC_MethodHook() {
-            private final String DATE_TEXT_VIEW_NAME_OTHER = "mSmallTextView";
-            private final String DATE_TEXT_VIEW_NAME_SPRINT = "mBodySubTextView";
-
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 try {
                     TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                    TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, getDateTextViewName());
+                    TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, dateTextViewName);
 
                     boolean isIncomingMessage = isIncomingMessage(param);
                     boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
@@ -357,14 +363,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 }
             }
 
-            private String getDateTextViewName() {
-                if (Devices.getDevice() == Devices.SPRINT) {
-                    return DATE_TEXT_VIEW_NAME_SPRINT;
-                } else {
-                    return DATE_TEXT_VIEW_NAME_OTHER;
-                }
-            }
-
             private boolean isIncomingMessage(MethodHookParam param) {
                 Object messageItem = XposedHelpers.getObjectField(param.thisObject, "mMessageItem");
 
@@ -378,25 +376,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             }
         };
         XC_MethodHook resizeHook = new XC_MethodHook() {
-            private final String DATE_TEXT_VIEW_NAME_OTHER = "mSmallTextView";
-            private final String DATE_TEXT_VIEW_NAME_SPRINT = "mBodySubTextView";
-
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
-                TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, getDateTextViewName());
+                TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, dateTextViewName);
 
                 int offset = settings.getInt(Prefs.DATE_SIZE_OFFSET, 0);
 
                 tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize() - offset);
-            }
-
-            private String getDateTextViewName() {
-                if (Devices.getDevice() == Devices.SPRINT) {
-                    return DATE_TEXT_VIEW_NAME_SPRINT;
-                } else {
-                    return DATE_TEXT_VIEW_NAME_OTHER;
-                }
             }
         };
 
