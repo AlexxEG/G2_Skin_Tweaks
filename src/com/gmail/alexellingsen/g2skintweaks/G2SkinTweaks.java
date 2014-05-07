@@ -405,37 +405,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             }
         };
 
-        int fails = 0;
-        // Store exceptions, and only print them if both hooks fail
-        ArrayList<Throwable> exceptions = new ArrayList<Throwable>();
-
-        try {
-            hookMessageListItemOther(finalClass, hook, resizeHook);
-            return; // No need to continue
-        } catch (Throwable e) {
-            fails++;
-            exceptions.add(e);
-        }
-
-        try {
+        if (Devices.getDevice() == Devices.SPRINT) {
             hookMessageListItemSprint(finalClass, hook, resizeHook);
-            return; // No need to continue
-        } catch (Throwable e) {
-            fails++;
-            exceptions.add(e);
-        }
-
-        if (fails == 2) { // Both failed
-            for (Throwable e : exceptions) {
-                XposedBridge.log(e);
-            }
-
-            XposedBridge.log("G2 Skin Tweaks couldn't find a proper method to hook.");
-            XposedBridge.log("Please let the developer know your device model if you want to help.");
+        } else {
+            hookMessageListItemOther(finalClass, hook, resizeHook);
         }
     }
 
-    private void hookMessageListItemOther(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) throws Throwable {
+    private void hookMessageListItemOther(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
@@ -458,7 +435,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void hookMessageListItemSprint(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) throws Throwable {
+    private void hookMessageListItemSprint(Class<?> finalClass, XC_MethodHook hook, XC_MethodHook resizeHook) {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
