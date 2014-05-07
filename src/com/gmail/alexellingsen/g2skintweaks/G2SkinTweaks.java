@@ -346,15 +346,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         Drawable bd = parents.get(1).getBackground();
 
                         if (enableTransparency) {
-                            ll.setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
-
-                            color = Color.argb(
-                                    // Color.alpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)),
-                                    Color.alpha(255),
-                                    Color.red(color),
-                                    Color.green(color),
-                                    Color.blue(color)
-                            );
+                            bd.setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
                         } else {
                             color = Color.argb(
                                     Color.alpha(bd.getOpacity()),
