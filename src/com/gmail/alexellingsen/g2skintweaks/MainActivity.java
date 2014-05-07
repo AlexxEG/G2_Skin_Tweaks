@@ -59,6 +59,9 @@ public class MainActivity extends Activity {
         if (id == R.id.action_reset_default) {
             fragment.askResetToDefault();
             return true;
+        } else if (id == R.id.action_create_shortcut) {
+            createHomeShortcut();
+            return true;
         } else if (id == R.id.action_enable_debugging) {
             item.setChecked(!item.isChecked());
             settings.putBoolean(Prefs.ENABLE_DEBUGGING, item.isChecked());
@@ -70,6 +73,23 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createHomeShortcut() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+        intent.setAction(Intent.ACTION_MAIN);
+
+        Intent addIntent = new Intent();
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "G2 Skin Tweaks");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(),
+                        R.drawable.ic_launcher)
+        );
+
+        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        getApplicationContext().sendBroadcast(addIntent);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

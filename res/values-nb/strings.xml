@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="action_create_shortcut">Lag Snarvei</string>
     <string name="action_reset_default">Tilbakestill</string>
     <string name="advanced">Avansert</string>
     <string name="app_name">G2 Skin Tweaks</string>
@@ -38,9 +39,9 @@
     <string name="text_set_custom_color">Trykk her for å sette innkommende &amp; utgående farger.</string>
     <string name="text_set_text_color">Trykk her for å sette tekst farge.</string>
     <string name="title_general">Generelt</string>
+    <string name="transparency">Transparency</string>
     <string name="turn_on_screen_new_sms">Slå på skjermen når en ny SMS kommer</string>
     <string name="turned_power_led_off">Skrudde strøm LED av</string>
     <string name="yes">Ja</string>
-    <string name="transparency">Transparency</string>
 
 </resources>
