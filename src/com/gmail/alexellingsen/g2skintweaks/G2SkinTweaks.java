@@ -289,10 +289,10 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void hookMessageListItem(final LoadPackageParam lpparam) {
-        final Class<?> finalClass;
+        final Class<?> findClass;
 
         try {
-            finalClass = XposedHelpers.findClass(
+            findClass = XposedHelpers.findClass(
                     "com.android.mms.ui.MessageListItem",
                     lpparam.classLoader);
         } catch (ClassNotFoundError e) {
@@ -406,9 +406,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         };
 
         if (Devices.getDevice() == Devices.SPRINT) {
-            hookMessageListItemSprint(finalClass, hook, resizeHook);
+            hookMessageListItemSprint(findClass, hook, resizeHook);
         } else {
-            hookMessageListItemOther(finalClass, hook, resizeHook);
+            hookMessageListItemOther(findClass, hook, resizeHook);
         }
     }
 
