@@ -11,7 +11,6 @@ import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGHomeHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
@@ -25,7 +24,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("UnusedDeclaration")
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
     private static final int DEFAULT_MINIMUM_ZOOM = 85;
@@ -348,7 +346,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             }
                         }
 
-                        LinearLayout ll = (LinearLayout) param.thisObject;
                         // Looking for the second parent, index 1
                         Drawable bd = parents.get(1).getBackground();
 
@@ -687,18 +684,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
         if (debug) {
             XposedBridge.log(String.format("G2SkinTweaks: %s", text));
-        }
-    }
-
-    private void log(Throwable e) {
-        boolean debug = false;
-
-        if (settings != null) {
-            debug = settings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
-        }
-
-        if (debug) {
-            XposedBridge.log(e);
         }
     }
 }

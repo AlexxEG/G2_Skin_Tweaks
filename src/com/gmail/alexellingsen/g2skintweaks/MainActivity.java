@@ -135,7 +135,6 @@ public class MainActivity extends Activity {
         activity.startActivityForResult(intent, CROP_IMAGE);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static class MainFragment extends Fragment {
 
         private View rootView = null;

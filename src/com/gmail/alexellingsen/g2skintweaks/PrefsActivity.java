@@ -5,7 +5,7 @@ import android.preference.*;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-@SuppressWarnings({"ConstantConditions", "NullableProblems"})
+@SuppressWarnings("NullableProblems")
 public class PrefsActivity extends PreferenceActivity {
 
     @Override
