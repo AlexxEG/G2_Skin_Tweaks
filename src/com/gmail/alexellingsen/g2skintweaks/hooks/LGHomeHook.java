@@ -1,20 +1,15 @@
 package com.gmail.alexellingsen.g2skintweaks.hooks;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
-import com.gmail.alexellingsen.g2skintweaks.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-
-import java.util.Objects;
 
 public class LGHomeHook {
 
