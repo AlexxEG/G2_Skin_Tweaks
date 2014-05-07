@@ -246,6 +246,7 @@ public class MainActivity extends Activity {
 
         private void setupCustomBubbleColor() {
             boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
+            boolean enableTransparency = settings.getBoolean(Prefs.BUBBLE_TRANSPARENCY, false);
 
             CheckBox chbCustomBubbleColor = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble_color);
             View view = rootView.findViewById(R.id.custom_bubble_colors);
@@ -265,6 +266,7 @@ public class MainActivity extends Activity {
 
             btnBubbleLeftColor.setEnabled(enableCustomBubbleColor);
             btnBubbleLeftColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE));
+            btnBubbleLeftColor.getBackground().setAlpha(enableTransparency ? settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) : 255);
             btnBubbleLeftColor.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -274,10 +276,56 @@ public class MainActivity extends Activity {
 
             btnBubbleRightColor.setEnabled(enableCustomBubbleColor);
             btnBubbleRightColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE));
+            btnBubbleRightColor.getBackground().setAlpha(enableTransparency ? settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) : 255);
             btnBubbleRightColor.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                }
+            });
+
+            CheckBox chbTransparency = (CheckBox) rootView.findViewById(R.id.chb_bubble_transparency);
+            final TextView txtTransparency = (TextView) rootView.findViewById(R.id.txt_bubble_transparency);
+            final SeekBar seekTransparency = (SeekBar) rootView.findViewById(R.id.seek_bubble_transparency);
+
+            chbTransparency.setChecked(enableTransparency);
+            chbTransparency.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.BUBBLE_TRANSPARENCY, isChecked);
+
+                    seekTransparency.setEnabled(isChecked);
+
+                    if (!isChecked) {
+                        btnBubbleLeftColor.getBackground().setAlpha(255);
+                        btnBubbleRightColor.getBackground().setAlpha(255);
+                    } else {
+                        btnBubbleLeftColor.getBackground().setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+                        btnBubbleLeftColor.getBackground().setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+                    }
+                }
+            });
+
+            txtTransparency.setText(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) + "");
+
+            seekTransparency.setProgress(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+            seekTransparency.setEnabled(enableTransparency);
+            seekTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    txtTransparency.setText(progress + "");
+                    btnBubbleLeftColor.getBackground().setAlpha(progress);
+                    btnBubbleRightColor.getBackground().setAlpha(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    txtTransparency.setText(seekBar.getProgress() + "");
+                    settings.putInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, seekBar.getProgress());
                 }
             });
         }

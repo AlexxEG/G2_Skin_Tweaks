@@ -8,6 +8,8 @@ public class Prefs {
     // Settings
     public static final String BUBBLE_COLOR_LEFT = "selectedSquareColorLeft";
     public static final String BUBBLE_COLOR_RIGHT = "selectedSquareColorString";
+    public static final String BUBBLE_TRANSPARENCY = "bubble_transparency";
+    public static final String BUBBLE_TRANSPARENCY_VALUE = "bubble_transparency_value";
     public static final String CACHED_BACKLIGHT1_PATH = "cachedBacklight1Path";
     public static final String CACHED_BACKLIGHT2_PATH = "cachedBacklight2Path";
     public static final String CONVERSATION_COLOR_BOTTOM = "conversationColorBottom";

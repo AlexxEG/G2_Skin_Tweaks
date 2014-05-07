@@ -41,5 +41,6 @@
     <string name="turn_on_screen_new_sms">Turn on screen on new SMS</string>
     <string name="turned_power_led_off">Turned power LED off</string>
     <string name="yes">Yes</string>
+    <string name="transparency">Transparency</string>
 
 </resources>

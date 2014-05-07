@@ -320,8 +320,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     boolean isIncomingMessage = isIncomingMessage(param);
                     boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
                     boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
+                    boolean enableTransparency = settings.getBoolean(Prefs.BUBBLE_TRANSPARENCY, false);
 
-                    if (enableCustomBubbleColor) {
+                    if (enableCustomBubbleColor || enableTransparency) {
                         View parent = (View) tvBody.getParent();
                         ArrayList<View> parents = new ArrayList<View>();
 
@@ -330,23 +331,39 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             parent = (View) parent.getParent();
                         }
 
-                        int selectedColor;
+                        int color = Color.WHITE;
 
-                        if (isIncomingMessage) {
-                            selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
-                        } else {
-                            selectedColor = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                        if (enableCustomBubbleColor) {
+                            if (isIncomingMessage) {
+                                color = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+                            } else {
+                                color = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                            }
                         }
 
                         LinearLayout ll = (LinearLayout) param.thisObject;
                         // Looking for the second parent, index 1
                         Drawable bd = parents.get(1).getBackground();
-                        int color = Color.argb(
-                                Color.alpha(bd.getOpacity()),
-                                Color.red(selectedColor),
-                                Color.green(selectedColor),
-                                Color.blue(selectedColor)
-                        );
+
+                        if (enableTransparency) {
+                            ll.setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+
+                            color = Color.argb(
+                                    // Color.alpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)),
+                                    Color.alpha(255),
+                                    Color.red(color),
+                                    Color.green(color),
+                                    Color.blue(color)
+                            );
+                        } else {
+                            color = Color.argb(
+                                    Color.alpha(bd.getOpacity()),
+                                    Color.red(color),
+                                    Color.green(color),
+                                    Color.blue(color)
+                            );
+                        }
+
 
                         bd.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
                     }

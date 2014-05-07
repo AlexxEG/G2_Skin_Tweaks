@@ -125,6 +125,35 @@
             android:layout_height="wrap_content"
             layout="@layout/color_picker_buttons"/>
 
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dip">
+
+            <CheckBox
+                android:id="@+id/chb_bubble_transparency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transparency"/>
+
+            <TextView
+                android:id="@+id/txt_bubble_transparency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dip"
+                android:layout_gravity="bottom|right"
+                android:gravity="bottom|right"
+                android:text="@null"/>
+
+        </FrameLayout>
+
+        <SeekBar
+            android:id="@+id/seek_bubble_transparency"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:progress="255"/>
+
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dip"

@@ -41,5 +41,6 @@
     <string name="turn_on_screen_new_sms">Slå på skjermen når en ny SMS kommer</string>
     <string name="turned_power_led_off">Skrudde strøm LED av</string>
     <string name="yes">Ja</string>
+    <string name="transparency">Transparency</string>
 
 </resources>
