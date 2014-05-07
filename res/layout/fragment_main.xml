@@ -108,6 +108,26 @@
             android:background="@android:color/darker_gray"/>
 
         <CheckBox
+            android:id="@+id/chb_conversation_list_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:text="@string/enable_conversation_list_bg"/>
+
+        <Button
+            android:id="@+id/btn_conversation_list_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:text="@string/set_background"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="6dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <CheckBox
             android:id="@+id/chb_custom_bubble_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,9 +141,9 @@
 
         <include
             android:id="@+id/custom_bubble_colors"
+            layout="@layout/color_picker_buttons"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/color_picker_buttons"/>
+            android:layout_height="wrap_content"/>
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -140,8 +160,8 @@
                 android:id="@+id/txt_bubble_transparency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dip"
                 android:layout_gravity="bottom|right"
+                android:layout_marginRight="16dip"
                 android:gravity="bottom|right"
                 android:text="@null"/>
 
@@ -170,10 +190,10 @@
             android:text="@string/enable_custom_bubble"/>
 
         <Spinner
+            android:id="@+id/spinner_bubbles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dip"
-            android:id="@+id/spinner_bubbles"/>
+            android:layout_marginTop="6dip"/>
 
         <ImageView
             android:layout_width="fill_parent"
@@ -202,9 +222,9 @@
 
         <include
             android:id="@+id/sms_text_colors"
+            layout="@layout/color_picker_buttons"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/color_picker_buttons"/>
+            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="fill_parent"
@@ -227,9 +247,9 @@
 
         <include
             android:id="@+id/conversation_colors"
+            layout="@layout/color_picker_buttons"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/color_picker_buttons"/>
+            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="fill_parent"

@@ -16,6 +16,7 @@ public class Prefs {
     public static final String CONVERSATION_COLOR_TOP = "conversationColorTop";
     public static final String DATE_SIZE_OFFSET = "pref_date_offset_size";
     public static final String ENABLE_CONVERSATION_COLOR = "enableConversationColor";
+    public static final String ENABLE_CONVERSATION_LIST_BG = "enable_conversation_list_bg";
     public static final String ENABLE_CUSTOM_BUBBLE = "enableSquareBubble";
     public static final String ENABLE_CUSTOM_BUBBLE_COLOR = "enableCustomBubbleColor";
     public static final String ENABLE_DEBUGGING = "enableDebugging";

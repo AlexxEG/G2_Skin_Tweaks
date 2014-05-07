@@ -9,6 +9,7 @@
     <string name="chb_flash_power_led"><![CDATA[Blink strøm LED når SMS kommer<br /><small>* Root nødvending *</small>]]></string>
     <string name="confirm_reset_message">Er du sikker på at du vil tilbakestille?</string>
     <string name="enable_conversation_color">Slå på samtale liste farger</string>
+    <string name="enable_conversation_list_bg">Slå på samtale liste bakgrunn</string>
     <string name="enable_custom_bubble"><![CDATA[Slå på ny boble<br/><small>Erstatter fjerde eksisterende boble.</small>]]></string>
     <string name="enable_custom_bubble_color">Enable custom bubble colors</string>
     <string name="enable_debugging">Aktiver Debugging</string>
@@ -33,6 +34,8 @@
     <string name="pref_power_led_time_summary">Tiden i millisekunder strøm LED står på når en ny SMS/MMS kommer.</string>
     <string name="reboot_notice">Du må restarte for at alt skal ta effekt.</string>
     <string name="request_root">Be om root</string>
+    <string name="set_background">Sett bakgrunn</string>
+    <string name="set_background_complete">Satte bakgrunn.</string>
     <string name="settings">Innstillinger</string>
     <string name="square_bubble">Square Bubble</string>
     <string name="text_conversation_color">Trykk for å sette topp &amp; bunn farge.</string>

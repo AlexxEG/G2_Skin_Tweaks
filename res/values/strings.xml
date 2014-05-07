@@ -9,6 +9,7 @@
     <string name="chb_flash_power_led"><![CDATA[Flash power LED on new message<br /><small>* Root required *</small>]]></string>
     <string name="confirm_reset_message">Are you sure you want to reset to default?</string>
     <string name="enable_conversation_color">Enable conversation color</string>
+    <string name="enable_conversation_list_bg">Enable conversation list background</string>
     <string name="enable_custom_bubble"><![CDATA[Enable custom bubble<br/><small>Replaces fourth existing bubble.</small>]]></string>
     <string name="enable_custom_bubble_color">Enable custom bubble colors</string>
     <string name="enable_debugging">Enable Debugging</string>
@@ -33,6 +34,8 @@
     <string name="pref_power_led_time_summary">The amount of time in milliseconds the power LED will stay on after new SMS/MMS.</string>
     <string name="reboot_notice">You\'ll need to reboot for everything to reset.</string>
     <string name="request_root">Request root</string>
+    <string name="set_background">Set background</string>
+    <string name="set_background_complete">Background was set.</string>
     <string name="settings">Settings</string>
     <string name="square_bubble">Square Bubble</string>
     <string name="text_conversation_color">Click to set top &amp; bottom text color respectively.</string>

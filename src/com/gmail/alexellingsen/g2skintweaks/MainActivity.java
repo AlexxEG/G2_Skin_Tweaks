@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Html;
 import android.view.*;
 import android.view.View.OnClickListener;
@@ -15,8 +17,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorSelectedListener;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 
+    private static final int CROP_IMAGE = 112;
+    private static final int PICK_IMAGE = 111;
     private static final int PREFERENCE_ACTIVITY = 100;
 
     private MainFragment fragment = null;
@@ -93,10 +99,40 @@ public class MainActivity extends Activity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK)
+            return;
+
         if (requestCode == PREFERENCE_ACTIVITY) {
             // Update text to show new preferences, if any.
             fragment.updateAfterPreferences();
+        } else if (requestCode == PICK_IMAGE) {
+            cropImage(this, data.getData());
+        } else if (requestCode == CROP_IMAGE) {
+            Toast.makeText(this, getString(R.string.set_background_complete), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private static void pickImage(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_IMAGE);
+    }
+
+    private static void cropImage(Activity activity, Uri data) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+
+        intent.setData(data);
+        intent.putExtra("outputX", 1080);
+        intent.putExtra("outputY", 1584);
+        intent.putExtra("aspectX", 15);
+        intent.putExtra("aspectY", 22);
+        intent.putExtra("scale", true);
+
+        Uri path = Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() +
+                "/G2SkinTweaks/background.png"));
+
+        intent.putExtra("output", path);
+        activity.startActivityForResult(intent, CROP_IMAGE);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -183,6 +219,7 @@ public class MainActivity extends Activity {
 
         private void setup() {
             setupConversationColor();
+            setupConversationListBG();
             setupCustomBubble();
             setupCustomBubbleColor();
             setupLowerMinimumZoom();
@@ -227,6 +264,30 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     showColorPicker(v, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                }
+            });
+        }
+
+        private void setupConversationListBG() {
+            boolean enableConversationListBG = settings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false);
+
+            CheckBox chbBackground = (CheckBox) rootView.findViewById(R.id.chb_conversation_list_bg);
+            final Button btnBackground = (Button) rootView.findViewById(R.id.btn_conversation_list_bg);
+
+            chbBackground.setChecked(enableConversationListBG);
+            chbBackground.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    settings.putBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, isChecked);
+                    btnBackground.setEnabled(isChecked);
+                }
+            });
+
+            btnBackground.setEnabled(enableConversationListBG);
+            btnBackground.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pickImage(getActivity());
                 }
             });
         }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import de.robv.android.xposed.*;
@@ -47,11 +48,13 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
 
+        LGMessageHook.init(settings);
         RecentAppsHook.init(settings);
     }
 
     @Override
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+        LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
 
         if (resparam.packageName.equals("com.android.mms")) {
@@ -87,6 +90,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+        LGMessageHook.handleLoadPackage(lpparam);
         RecentAppsHook.handleLoadPackage(lpparam);
 
         if (Devices.getDevice() == Devices.SPRINT) {
