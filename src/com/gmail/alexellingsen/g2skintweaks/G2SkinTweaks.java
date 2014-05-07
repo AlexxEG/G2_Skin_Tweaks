@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.gmail.alexellingsen.g2skintweaks.hooks.LGHomeHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
@@ -54,6 +55,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     @Override
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+        LGHomeHook.handleInitPackageResources(resparam);
         LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
 
@@ -90,6 +92,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+        LGHomeHook.handleLoadPackage(lpparam);
         LGMessageHook.handleLoadPackage(lpparam);
         RecentAppsHook.handleLoadPackage(lpparam);
 
