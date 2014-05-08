@@ -192,7 +192,8 @@ public class MainActivity extends PreferenceActivity {
             setupColorPickerPreferences();
 
             String[] entries = getResources().getStringArray(R.array.custom_bubbles);
-            String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3, Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
+            String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
+                    Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
 
             for (String key : keys) {
                 findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
