@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:icon="@null"
+        android:selectable="false"
+        android:summary="Some options requires you kill the relevant app process before it takes effect."
+        android:title="@string/information_header"/>
+
+    <PreferenceCategory android:title="@string/category_tweaks">
+        <PreferenceScreen
+            android:icon="@null"
+            android:persistent="false"
+            android:title="@string/title_general">
+
+            <PreferenceCategory android:title="@string/category_general">
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_remove_dividers"
+                    android:title="@string/pref_remove_dividers"/>
+
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_replace_switch"
+                    android:summary="@string/pref_replace_switch_summary"
+                    android:title="@string/pref_replace_switch"/>
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/category_recent_apps">
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_recent_apps_opacity"
+                    android:summary="@string/pref_recent_apps_custom_opacity_summary"
+                    android:title="@string/pref_recent_apps_custom_opacity"/>
+
+                <Preference
+                    android:dependency="pref_recent_apps_opacity"
+                    android:icon="@null"
+                    android:key="set_recent_apps_opacity"
+                    android:title="@string/set_custom_opacity"/>
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:icon="@null"
+            android:persistent="false"
+            android:title="@string/title_messenger">
+
+            <PreferenceCategory android:title="@string/messenger_customization">
+
+                <PreferenceScreen
+                    android:icon="@null"
+                    android:persistent="false"
+                    android:summary="@string/title_custom_bubbles_summary"
+                    android:title="@string/title_custom_bubbles">
+
+                    <CheckBoxPreference
+                        android:icon="@null"
+                        android:key="pref_custom_bubbles"
+                        android:title="@string/pref_custom_bubbles"/>
+
+                    <Preference
+                        android:icon="@null"
+                        android:selectable="false"
+                        android:summary="@string/custom_bubbles_note"/>
+
+                    <PreferenceCategory android:title="@string/category_bubbles">
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_1"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_1"/>
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_2"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_2"/>
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_3"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_3"/>
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_4"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_4"/>
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_5"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_5"/>
+
+                        <ListPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_custom_bubbles"
+                            android:entries="@array/custom_bubbles"
+                            android:entryValues="@array/custom_bubbles_values"
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_6"
+                            android:summary="@string/default_string"
+                            android:title="@string/pref_custom_bubble_6"/>
+                    </PreferenceCategory>
+                </PreferenceScreen>
+
+                <PreferenceScreen
+                    android:icon="@null"
+                    android:persistent="false"
+                    android:summary="Set bubble colors &amp; transparency."
+                    android:title="Bubble customization">
+
+                    <PreferenceCategory android:title="@string/category_colors">
+
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_custom_bubble_colors"
+                            android:title="@string/pref_bubble_colors"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_custom_bubble_colors"
+                            android:icon="@null"
+                            android:key="set_custom_bubble_color_left"
+                            android:title="@string/pref_bubble_color_left"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_custom_bubble_colors"
+                            android:icon="@null"
+                            android:key="set_custom_bubble_color_right"
+                            android:title="@string/pref_bubble_color_right"/>
+
+                    </PreferenceCategory>
+
+                    <PreferenceCategory android:title="@string/category_transparency">
+
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_bubble_transparency"
+                            android:title="@string/pref_transparency"/>
+
+                        <Preference
+                            android:dependency="pref_bubble_transparency"
+                            android:icon="@null"
+                            android:key="set_bubble_transparency"
+                            android:title="@string/pref_transparency_value"/>
+
+                    </PreferenceCategory>
+
+                </PreferenceScreen>
+
+                <PreferenceScreen
+                    android:icon="@null"
+                    android:persistent="false"
+                    android:summary="@string/category_conversation_list_customization_summary"
+                    android:title="@string/category_conversation_list_customization">
+
+                    <PreferenceCategory android:title="@string/category_background">
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_conversation_list_bg"
+                            android:title="@string/pref_conversation_list_bg"/>
+
+                        <Preference
+                            android:dependency="pref_conversation_list_bg"
+                            android:icon="@null"
+                            android:key="set_conversation_list_bg"
+                            android:summary="@string/pref_conversation_list_bg_select_summary"
+                            android:title="@string/pref_conversation_list_bg_select"/>
+                    </PreferenceCategory>
+
+                    <PreferenceCategory android:title="@string/category_colors">
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_conversation_text_color"
+                            android:title="@string/pref_conversation_text_colors"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_conversation_text_color"
+                            android:icon="@null"
+                            android:key="set_conversation_text_color_top"
+                            android:summary="@string/pref_conversation_color_top_summary"
+                            android:title="@string/pref_conversation_color_top"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_conversation_text_color"
+                            android:icon="@null"
+                            android:key="set_conversation_text_color_bottom"
+                            android:summary="@string/pref_conversation_color_bottom_summary"
+                            android:title="@string/pref_conversation_color_bottom"/>
+                    </PreferenceCategory>
+
+                    <!-- ToDo: Make these work -->
+                    <PreferenceCategory android:title="@string/category_text_size">
+                        <Preference
+                            android:enabled="false"
+                            android:icon="@null"
+                            android:title="* WIP *"/>
+
+                        <CheckBoxPreference
+                            android:enabled="false"
+                            android:icon="@null"
+                            android:title="Enable custom text size"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                            android:enabled="false"
+                            android:icon="@null"
+                            android:summary="The minimum text size allowed."
+                            android:title="Minimum text size"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                            android:enabled="false"
+                            android:icon="@null"
+                            android:summary="Set the bottom size to the current zoom level - given offset."
+                            android:title="Bottom line offset"/>
+                    </PreferenceCategory>
+
+                </PreferenceScreen>
+
+                <PreferenceScreen
+                    android:icon="@null"
+                    android:persistent="false"
+                    android:summary="@string/category_messages_customization_summary"
+                    android:title="@string/category_messages_customization">
+
+                    <PreferenceCategory android:title="@string/category_colors">
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_sms_text_colors"
+                            android:title="@string/pref_messages_text_colors"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_sms_text_colors"
+                            android:icon="@null"
+                            android:key="set_sms_color_left"
+                            android:title="@string/pref_messages_text_color_left"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_sms_text_colors"
+                            android:icon="@null"
+                            android:key="set_sms_color_right"
+                            android:title="@string/pref_messages_text_color_right"/>
+                    </PreferenceCategory>
+
+                    <PreferenceCategory android:title="@string/category_text_size">
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_smaller_text_messages"
+                            android:summary="@string/pref_smaller_text_summary"
+                            android:title="@string/pref_smaller_text"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                            android:defaultValue="85"
+                            android:dependency="pref_smaller_text_messages"
+                            android:icon="@null"
+                            android:key="pref_minimum_zoom_messages"
+                            android:summary="@string/pref_minimum_text_size_summary"
+                            android:title="@string/pref_minimum_text_size"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                            android:defaultValue="0"
+                            android:dependency="pref_smaller_text_messages"
+                            android:icon="@null"
+                            android:key="pref_date_offset_size_messages"
+                            android:summary="@string/pref_date_offset_summary"
+                            android:title="@string/pref_date_offset"/>
+                    </PreferenceCategory>
+
+                </PreferenceScreen>
+
+            </PreferenceCategory>
+
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:icon="@null"
+            android:persistent="false"
+            android:title="@string/title_lg_launcher">
+
+            <CheckBoxPreference
+                android:icon="@null"
+                android:key="pref_applications_shortcut"
+                android:summary="Clicking the icon in the App Info dialog will open the selected app in Applications."
+                android:title="Applications info shortcut"/>
+
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:icon="@null"
+            android:persistent="false"
+            android:title="@string/title_misc">
+
+            <PreferenceCategory android:title="@string/category_screen">
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_dont_turn_screen_on_sms"
+                    android:summary="@string/dont_turn_screen_on_sms_summary"
+                    android:title="@string/dont_turn_screen_on_sms"/>
+
+                <CheckBoxPreference
+                    android:dependency="pref_dont_turn_screen_on_sms"
+                    android:icon="@null"
+                    android:key="pref_flash_led_sms"
+                    android:summary="@string/flash_power_led_summary"
+                    android:title="@string/flash_power_led"/>
+
+                <Preference
+                    android:dependency="pref_flash_led_sms"
+                    android:icon="@null"
+                    android:key="request_root"
+                    android:summary="@string/ask_for_root_summary"
+                    android:title="@string/ask_for_root"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>

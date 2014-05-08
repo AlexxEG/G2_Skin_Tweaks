@@ -64,10 +64,10 @@ public class RecentAppsHook {
                     @SuppressWarnings("deprecation")
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        boolean enableTransparentBackground = mSettings.getBoolean(Prefs.RECENT_APPS_CUSTOM_OPACITY, false);
+                        boolean enableTransparentBackground = mSettings.getBoolean(Prefs.RECENT_APPS_OPACITY, false);
 
                         if (enableTransparentBackground) {
-                            int alpha = mSettings.getInt(Prefs.RECENT_APPS_CUSTOM_OPACITY_VALUE, 0);
+                            int alpha = mSettings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 0);
 
                             frame.setBackgroundDrawable(null);
                             frame.setBackgroundColor(Color.argb(alpha, 0, 0, 0));

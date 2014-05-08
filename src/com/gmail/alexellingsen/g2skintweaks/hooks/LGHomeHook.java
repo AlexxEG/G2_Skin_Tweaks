@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+import com.gmail.alexellingsen.g2skintweaks.Prefs;
+import com.gmail.alexellingsen.g2skintweaks.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
@@ -15,7 +17,12 @@ public class LGHomeHook {
 
     private static final String PACKAGE = "com.lge.launcher2";
 
+    private static SettingsHelper mSettings;
     private static ImageView icon;
+
+    public static void init(SettingsHelper settings) {
+        mSettings = settings;
+    }
 
     public static void handleInitPackageResources(final XC_InitPackageResources.InitPackageResourcesParam resparam) {
         if (!resparam.packageName.equals(PACKAGE))
@@ -42,18 +49,20 @@ public class LGHomeHook {
                 new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        final Activity activity = (Activity) XposedHelpers.getObjectField(param.thisObject, "mActivity");
-                        final Object mAppInfo = XposedHelpers.getObjectField(param.thisObject, "mAppInfo");
-                        final Intent intent = (Intent) XposedHelpers.getObjectField(mAppInfo, "intent");
+                        if (mSettings.getBoolean(Prefs.ENABLE_APPLICATIONS_SHORTCUT, false)) {
+                            final Activity activity = (Activity) XposedHelpers.getObjectField(param.thisObject, "mActivity");
+                            final Object mAppInfo = XposedHelpers.getObjectField(param.thisObject, "mAppInfo");
+                            final Intent intent = (Intent) XposedHelpers.getObjectField(mAppInfo, "intent");
 
-                        icon.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent appInfoIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                appInfoIntent.setData(Uri.parse("package:" + intent.getComponent().getPackageName()));
-                                activity.startActivity(appInfoIntent);
-                            }
-                        });
+                            icon.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent appInfoIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    appInfoIntent.setData(Uri.parse("package:" + intent.getComponent().getPackageName()));
+                                    activity.startActivity(appInfoIntent);
+                                }
+                            });
+                        }
                     }
                 }
         );

@@ -1,7 +1,6 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
 import android.content.res.XModuleResources;
-import android.content.res.XResForwarder;
 import android.content.res.XResources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGHomeHook;
+import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageBubbles;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
@@ -47,7 +47,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
 
+        LGHomeHook.init(settings);
         LGMessageHook.init(settings);
+        LGMessageBubbles.init(settings);
         RecentAppsHook.init(settings);
     }
 
@@ -64,10 +66,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             if (enableCustomBubble) {
                 final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
-                resparam.res.setReplacement(packageName, "drawable", "message_set_bubble_04", getSelectedBubbleSet(modRes));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_inbox_bg_04", getSelectedBubble(modRes, true));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_outbox_bg_04", getSelectedBubble(modRes, false));
-                resparam.res.setReplacement(packageName, "drawable", "bubble_reserved_bg_04", getSelectedBubble(modRes, false));
+                LGMessageBubbles.handleInitPackageResources(resparam, modRes);
             }
         }
 
@@ -144,7 +143,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
 
                             int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
@@ -164,7 +163,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             if (originalFontSmall != -1) {
                                 XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
 
@@ -239,7 +238,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
 
                             int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
@@ -250,7 +249,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             if (originalFontSmall != -1) {
                                 XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
 
@@ -283,9 +282,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        boolean turnOnScreenNewSms = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
+                        boolean dontTurnScreenOn = settings.getBoolean(Prefs.DONT_TURN_SCREEN_ON_SMS, false);
 
-                        if (!turnOnScreenNewSms) {
+                        if (dontTurnScreenOn) {
                             param.setResult(null);
                         }
                     }
@@ -395,7 +394,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
                 TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, dateTextViewName);
 
-                int offset = settings.getInt(Prefs.DATE_SIZE_OFFSET, 0);
+                int offset = settings.getInt(Prefs.DATE_SIZE_OFFSET_MESSAGES, 0);
 
                 tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize() - offset);
             }
@@ -586,8 +585,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                         log("'processActionMove' ran");
 
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
-                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
 
                             if (min != minimumZoom) {
                                 XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
@@ -625,8 +624,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                         log("'processTouchEvent' ran");
 
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false)) {
-                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
 
                             if (min != minimumZoom) {
                                 XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
@@ -639,40 +638,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     }
                 }
         );
-    }
-
-    private XResForwarder getSelectedBubble(XModuleResources modRes, boolean left) {
-        int id;
-
-        switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
-            case 0:
-                id = left ? R.drawable.balloon_bg_04_left_normal : R.drawable.balloon_bg_04_right_normal;
-                break;
-            case 1:
-                id = left ? R.drawable.hangouts_balloon_left : R.drawable.hangouts_balloon_right;
-                break;
-            default:
-                return null;
-        }
-
-        return modRes.fwd(id);
-    }
-
-    private XResForwarder getSelectedBubbleSet(XModuleResources modRes) {
-        int id;
-
-        switch (settings.getInt(Prefs.SELECTED_BUBBLE, 0)) {
-            case 0:
-                id = R.drawable.message_set_bubble_04;
-                break;
-            case 1:
-                id = R.drawable.message_set_hangouts;
-                break;
-            default:
-                return null;
-        }
-
-        return modRes.fwd(id);
     }
 
     private void log(String text) {

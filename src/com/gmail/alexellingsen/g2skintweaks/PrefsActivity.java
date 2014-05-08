@@ -35,8 +35,6 @@ public class PrefsActivity extends PreferenceActivity {
 
     public static class PrefsFragment extends PreferenceFragment {
 
-        private static final int MAX_MINIMUM_ZOOM = 85;
-
         public PrefsFragment() {
         }
 
@@ -50,26 +48,6 @@ public class PrefsActivity extends PreferenceActivity {
             prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
             addPreferencesFromResource(R.xml.preferences);
-
-            Preference minimumZoomLevel = findPreference(Prefs.MINIMUM_ZOOM_LEVEL);
-
-            minimumZoomLevel.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            int i = Integer.parseInt(newValue.toString());
-
-                            if (i > MAX_MINIMUM_ZOOM) {
-                                Toast.makeText(getActivity(),
-                                        getString(R.string.minimum_zoom_too_high),
-                                        Toast.LENGTH_LONG).show();
-                                return false;
-                            }
-
-                            return true;
-                        }
-                    }
-            );
         }
 
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {

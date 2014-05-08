@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/messenger_customization">
-        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-            android:defaultValue="30"
-            android:icon="@null"
-            android:inputType="number"
-            android:key="pref_minimum_zoom"
-            android:numeric="integer"
-            android:summary="@string/pref_minimum_zoom"
-            android:title="@string/pref_minimum_zoom_summary"/>
-
-        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-            android:defaultValue="0"
-            android:icon="@null"
-            android:inputType="number"
-            android:key="pref_date_offset_size"
-            android:numeric="integer"
-            android:summary="@string/pref_date_offset_size_summary"
-            android:title="@string/pref_date_offset_size"/>
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/advanced">
         <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
             android:defaultValue="1000"

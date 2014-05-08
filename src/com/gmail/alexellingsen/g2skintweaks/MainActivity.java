@@ -2,43 +2,61 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Html;
-import android.view.*;
-import android.view.View.OnClickListener;
-import android.widget.*;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.preference.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
-import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch.OnColorSelectedListener;
+import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch;
 
 import java.io.File;
+import java.util.Arrays;
 
-public class MainActivity extends Activity {
+public class MainActivity extends PreferenceActivity {
 
     private static final int CROP_IMAGE = 112;
     private static final int PICK_IMAGE = 111;
-    private static final int PREFERENCE_ACTIVITY = 100;
 
-    private MainFragment fragment = null;
+    private MainFragment mainFragment = null;
     private static SettingsHelper settings = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         settings = new SettingsHelper(this);
 
-        if (savedInstanceState == null) {
-            fragment = new MainFragment();
+        mainFragment = new MainFragment();
 
-            getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, mainFragment)
+                .commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK)
+            return;
+
+        if (requestCode == PICK_IMAGE) {
+            cropImage(this, data.getData());
+        } else if (requestCode == CROP_IMAGE) {
+            Toast.makeText(this, getString(R.string.set_background_complete), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -62,10 +80,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_reset_default) {
-            fragment.askResetToDefault();
-            return true;
-        } else if (id == R.id.action_create_shortcut) {
+        if (id == R.id.action_create_shortcut) {
             createHomeShortcut();
             return true;
         } else if (id == R.id.action_enable_debugging) {
@@ -74,7 +89,7 @@ public class MainActivity extends Activity {
             return true;
         } else if (id == R.id.action_settings) {
             Intent i = new Intent(getApplicationContext(), PrefsActivity.class);
-            startActivityForResult(i, PREFERENCE_ACTIVITY);
+            startActivity(i);
             return true;
         }
 
@@ -96,20 +111,6 @@ public class MainActivity extends Activity {
 
         addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         getApplicationContext().sendBroadcast(addIntent);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK)
-            return;
-
-        if (requestCode == PREFERENCE_ACTIVITY) {
-            // Update text to show new preferences, if any.
-            fragment.updateAfterPreferences();
-        } else if (requestCode == PICK_IMAGE) {
-            cropImage(this, data.getData());
-        } else if (requestCode == CROP_IMAGE) {
-            Toast.makeText(this, getString(R.string.set_background_complete), Toast.LENGTH_LONG).show();
-        }
     }
 
     private static void pickImage(Activity activity) {
@@ -135,40 +136,114 @@ public class MainActivity extends Activity {
         activity.startActivityForResult(intent, CROP_IMAGE);
     }
 
-    public static class MainFragment extends Fragment {
-
-        private View rootView = null;
+    public static class MainFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
         public MainFragment() {
         }
 
+        @SuppressWarnings("deprecation")
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            PreferenceManager prefMgr = getPreferenceManager();
+            prefMgr.setSharedPreferencesName(Prefs.NAME);
+            prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
+
+            addPreferencesFromResource(R.xml.preferences_main);
 
             setup();
-
-            return rootView;
         }
 
-        private void askResetToDefault() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-            builder.setTitle(getString(R.string.are_you_sure));
-            builder.setMessage(getString(R.string.confirm_reset_message));
-            builder.setPositiveButton(getString(R.string.yes), new AlertDialog.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    resetToDefault();
+        }
+
+        @Override
+        public void onPause() {
+            getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+            super.onPause();
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.startsWith("pref_custom_bubble_")) {
+                String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
+                        Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
+
+                if (Arrays.asList(keys).contains(key)) {
+                    String[] entries = getResources().getStringArray(R.array.custom_bubbles);
+
+                    findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
                 }
-            });
-            builder.setNegativeButton(getString(R.string.no), new AlertDialog.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing
-                }
-            });
-            builder.show();
+            }
+        }
+
+        private void setup() {
+            // ToDo: Improve this
+            findPreference(RECENT_APPS_OPACITY).setSummary("Opacity: " + settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255));
+            findPreference(BUBBLE_TRANSPARENCY).setSummary("Transparency: " + settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+
+            ((PreviewColorPreference) findPreference(CONVERSATION_COLOR_BOTTOM)).setColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
+            ((PreviewColorPreference) findPreference(CONVERSATION_COLOR_TOP)).setColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
+            ((PreviewColorPreference) findPreference(BUBBLE_COLOR_LEFT)).setColor(settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE));
+            ((PreviewColorPreference) findPreference(BUBBLE_COLOR_RIGHT)).setColor(settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE));
+            ((PreviewColorPreference) findPreference(SMS_COLOR_LEFT)).setColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
+            ((PreviewColorPreference) findPreference(SMS_COLOR_RIGHT)).setColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
+
+            String[] entries = getResources().getStringArray(R.array.custom_bubbles);
+            String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3, Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
+
+            for (String key : keys) {
+                findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
+            }
+        }
+
+        private final String RECENT_APPS_OPACITY = "set_recent_apps_opacity";
+        private final String REQUEST_ROOT = "request_root";
+        private final String CONVERSATION_COLOR_BOTTOM = "set_conversation_text_color_bottom";
+        private final String CONVERSATION_COLOR_TOP = "set_conversation_text_color_top";
+        private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
+        private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
+        private final String BUBBLE_COLOR_LEFT = "set_custom_bubble_color_left";
+        private final String BUBBLE_COLOR_RIGHT = "set_custom_bubble_color_right";
+        private final String SMS_COLOR_LEFT = "set_sms_color_left";
+        private final String SMS_COLOR_RIGHT = "set_sms_color_right";
+
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+            if (preference == null || preference.getKey() == null)
+                return super.onPreferenceTreeClick(preferenceScreen, preference);
+
+            if (preference.getKey().equals(RECENT_APPS_OPACITY)) {
+                int i = settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255);
+
+                showSeekBarDialog(preference, "Opacity: %s", Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
+            } else if (preference.getKey().equals(REQUEST_ROOT)) {
+                RootFunctions.requestRoot();
+            } else if (preference.getKey().equals(CONVERSATION_COLOR_BOTTOM)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+            } else if (preference.getKey().equals(CONVERSATION_COLOR_TOP)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+            } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
+                pickImage(getActivity());
+            } else if (preference.getKey().equals(BUBBLE_TRANSPARENCY)) {
+                int i = settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255);
+
+                showSeekBarDialog(preference, "Transparency: %s", Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
+            } else if (preference.getKey().equals(BUBBLE_COLOR_LEFT)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+            } else if (preference.getKey().equals(BUBBLE_COLOR_RIGHT)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+            } else if (preference.getKey().equals(SMS_COLOR_LEFT)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
+            } else if (preference.getKey().equals(SMS_COLOR_RIGHT)) {
+                showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+            }
+
+            return super.onPreferenceTreeClick(preferenceScreen, preference);
         }
 
         private int[] getColorChoice() {
@@ -184,393 +259,7 @@ public class MainActivity extends Activity {
             return mColorChoices;
         }
 
-        public void resetToDefault() {
-            View viewCustomBubbleColors = rootView.findViewById(R.id.custom_bubble_colors);
-            View viewMessagesColors = rootView.findViewById(R.id.sms_text_colors);
-            View viewConversationColors = rootView.findViewById(R.id.conversation_colors);
-
-            viewCustomBubbleColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.WHITE);
-            viewCustomBubbleColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.WHITE);
-            viewMessagesColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
-            viewMessagesColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
-            viewConversationColors.findViewById(R.id.btn_color_left).setBackgroundColor(Color.BLACK);
-            viewConversationColors.findViewById(R.id.btn_color_right).setBackgroundColor(Color.BLACK);
-            ((CheckBox) rootView.findViewById(R.id.chb_replace_switch)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_custom_bubble)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_custom_bubble_color)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_sms_text_color)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_conversation_color)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size)).setChecked(false);
-            ((CheckBox) rootView.findViewById(R.id.chb_turn_on_screen)).setChecked(true);
-            ((Spinner) rootView.findViewById(R.id.spinner_bubbles)).setSelection(0);
-
-            // Listeners will update most preferences
-            settings.putInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
-            settings.putInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-            settings.putInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
-            settings.putInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-            settings.putInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
-            settings.putInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
-
-            String text = getString(R.string.reboot_notice);
-            Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
-        }
-
-        private void setup() {
-            setupConversationColor();
-            setupConversationListBG();
-            setupCustomBubble();
-            setupCustomBubbleColor();
-            setupLowerMinimumZoom();
-            setupMessagesColor();
-            setupRecentAppsOpacity();
-            setupRemoveDividers();
-            setupReplacementSwitch();
-            setupTurnOnScreenNewSMS();
-        }
-
-        private void setupConversationColor() {
-            boolean b = settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false);
-
-            View view = rootView.findViewById(R.id.conversation_colors);
-            final Button top = (Button) view.findViewById(R.id.btn_color_left);
-            final Button bottom = (Button) view.findViewById(R.id.btn_color_right);
-            final CheckBox chbConversationColor = (CheckBox) rootView.findViewById(R.id.chb_conversation_color);
-
-            chbConversationColor.setChecked(b);
-            chbConversationColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_CONVERSATION_COLOR, isChecked);
-
-                    top.setEnabled(isChecked);
-                    bottom.setEnabled(isChecked);
-                }
-            });
-
-            bottom.setEnabled(b);
-            bottom.setBackgroundColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
-            bottom.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
-                }
-            });
-
-            top.setEnabled(b);
-            top.setBackgroundColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
-            top.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
-                }
-            });
-        }
-
-        private void setupConversationListBG() {
-            boolean enableConversationListBG = settings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false);
-
-            CheckBox chbBackground = (CheckBox) rootView.findViewById(R.id.chb_conversation_list_bg);
-            final Button btnBackground = (Button) rootView.findViewById(R.id.btn_conversation_list_bg);
-
-            chbBackground.setChecked(enableConversationListBG);
-            chbBackground.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, isChecked);
-                    btnBackground.setEnabled(isChecked);
-                }
-            });
-
-            btnBackground.setEnabled(enableConversationListBG);
-            btnBackground.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pickImage(getActivity());
-                }
-            });
-        }
-
-        private void setupCustomBubble() {
-            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
-
-            CheckBox chbCustomBubble = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble);
-            Spinner spinnerBubbles = (Spinner) rootView.findViewById(R.id.spinner_bubbles);
-
-            chbCustomBubble.setText(Html.fromHtml(getString(R.string.enable_custom_bubble)));
-            chbCustomBubble.setChecked(enableCustomBubble);
-            chbCustomBubble.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, isChecked);
-                }
-            });
-
-            ArrayAdapter<String> items = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
-
-            items.addAll(getResources().getStringArray(R.array.spinner_bubbles));
-
-            spinnerBubbles.setAdapter(items);
-            spinnerBubbles.setSelection(settings.getInt(Prefs.SELECTED_BUBBLE, 0));
-            spinnerBubbles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    settings.putInt(Prefs.SELECTED_BUBBLE, position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-        }
-
-        private void setupCustomBubbleColor() {
-            boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
-            boolean enableTransparency = settings.getBoolean(Prefs.BUBBLE_TRANSPARENCY, false);
-
-            CheckBox chbCustomBubbleColor = (CheckBox) rootView.findViewById(R.id.chb_custom_bubble_color);
-            View view = rootView.findViewById(R.id.custom_bubble_colors);
-            final Button btnBubbleLeftColor = (Button) view.findViewById(R.id.btn_color_left);
-            final Button btnBubbleRightColor = (Button) view.findViewById(R.id.btn_color_right);
-
-            chbCustomBubbleColor.setChecked(enableCustomBubbleColor);
-            chbCustomBubbleColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, isChecked);
-
-                    btnBubbleLeftColor.setEnabled(isChecked);
-                    btnBubbleRightColor.setEnabled(isChecked);
-                }
-            });
-
-            btnBubbleLeftColor.setEnabled(enableCustomBubbleColor);
-            btnBubbleLeftColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE));
-            btnBubbleLeftColor.getBackground().setAlpha(enableTransparency ? settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) : 255);
-            btnBubbleLeftColor.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
-                }
-            });
-
-            btnBubbleRightColor.setEnabled(enableCustomBubbleColor);
-            btnBubbleRightColor.setBackgroundColor(settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE));
-            btnBubbleRightColor.getBackground().setAlpha(enableTransparency ? settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) : 255);
-            btnBubbleRightColor.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-                }
-            });
-
-            CheckBox chbTransparency = (CheckBox) rootView.findViewById(R.id.chb_bubble_transparency);
-            final TextView txtTransparency = (TextView) rootView.findViewById(R.id.txt_bubble_transparency);
-            final SeekBar seekTransparency = (SeekBar) rootView.findViewById(R.id.seek_bubble_transparency);
-
-            chbTransparency.setChecked(enableTransparency);
-            chbTransparency.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.BUBBLE_TRANSPARENCY, isChecked);
-
-                    seekTransparency.setEnabled(isChecked);
-
-                    if (!isChecked) {
-                        btnBubbleLeftColor.getBackground().setAlpha(255);
-                        btnBubbleRightColor.getBackground().setAlpha(255);
-                    } else {
-                        btnBubbleLeftColor.getBackground().setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
-                        btnBubbleLeftColor.getBackground().setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
-                    }
-                }
-            });
-
-            txtTransparency.setText(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255) + "");
-
-            seekTransparency.setProgress(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
-            seekTransparency.setEnabled(enableTransparency);
-            seekTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    txtTransparency.setText(progress + "");
-                    btnBubbleLeftColor.getBackground().setAlpha(progress);
-                    btnBubbleRightColor.getBackground().setAlpha(progress);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    txtTransparency.setText(seekBar.getProgress() + "");
-                    settings.putInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, seekBar.getProgress());
-                }
-            });
-        }
-
-        private void setupLowerMinimumZoom() {
-            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
-            boolean enableSmallerSmsSize = settings.getBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, false);
-
-            CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size);
-
-            chbMessengerFontSize.setText(getString(R.string.enable_sms_smaller_size, minimumZoom));
-            chbMessengerFontSize.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_SMALLER_SMS_SIZE, isChecked);
-                }
-            });
-            chbMessengerFontSize.setChecked(enableSmallerSmsSize);
-        }
-
-        private void setupMessagesColor() {
-            boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-
-            View view = rootView.findViewById(R.id.sms_text_colors);
-            final Button btnSmsTextColorLeft = (Button) view.findViewById(R.id.btn_color_left);
-            final Button btnSmsTextColorRight = (Button) view.findViewById(R.id.btn_color_right);
-
-            CheckBox chbSmsTextColor = (CheckBox) rootView.findViewById(R.id.chb_sms_text_color);
-            chbSmsTextColor.setChecked(enableSmsTextColor);
-            chbSmsTextColor.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, isChecked);
-
-                    btnSmsTextColorLeft.setEnabled(isChecked);
-                    btnSmsTextColorRight.setEnabled(isChecked);
-                }
-            });
-
-            btnSmsTextColorLeft.setEnabled(enableSmsTextColor);
-            btnSmsTextColorLeft.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
-            btnSmsTextColorLeft.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
-                }
-            });
-
-            btnSmsTextColorRight.setEnabled(enableSmsTextColor);
-            btnSmsTextColorRight.setBackgroundColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
-            btnSmsTextColorRight.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showColorPicker(v, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
-                }
-            });
-        }
-
-        private void setupRecentAppsOpacity() {
-            boolean enableOpacity = settings.getBoolean(Prefs.RECENT_APPS_CUSTOM_OPACITY, false);
-            int opacity = settings.getInt(Prefs.RECENT_APPS_CUSTOM_OPACITY_VALUE, 0);
-
-            CheckBox chbOpacity = (CheckBox) rootView.findViewById(R.id.chb_recent_apps_opacity);
-            final TextView txtOpacity = (TextView) rootView.findViewById(R.id.txt_recent_apps_opacity);
-            final SeekBar seekOpacity = (SeekBar) rootView.findViewById(R.id.seek_recent_apps_opacity);
-
-            chbOpacity.setChecked(enableOpacity);
-            chbOpacity.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.RECENT_APPS_CUSTOM_OPACITY, isChecked);
-                    txtOpacity.setEnabled(isChecked);
-                    seekOpacity.setEnabled(isChecked);
-                }
-            });
-
-            txtOpacity.setText(opacity + "");
-            txtOpacity.setEnabled(enableOpacity);
-
-            seekOpacity.setProgress(opacity);
-            seekOpacity.setEnabled(enableOpacity);
-            seekOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    txtOpacity.setText(progress + "");
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    txtOpacity.setText(seekBar.getProgress() + "");
-                    settings.putInt(Prefs.RECENT_APPS_CUSTOM_OPACITY_VALUE, seekBar.getProgress());
-                }
-            });
-        }
-
-        private void setupRemoveDividers() {
-            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
-
-            CheckBox chbRemoveDividers = (CheckBox) rootView.findViewById(R.id.chb_remove_dividers);
-            chbRemoveDividers.setChecked(enableRemoveDividers);
-            chbRemoveDividers.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, isChecked);
-                }
-            });
-        }
-
-        private void setupReplacementSwitch() {
-            boolean ENABLE_REPLACE_SWITCH = settings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
-
-            CheckBox chbReplaceSwitch = (CheckBox) rootView.findViewById(R.id.chb_replace_switch);
-            chbReplaceSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_REPLACE_SWITCH, isChecked);
-                }
-            });
-            chbReplaceSwitch.setChecked(ENABLE_REPLACE_SWITCH);
-        }
-
-        private void setupTurnOnScreenNewSMS() {
-            boolean enableTurnOnScreenNewSms = settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true);
-            boolean enablePowerLed = settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
-
-            final CheckBox chbTurnOnScreenNewSMS = (CheckBox) rootView.findViewById(R.id.chb_turn_on_screen);
-            final CheckBox chbEnablePowerLed = (CheckBox) rootView.findViewById(R.id.chb_enable_power_led);
-            final Button btnRequestRoot = (Button) rootView.findViewById(R.id.btn_request_root);
-
-            chbTurnOnScreenNewSMS.setChecked(enableTurnOnScreenNewSms);
-            chbTurnOnScreenNewSMS.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, isChecked);
-
-                    chbEnablePowerLed.setEnabled(!isChecked);
-                    btnRequestRoot.setEnabled(!isChecked);
-                }
-            });
-
-            chbEnablePowerLed.setChecked(enablePowerLed);
-            chbEnablePowerLed.setEnabled(!enableTurnOnScreenNewSms);
-            chbEnablePowerLed.setText(Html.fromHtml(getString(R.string.chb_flash_power_led)));
-            chbEnablePowerLed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    settings.putBoolean(Prefs.ENABLE_POWER_LED, isChecked);
-                }
-            });
-
-            btnRequestRoot.setEnabled(!enableTurnOnScreenNewSms);
-            btnRequestRoot.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RootFunctions.requestRoot();
-                }
-            });
-        }
-
-        private void showColorPicker(final View v, final String key, int defaultColor) {
+        private void showColorPicker(final PreviewColorPreference preference, final String key, int defaultColor) {
             int[] mColor = getColorChoice();
             int mSelectedColor = settings.getInt(key, defaultColor);
 
@@ -581,26 +270,63 @@ public class MainActivity extends Activity {
                     4,
                     ColorPickerDialog.SIZE_SMALL);
 
-            colorPicker.setOnColorSelectedListener(new OnColorSelectedListener() {
+            colorPicker.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
                 @Override
                 public void onColorSelected(int color) {
                     settings.putInt(key, color);
 
-                    v.setBackgroundColor(color);
+                    preference.setColor(color);
                 }
             });
 
             colorPicker.show(getFragmentManager(), "cal");
         }
 
-        public void updateAfterPreferences() {
-            CheckBox chbMessengerFontSize = (CheckBox) rootView.findViewById(R.id.chb_smaller_sms_size);
+        private void showSeekBarDialog(final Preference preference, final String text, final String key, int value, int max) {
+            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.seek_bar_dialog, null);
+            final SeekBar sb = (SeekBar) layout.findViewById(R.id.seek_bar_dialog_seek_bar);
+            final TextView tv = (TextView) layout.findViewById(R.id.seek_bar_dialog_text_view);
 
-            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL, 30);
+            tv.setText(value + "");
 
-            chbMessengerFontSize.setText(getString(R.string.enable_sms_smaller_size, minimumZoom));
+            sb.setMax(max);
+            sb.setProgress(value);
+            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    tv.setText(progress + "");
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setView(layout)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            settings.putInt(key, sb.getProgress());
+                            preference.setSummary(String.format(text, sb.getProgress() + ""));
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
-
     }
 
 }

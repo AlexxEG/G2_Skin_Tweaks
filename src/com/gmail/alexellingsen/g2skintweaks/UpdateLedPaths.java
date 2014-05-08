@@ -11,7 +11,7 @@ public class UpdateLedPaths extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final SettingsHelper settings = new SettingsHelper(context);
 
-        boolean shouldCache = !settings.getBoolean(Prefs.TURN_ON_SCREEN_NEW_SMS, true) &&
+        boolean shouldCache = settings.getBoolean(Prefs.DONT_TURN_SCREEN_ON_SMS, false) &&
                 settings.getBoolean(Prefs.ENABLE_POWER_LED, true);
 
         if (shouldCache) {
