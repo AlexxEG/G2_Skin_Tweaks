@@ -61,7 +61,7 @@
     <string name="pref_recent_apps_custom_opacity">Enable custom opacity</string>
     <string name="pref_recent_apps_custom_opacity_summary">Set a custom opacity for the Recent Apps list.</string>
     <string name="pref_remove_dividers">Remove dividers</string>
-    <string name="pref_replace_switch">Enable replacement switch *</string>
+    <string name="pref_replace_switch">Enable replacement switch</string>
     <string name="pref_replace_switch_summary">Replaces Switches in LG apps with CheckBoxes. REQUIRES REBOOT.</string>
     <string name="pref_smaller_text">Enable smaller text size</string>
     <string name="pref_smaller_text_summary">Enable smaller text size when pinch zooming in LG Messenger app.</string>
