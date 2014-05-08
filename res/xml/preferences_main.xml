@@ -77,7 +77,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_1"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_1"/>
+                            android:title="@string/pref_bubble_slot_1"/>
 
                         <ListPreference
                             android:defaultValue="0"
@@ -87,7 +87,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_2"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_2"/>
+                            android:title="@string/pref_bubble_slot_2"/>
 
                         <ListPreference
                             android:defaultValue="0"
@@ -97,7 +97,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_3"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_3"/>
+                            android:title="@string/pref_bubble_slot_3"/>
 
                         <ListPreference
                             android:defaultValue="0"
@@ -107,7 +107,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_4"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_4"/>
+                            android:title="@string/pref_bubble_slot_4"/>
 
                         <ListPreference
                             android:defaultValue="0"
@@ -117,7 +117,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_5"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_5"/>
+                            android:title="@string/pref_bubble_slot_5"/>
 
                         <ListPreference
                             android:defaultValue="0"
@@ -127,7 +127,7 @@
                             android:icon="@null"
                             android:key="pref_custom_bubble_6"
                             android:summary="@string/default_string"
-                            android:title="@string/pref_custom_bubble_6"/>
+                            android:title="@string/pref_bubble_slot_6"/>
                     </PreferenceCategory>
                 </PreferenceScreen>
 

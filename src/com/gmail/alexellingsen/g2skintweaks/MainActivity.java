@@ -316,7 +316,8 @@ public class MainActivity extends PreferenceActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                     .setView(layout)
-                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.title_set_value)
+                    .setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             settings.putInt(key, sb.getProgress());
@@ -324,7 +325,7 @@ public class MainActivity extends PreferenceActivity {
                             dialog.dismiss();
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
