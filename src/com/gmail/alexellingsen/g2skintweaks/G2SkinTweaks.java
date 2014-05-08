@@ -60,13 +60,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         RecentAppsHook.handleInitPackageResources(resparam);
 
         if (resparam.packageName.equals("com.android.mms")) {
-            boolean enableCustomBubble = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
+            XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
-            if (enableCustomBubble) {
-                final XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
-
-                LGMessageBubbles.handleInitPackageResources(resparam, modRes);
-            }
+            LGMessageBubbles.handleInitPackageResources(resparam, modRes);
         }
 
         if (resparam.packageName.equals("com.android.settings")) {

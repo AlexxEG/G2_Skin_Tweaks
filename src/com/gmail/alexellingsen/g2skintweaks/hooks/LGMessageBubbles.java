@@ -6,12 +6,11 @@ import android.content.res.XResources;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.R;
 import com.gmail.alexellingsen.g2skintweaks.SettingsHelper;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 public class LGMessageBubbles {
 
-    private static final String[] LEFT_BUBBLES = new String[] {
+    private static final String[] LEFT_BUBBLES = new String[]{
             "bubble_inbox_bg_01",
             "bubble_inbox_bg_02",
             "bubble_inbox_bg_03",
@@ -19,7 +18,7 @@ public class LGMessageBubbles {
             "bubble_inbox_bg_05",
             "bubble_inbox_bg_06"
     };
-    private static final String[] RIGHT_BUBBLES = new String[] {
+    private static final String[] RIGHT_BUBBLES = new String[]{
             "bubble_outbox_bg_01",
             "bubble_outbox_bg_02",
             "bubble_outbox_bg_03",
@@ -34,7 +33,7 @@ public class LGMessageBubbles {
             "bubble_reserved_bg_06"
     };
 
-    private static final String[] MESSAGE_SET_BUBBLES = new String[] {
+    private static final String[] MESSAGE_SET_BUBBLES = new String[]{
             "message_set_bubble_01",
             "message_set_bubble_02",
             "message_set_bubble_03",
@@ -54,6 +53,12 @@ public class LGMessageBubbles {
     }
 
     public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) throws Throwable {
+        boolean enableCustomBubble = mSettings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
+
+        if (!enableCustomBubble) {
+            return;
+        }
+
         mModRes = modRes;
         mResources = resparam.res;
 
