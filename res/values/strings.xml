@@ -12,9 +12,9 @@
     <string name="category_background">Background</string>
     <string name="category_bubbles">Bubbles</string>
     <string name="category_colors">Colors</string>
-    <string name="category_conversation_list_customization">Conversation List Customization</string>
+    <string name="category_conversation_list_customization">Conversation list customization</string>
     <string name="category_conversation_list_customization_summary">Set conversation list background image or color.</string>
-    <string name="category_messages_customization">Message List Customization</string>
+    <string name="category_messages_customization">Message list customization</string>
     <string name="category_messages_customization_summary">Customize size &amp; colors.</string>
     <string name="category_recent_apps">Recent Apps</string>
     <string name="category_screen">Screen</string>
