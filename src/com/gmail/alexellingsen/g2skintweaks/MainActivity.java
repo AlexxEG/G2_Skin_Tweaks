@@ -188,12 +188,7 @@ public class MainActivity extends PreferenceActivity {
             findPreference(RECENT_APPS_OPACITY).setSummary("Opacity: " + settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255));
             findPreference(BUBBLE_TRANSPARENCY).setSummary("Transparency: " + settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
 
-            ((PreviewColorPreference) findPreference(CONVERSATION_COLOR_BOTTOM)).setColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
-            ((PreviewColorPreference) findPreference(CONVERSATION_COLOR_TOP)).setColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
-            ((PreviewColorPreference) findPreference(BUBBLE_COLOR_LEFT)).setColor(settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE));
-            ((PreviewColorPreference) findPreference(BUBBLE_COLOR_RIGHT)).setColor(settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE));
-            ((PreviewColorPreference) findPreference(SMS_COLOR_LEFT)).setColor(settings.getInt(Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK));
-            ((PreviewColorPreference) findPreference(SMS_COLOR_RIGHT)).setColor(settings.getInt(Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK));
+            setupColorPickerPreferences();
 
             String[] entries = getResources().getStringArray(R.array.custom_bubbles);
             String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3, Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
@@ -203,16 +198,28 @@ public class MainActivity extends PreferenceActivity {
             }
         }
 
+        private void setupColorPickerPreferences() {
+            String[] keys = new String[]{Prefs.CONVERSATION_COLOR_BOTTOM, Prefs.CONVERSATION_COLOR_TOP,
+                    Prefs.BUBBLE_COLOR_LEFT, Prefs.BUBBLE_COLOR_RIGHT, Prefs.SMS_TEXT_COLOR_LEFT, Prefs.SMS_TEXT_COLOR_RIGHT};
+
+            // Show color picker on click
+            for (final String key : keys) {
+                final PreviewColorPreference pcp = (PreviewColorPreference) findPreference(key);
+
+                pcp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        showColorPicker(pcp, key, settings.getInt(key, Color.BLACK));
+                        return true;
+                    }
+                });
+            }
+        }
+
         private final String RECENT_APPS_OPACITY = "set_recent_apps_opacity";
         private final String REQUEST_ROOT = "request_root";
-        private final String CONVERSATION_COLOR_BOTTOM = "set_conversation_text_color_bottom";
-        private final String CONVERSATION_COLOR_TOP = "set_conversation_text_color_top";
         private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
         private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
-        private final String BUBBLE_COLOR_LEFT = "set_custom_bubble_color_left";
-        private final String BUBBLE_COLOR_RIGHT = "set_custom_bubble_color_right";
-        private final String SMS_COLOR_LEFT = "set_sms_color_left";
-        private final String SMS_COLOR_RIGHT = "set_sms_color_right";
         private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -225,24 +232,12 @@ public class MainActivity extends PreferenceActivity {
                 showSeekBarDialog(preference, "Opacity: %s", Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
             } else if (preference.getKey().equals(REQUEST_ROOT)) {
                 RootFunctions.requestRoot();
-            } else if (preference.getKey().equals(CONVERSATION_COLOR_BOTTOM)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
-            } else if (preference.getKey().equals(CONVERSATION_COLOR_TOP)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
             } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
                 pickImage(getActivity());
             } else if (preference.getKey().equals(BUBBLE_TRANSPARENCY)) {
                 int i = settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255);
 
                 showSeekBarDialog(preference, "Transparency: %s", Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
-            } else if (preference.getKey().equals(BUBBLE_COLOR_LEFT)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
-            } else if (preference.getKey().equals(BUBBLE_COLOR_RIGHT)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
-            } else if (preference.getKey().equals(SMS_COLOR_LEFT)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
-            } else if (preference.getKey().equals(SMS_COLOR_RIGHT)) {
-                showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
             } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
                 Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
 

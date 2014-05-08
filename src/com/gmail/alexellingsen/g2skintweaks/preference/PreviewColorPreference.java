@@ -1,6 +1,7 @@
 package com.gmail.alexellingsen.g2skintweaks.preference;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -43,13 +44,27 @@ public class PreviewColorPreference extends Preference {
         mImageView.setBackgroundColor(mColor);
     }
 
+    @Override
+    protected Object onGetDefaultValue(TypedArray a, int index) {
+        return a.getInt(index, Color.BLACK);
+    }
+
+    @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        setColor(restoreValue ? getPersistedInt(mColor)
+                : (Integer) defaultValue);
+    }
+
     public int getColor() {
         return mColor;
     }
 
     public void setColor(int color) {
-        mColor = color;
-        notifyChanged();
+        if (color != mColor) {
+            mColor = color;
+            persistInt(color);
+            notifyChanged();
+        }
     }
 
 }
