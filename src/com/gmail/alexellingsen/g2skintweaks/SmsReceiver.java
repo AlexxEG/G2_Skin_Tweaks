@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 
 public class SmsReceiver extends BroadcastReceiver {
 

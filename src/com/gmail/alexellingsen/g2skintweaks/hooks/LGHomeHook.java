@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
-import com.gmail.alexellingsen.g2skintweaks.SettingsHelper;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;

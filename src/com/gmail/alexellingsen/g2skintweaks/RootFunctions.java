@@ -2,6 +2,7 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import android.content.Context;
 import android.util.Log;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

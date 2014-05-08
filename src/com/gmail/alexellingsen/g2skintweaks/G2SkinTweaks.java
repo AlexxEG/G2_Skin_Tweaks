@@ -16,6 +16,7 @@ import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageBubbles;
 import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
 import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.*;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;

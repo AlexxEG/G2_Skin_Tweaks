@@ -3,6 +3,7 @@ package com.gmail.alexellingsen.g2skintweaks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XposedBridge;
 
 public class UpdateLedPaths extends BroadcastReceiver {

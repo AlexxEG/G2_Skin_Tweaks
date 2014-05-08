@@ -5,7 +5,7 @@ import android.content.res.XResForwarder;
 import android.content.res.XResources;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.R;
-import com.gmail.alexellingsen.g2skintweaks.SettingsHelper;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 public class LGMessageBubbles {

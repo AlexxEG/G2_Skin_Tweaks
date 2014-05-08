@@ -20,6 +20,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference;
+import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch;
 
