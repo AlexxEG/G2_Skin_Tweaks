@@ -15,7 +15,7 @@
             android:persistent="false"
             android:title="@string/title_general">
 
-            <PreferenceCategory android:title="@string/category_general">
+            <PreferenceCategory android:title="@string/title_general">
                 <CheckBoxPreference
                     android:icon="@null"
                     android:key="pref_remove_dividers"

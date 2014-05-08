@@ -2,7 +2,6 @@
 <resources>
 
     <string name="action_create_shortcut">Create Shortcut</string>
-    <string name="action_reset_default">Reset to default</string>
     <string name="advanced">Advanced</string>
     <string name="app_name">G2 Skin Tweaks</string>
     <string name="ask_for_root">Ask for root</string>
@@ -12,7 +11,6 @@
     <string name="category_colors">Colors</string>
     <string name="category_conversation_list_customization">Conversation list customization</string>
     <string name="category_conversation_list_customization_summary">Set conversation list background image or color.</string>
-    <string name="category_general">General</string>
     <string name="category_messages_customization">Message list customization</string>
     <string name="category_messages_customization_summary">Customize size &amp; colors.</string>
     <string name="category_recent_apps">Recent Apps</string>
