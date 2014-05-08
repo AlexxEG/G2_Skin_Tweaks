@@ -340,12 +340,12 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Shortcuts">
+    <PreferenceCategory android:title="@string/category_shortcuts">
         <Preference
             android:icon="@null"
             android:key="shortcut_xposed_installer"
             android:persistent="false"
-            android:title="Xposed Installer"/>
+            android:title="@string/shortcut_xposed_installer"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
