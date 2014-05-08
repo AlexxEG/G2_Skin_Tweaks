@@ -81,6 +81,6 @@
     <string name="title_messenger">LG Messenger</string>
     <string name="title_misc">Misc</string>
     <string name="turned_power_led_off">Turned power LED off</string>
-    <string name="xposed_installer_not_found">Couldn't find Xposed Installer.</string>
+    <string name="xposed_installer_not_found">Couldn\'t find Xposed Installer.</string>
 
 </resources>
