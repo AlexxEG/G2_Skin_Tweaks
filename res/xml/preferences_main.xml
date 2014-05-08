@@ -134,8 +134,8 @@
                 <PreferenceScreen
                     android:icon="@null"
                     android:persistent="false"
-                    android:summary="Set bubble colors &amp; transparency."
-                    android:title="Bubble customization">
+                    android:summary="@string/title_bubble_customization_summary"
+                    android:title="@string/title_bubble_customization">
 
                     <PreferenceCategory android:title="@string/category_colors">
 

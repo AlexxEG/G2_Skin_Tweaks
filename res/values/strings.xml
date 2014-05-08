@@ -14,7 +14,7 @@
     <string name="category_conversation_list_customization_summary">Set conversation list background image or color.</string>
     <string name="category_general">General</string>
     <string name="category_messages_customization">Message list customization</string>
-    <string name="category_messages_customization_summary"><![CDATA[Customize size &amp; colors.]]></string>
+    <string name="category_messages_customization_summary">Customize size &amp; colors.</string>
     <string name="category_recent_apps">Recent Apps</string>
     <string name="category_screen">Screen</string>
     <string name="category_text_size">Text Size</string>
@@ -71,6 +71,8 @@
     <string name="set_background_complete">Background was set.</string>
     <string name="set_custom_opacity">Set custom opacity</string>
     <string name="square_bubble">Square Bubble</string>
+    <string name="title_bubble_customization">Bubble customization</string>
+    <string name="title_bubble_customization_summary">Set bubble colors &amp; transparency.</string>
     <string name="title_custom_bubbles">Custom bubble(s)</string>
     <string name="title_custom_bubbles_summary">Use custom bubbles with the stock Messenger app.</string>
     <string name="title_general">General</string>
