@@ -20,6 +20,7 @@
     <string name="category_text_size">Text Size</string>
     <string name="category_transparency">Transparency</string>
     <string name="category_tweaks">Tweaks</string>
+    <string name="custom_bubbles_note">Note: Text wont always fit correctly inside any bubble. If it doesn\'t, try to move the bubble to another slot.</string>
     <string name="default_string">Default</string>
     <string name="dont_turn_screen_on_sms">Keep screen off on SMS</string>
     <string name="dont_turn_screen_on_sms_summary">Don\'t turn on the screen when receiving new SMS/MMS.</string>
@@ -76,10 +77,10 @@
     <string name="title_custom_bubbles">Custom bubble(s)</string>
     <string name="title_custom_bubbles_summary">Use custom bubbles with the stock Messenger app.</string>
     <string name="title_general">General</string>
+    <string name="title_lg_launcher">LG Launcher</string>
     <string name="title_messenger">LG Messenger</string>
     <string name="title_misc">Misc</string>
     <string name="turned_power_led_off">Turned power LED off</string>
-    <string name="custom_bubbles_note">Note: Text wont always fit correctly inside any bubble. If it doesn\'t, try to move the bubble to another slot.</string>
-    <string name="title_lg_launcher">LG Launcher</string>
+    <string name="xposed_installer_not_found">Couldn't find Xposed Installer.</string>
 
 </resources>

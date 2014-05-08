@@ -30,6 +30,7 @@ public class MainActivity extends PreferenceActivity {
 
     private static final int CROP_IMAGE = 112;
     private static final int PICK_IMAGE = 111;
+    private static final String XPOSED_INSTALLER_PACKAGE = "de.robv.android.xposed.installer";
 
     private MainFragment mainFragment = null;
     private static SettingsHelper settings = null;
@@ -212,6 +213,7 @@ public class MainActivity extends PreferenceActivity {
         private final String BUBBLE_COLOR_RIGHT = "set_custom_bubble_color_right";
         private final String SMS_COLOR_LEFT = "set_sms_color_left";
         private final String SMS_COLOR_RIGHT = "set_sms_color_right";
+        private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
             if (preference == null || preference.getKey() == null)
@@ -241,6 +243,15 @@ public class MainActivity extends PreferenceActivity {
                 showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_LEFT, Color.BLACK);
             } else if (preference.getKey().equals(SMS_COLOR_RIGHT)) {
                 showColorPicker((PreviewColorPreference) preference, Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
+            } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
+                Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
+
+                if (intent == null) {
+                    Toast.makeText(getActivity(),
+                            getString(R.string.xposed_installer_not_found), Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(intent);
+                }
             }
 
             return super.onPreferenceTreeClick(preferenceScreen, preference);
