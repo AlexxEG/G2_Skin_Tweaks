@@ -222,6 +222,7 @@ public class MainActivity extends PreferenceActivity {
         private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
         private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
+        @Override
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
             if (preference == null || preference.getKey() == null)
                 return super.onPreferenceTreeClick(preferenceScreen, preference);
