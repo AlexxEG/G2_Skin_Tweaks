@@ -33,7 +33,6 @@ public class MainActivity extends PreferenceActivity {
     private static final int PICK_IMAGE = 111;
     private static final String XPOSED_INSTALLER_PACKAGE = "de.robv.android.xposed.installer";
 
-    private MainFragment mainFragment = null;
     private static SettingsHelper settings = null;
 
     @Override
@@ -42,7 +41,7 @@ public class MainActivity extends PreferenceActivity {
 
         settings = new SettingsHelper(this);
 
-        mainFragment = new MainFragment();
+        MainFragment mainFragment = new MainFragment();
 
         getFragmentManager()
                 .beginTransaction()
@@ -186,8 +185,8 @@ public class MainActivity extends PreferenceActivity {
 
         private void setup() {
             // ToDo: Improve this
-            findPreference(RECENT_APPS_OPACITY).setSummary("Opacity: " + settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255));
-            findPreference(BUBBLE_TRANSPARENCY).setSummary("Transparency: " + settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+            findPreference(RECENT_APPS_OPACITY).setSummary(getString(R.string.pref_recent_apps_opacity_value_summary, settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255)));
+            findPreference(BUBBLE_TRANSPARENCY).setSummary(getString(R.string.pref_transparency_value_summary, settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)));
 
             setupColorPickerPreferences();
 
@@ -232,7 +231,7 @@ public class MainActivity extends PreferenceActivity {
             if (preference.getKey().equals(RECENT_APPS_OPACITY)) {
                 int i = settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255);
 
-                showSeekBarDialog(preference, "Opacity: %s", Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
+                showSeekBarDialog(preference, R.string.pref_recent_apps_opacity_value_summary, Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
             } else if (preference.getKey().equals(REQUEST_ROOT)) {
                 RootFunctions.requestRoot();
             } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
@@ -240,7 +239,7 @@ public class MainActivity extends PreferenceActivity {
             } else if (preference.getKey().equals(BUBBLE_TRANSPARENCY)) {
                 int i = settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255);
 
-                showSeekBarDialog(preference, "Transparency: %s", Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
+                showSeekBarDialog(preference, R.string.pref_transparency_value_summary, Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
             } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
                 Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
 
@@ -291,7 +290,7 @@ public class MainActivity extends PreferenceActivity {
             colorPicker.show(getFragmentManager(), "cal");
         }
 
-        private void showSeekBarDialog(final Preference preference, final String text, final String key, int value, int max) {
+        private void showSeekBarDialog(final Preference preference, final int resText, final String key, int value, int max) {
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.seek_bar_dialog, null);
             final SeekBar sb = (SeekBar) layout.findViewById(R.id.seek_bar_dialog_seek_bar);
@@ -323,7 +322,7 @@ public class MainActivity extends PreferenceActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             settings.putInt(key, sb.getProgress());
-                            preference.setSummary(String.format(text, sb.getProgress() + ""));
+                            preference.setSummary(getString(resText, sb.getProgress()));
                             dialog.dismiss();
                         }
                     })
