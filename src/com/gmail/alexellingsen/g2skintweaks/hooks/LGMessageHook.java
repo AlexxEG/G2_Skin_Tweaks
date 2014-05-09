@@ -24,7 +24,7 @@ public class LGMessageHook {
         mSettings = settings;
     }
 
-    public static void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+    public static void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) {
         if (!resparam.packageName.equals(PACKAGE))
             return;
 
@@ -36,7 +36,7 @@ public class LGMessageHook {
         });
     }
 
-    public static void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 

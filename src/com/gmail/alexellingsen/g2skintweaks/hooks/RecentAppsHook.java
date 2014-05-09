@@ -22,7 +22,7 @@ public class RecentAppsHook {
         mSettings = settings;
     }
 
-    public static void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+    public static void handleInitPackageResources(InitPackageResourcesParam resparam) {
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
 
@@ -38,7 +38,7 @@ public class RecentAppsHook {
         resparam.res.hookLayout("com.android.systemui", "layout", "status_bar_recent_panel", hook);
     }
 
-    public static void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
+    public static void handleLoadPackage(LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals("com.android.systemui"))
             return;
 

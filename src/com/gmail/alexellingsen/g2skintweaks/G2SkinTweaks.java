@@ -449,7 +449,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) throws Throwable {
+    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) {
         final Class<?> findClass;
 
         try {
@@ -508,7 +508,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         );
     }
 
-    private void removeDividers(final InitPackageResourcesParam resparam) throws Throwable {
+    private void removeDividers(final InitPackageResourcesParam resparam) {
         try {
             resparam.res.hookLayout(
                     "com.android.settings",
