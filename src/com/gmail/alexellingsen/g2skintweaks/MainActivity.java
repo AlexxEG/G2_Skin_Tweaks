@@ -218,10 +218,10 @@ public class MainActivity extends PreferenceActivity {
             }
         }
 
+        private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
+        private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
         private final String RECENT_APPS_OPACITY = "set_recent_apps_opacity";
         private final String REQUEST_ROOT = "request_root";
-        private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
-        private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
         private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
         @Override
