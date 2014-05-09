@@ -13,7 +13,6 @@ import com.gmail.alexellingsen.g2skintweaks.R;
 public class PreviewColorPreference extends Preference {
 
     private int mColor = Color.BLACK;
-    private ImageView mImageView;
 
     public PreviewColorPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -40,7 +39,9 @@ public class PreviewColorPreference extends Preference {
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
-        mImageView = (ImageView) view.findViewById(R.id.image_view_preference);
+
+        ImageView mImageView = (ImageView) view.findViewById(R.id.image_view_preference);
+
         mImageView.setBackgroundColor(mColor);
     }
 
