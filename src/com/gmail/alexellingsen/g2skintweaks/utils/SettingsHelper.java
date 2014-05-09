@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import de.robv.android.xposed.XSharedPreferences;
 
+@SuppressWarnings("UnusedReturnValue")
 public class SettingsHelper {
 
     private SharedPreferences preferences;
