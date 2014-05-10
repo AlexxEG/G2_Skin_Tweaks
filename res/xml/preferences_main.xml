@@ -234,31 +234,6 @@
                             android:title="@string/pref_conversation_color_bottom"/>
                     </PreferenceCategory>
 
-                    <!-- ToDo: Make these work -->
-                    <PreferenceCategory android:title="@string/category_text_size">
-                        <Preference
-                            android:enabled="false"
-                            android:icon="@null"
-                            android:title="* WIP *"/>
-
-                        <CheckBoxPreference
-                            android:enabled="false"
-                            android:icon="@null"
-                            android:title="Enable custom text size"/>
-
-                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-                            android:enabled="false"
-                            android:icon="@null"
-                            android:summary="The minimum text size allowed."
-                            android:title="Minimum text size"/>
-
-                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-                            android:enabled="false"
-                            android:icon="@null"
-                            android:summary="Set the bottom size to the current zoom level - given offset."
-                            android:title="Bottom line offset"/>
-                    </PreferenceCategory>
-
                 </PreferenceScreen>
 
                 <PreferenceScreen
@@ -286,32 +261,32 @@
                             android:title="@string/pref_messages_text_color_right"/>
                     </PreferenceCategory>
 
-                    <PreferenceCategory android:title="@string/category_text_size">
-                        <CheckBoxPreference
-                            android:icon="@null"
-                            android:key="pref_smaller_text_messages"
-                            android:summary="@string/pref_smaller_text_summary"
-                            android:title="@string/pref_smaller_text"/>
-
-                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-                            android:defaultValue="85"
-                            android:dependency="pref_smaller_text_messages"
-                            android:icon="@null"
-                            android:key="pref_minimum_zoom_messages"
-                            android:summary="@string/pref_minimum_text_size_summary"
-                            android:title="@string/pref_minimum_text_size"/>
-
-                        <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
-                            android:defaultValue="0"
-                            android:dependency="pref_smaller_text_messages"
-                            android:icon="@null"
-                            android:key="pref_date_offset_size_messages"
-                            android:summary="@string/pref_date_offset_summary"
-                            android:title="@string/pref_date_offset"/>
-                    </PreferenceCategory>
-
                 </PreferenceScreen>
 
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/category_text_size">
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_smaller_text_messages"
+                    android:summary="@string/pref_smaller_text_summary"
+                    android:title="@string/pref_smaller_text"/>
+
+                <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                    android:defaultValue="85"
+                    android:dependency="pref_smaller_text_messages"
+                    android:icon="@null"
+                    android:key="pref_minimum_zoom_messages"
+                    android:summary="@string/pref_minimum_text_size_summary"
+                    android:title="@string/pref_minimum_text_size"/>
+
+                <com.gmail.alexellingsen.g2skintweaks.preference.EditIntPreference
+                    android:defaultValue="0"
+                    android:dependency="pref_smaller_text_messages"
+                    android:icon="@null"
+                    android:key="pref_date_offset_size_messages"
+                    android:summary="@string/pref_date_offset_summary"
+                    android:title="@string/pref_date_offset"/>
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/category_screen">
