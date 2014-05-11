@@ -58,12 +58,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
         LGHomeHook.handleInitPackageResources(resparam);
         LGLockScreen.handleInitPackageResources(resparam, modRes);
+        LGMessageBubbles.handleInitPackageResources(resparam, modRes);
         LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
-
-        if (resparam.packageName.equals("com.android.mms")) {
-            LGMessageBubbles.handleInitPackageResources(resparam, modRes);
-        }
 
         if (resparam.packageName.equals("com.android.settings")) {
             boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);

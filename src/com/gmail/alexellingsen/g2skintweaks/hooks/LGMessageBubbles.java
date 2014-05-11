@@ -53,6 +53,10 @@ public class LGMessageBubbles {
     }
 
     public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
+        if (!resparam.packageName.equals(PACKAGE_NAME)) {
+            return;
+        }
+
         boolean enableCustomBubble = mSettings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE, false);
 
         if (!enableCustomBubble) {
