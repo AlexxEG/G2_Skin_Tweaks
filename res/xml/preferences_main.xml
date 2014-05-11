@@ -180,12 +180,14 @@
                             android:dependency="pref_custom_bubble_colors"
                             android:icon="@null"
                             android:key="pref_bubble_color_left"
+                            android:summary="@string/pref_bubble_color_left_summary"
                             android:title="@string/pref_bubble_color_left"/>
 
                         <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
                             android:dependency="pref_custom_bubble_colors"
                             android:icon="@null"
                             android:key="pref_bubble_color_right"
+                            android:summary="@string/pref_bubble_color_right_summary"
                             android:title="@string/pref_bubble_color_right"/>
 
                     </PreferenceCategory>
@@ -266,12 +268,14 @@
                             android:dependency="pref_sms_text_colors"
                             android:icon="@null"
                             android:key="pref_sms_color_left"
+                            android:summary="@string/pref_messages_text_color_left_summary"
                             android:title="@string/pref_messages_text_color_left"/>
 
                         <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
                             android:dependency="pref_sms_text_colors"
                             android:icon="@null"
                             android:key="pref_sms_color_right"
+                            android:summary="@string/pref_messages_text_color_right_summary"
                             android:title="@string/pref_messages_text_color_right"/>
                     </PreferenceCategory>
 

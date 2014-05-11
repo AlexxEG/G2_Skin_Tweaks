@@ -34,7 +34,9 @@
     <string name="pref_applications_shortcut">Applications info shortcut</string>
     <string name="pref_applications_shortcut_summary">Click the icon in the App Info dialog to open the app in Applications.</string>
     <string name="pref_bubble_color_left">Incoming bubble color</string>
+    <string name="pref_bubble_color_left_summary">Select the color for the incoming bubble.</string>
     <string name="pref_bubble_color_right">Outgoing bubble color</string>
+    <string name="pref_bubble_color_right_summary">Select the color for the outgoing bubble.</string>
     <string name="pref_bubble_slot_1">Bubble slot 1</string>
     <string name="pref_bubble_slot_2">Bubble slot 2</string>
     <string name="pref_bubble_slot_3">Bubble slot 3</string>
@@ -56,7 +58,9 @@
     <string name="pref_flash_power_led">Flash Power LED</string>
     <string name="pref_flash_power_led_summary">Reactivate Power LED. Requires root.</string>
     <string name="pref_messages_text_color_left">Incoming text color</string>
+    <string name="pref_messages_text_color_left_summary">Select the color for the incoming text</string>
     <string name="pref_messages_text_color_right">Outgoing text color</string>
+    <string name="pref_messages_text_color_right_summary">Select the color for the outgoing text.</string>
     <string name="pref_minimum_text_size">Minimum text size</string>
     <string name="pref_minimum_text_size_summary">The minimum text size allowed.</string>
     <string name="pref_power_led_off">Turn Power LED off</string>
