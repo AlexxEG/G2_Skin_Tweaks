@@ -11,10 +11,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.gmail.alexellingsen.g2skintweaks.hooks.LGHomeHook;
-import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageBubbles;
-import com.gmail.alexellingsen.g2skintweaks.hooks.LGMessageHook;
-import com.gmail.alexellingsen.g2skintweaks.hooks.RecentAppsHook;
+import com.gmail.alexellingsen.g2skintweaks.hooks.*;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.*;
@@ -49,6 +46,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
 
         LGHomeHook.init(settings);
+        LGLockScreen.init(settings);
         LGMessageHook.init(settings);
         LGMessageBubbles.init(settings);
         RecentAppsHook.init(settings);
@@ -56,13 +54,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     @Override
     public void handleInitPackageResources(InitPackageResourcesParam resparam) throws Throwable {
+        XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
+
         LGHomeHook.handleInitPackageResources(resparam);
+        LGLockScreen.handleInitPackageResources(resparam, modRes);
         LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
 
         if (resparam.packageName.equals("com.android.mms")) {
-            XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
-
             LGMessageBubbles.handleInitPackageResources(resparam, modRes);
         }
 
@@ -86,6 +85,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         LGHomeHook.handleLoadPackage(lpparam);
+        LGLockScreen.handleLoadPackage(lpparam);
         LGMessageHook.handleLoadPackage(lpparam);
         RecentAppsHook.handleLoadPackage(lpparam);
 

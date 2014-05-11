@@ -63,6 +63,20 @@
         <PreferenceScreen
             android:icon="@null"
             android:persistent="false"
+            android:title="LG Lockscreen">
+
+            <PreferenceCategory android:title="Lockscreen Customization">
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_aosp_pattern_dots"
+                    android:summary="@string/pref_aosp_pattern_dots_summary"
+                    android:title="@string/pref_aosp_pattern_dots"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:icon="@null"
+            android:persistent="false"
             android:title="@string/title_messenger">
 
             <PreferenceCategory android:title="@string/messenger_customization">
