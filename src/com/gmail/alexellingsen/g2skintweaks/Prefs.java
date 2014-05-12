@@ -24,6 +24,7 @@ public class Prefs {
     public static final String CONVERSATION_LIST_BG_COLOR_ALPHA = "pref_conversation_list_bg_color_alpha";
     public static final String CONVERSATION_LIST_BG_COLOR_VALUE = "pref_conversation_list_bg_color_value";
     public static final String DATE_SIZE_OFFSET_MESSAGES = "pref_date_offset_size_messages";
+    public static final String DONT_TURN_SCREEN_ON_SMS = "pref_dont_turn_screen_on_sms";
     public static final String ENABLE_AOSP_PATTERN_DOTS = "pref_aosp_pattern_dots";
     public static final String ENABLE_APPLICATIONS_SHORTCUT = "pref_applications_shortcut";
     public static final String ENABLE_CONVERSATION_COLOR = "pref_conversation_text_color";
@@ -42,5 +43,4 @@ public class Prefs {
     public static final String RECENT_APPS_OPACITY_VALUE = "pref_recent_apps_opacity_value";
     public static final String SMS_TEXT_COLOR_LEFT = "pref_sms_color_left";
     public static final String SMS_TEXT_COLOR_RIGHT = "pref_sms_color_right";
-    public static final String DONT_TURN_SCREEN_ON_SMS = "pref_dont_turn_screen_on_sms";
 }
