@@ -40,9 +40,9 @@ public class PreviewColorPreference extends Preference {
     protected void onBindView(View view) {
         super.onBindView(view);
 
-        ImageView mImageView = (ImageView) view.findViewById(R.id.image_view_preference);
+        ImageView imageView = (ImageView) view.findViewById(R.id.image_view_preference);
 
-        mImageView.setBackgroundColor(mColor);
+        imageView.setBackgroundColor(mColor);
     }
 
     @Override
