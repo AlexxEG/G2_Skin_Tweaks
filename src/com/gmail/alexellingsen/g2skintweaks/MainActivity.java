@@ -24,6 +24,7 @@ public class MainActivity extends PreferenceActivity {
 
     private static final int CROP_IMAGE = 112;
     private static final int PICK_IMAGE = 111;
+    private static final String INSTALL_SHORTCUT_ACTION = "com.android.launcher.action.INSTALL_SHORTCUT";
     private static final String XPOSED_INSTALLER_PACKAGE = "de.robv.android.xposed.installer";
 
     private static SettingsHelper settings = null;
@@ -103,7 +104,7 @@ public class MainActivity extends PreferenceActivity {
                         R.drawable.ic_launcher)
         );
 
-        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        addIntent.setAction(INSTALL_SHORTCUT_ACTION);
         getApplicationContext().sendBroadcast(addIntent);
     }
 
