@@ -52,6 +52,7 @@ public class LGMessageHook {
                     if (!folder.exists())
                         return;
 
+                    // Create .nomedia file to hide background image from gallery
                     File noMediaFile = new File(folder, ".nomedia");
 
                     if (!noMediaFile.exists())
@@ -73,11 +74,13 @@ public class LGMessageHook {
                 if (mSettings.getBoolean(Prefs.CONVERSATION_LIST_BG_COLOR, false)) {
                     int color = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_VALUE, Color.TRANSPARENT);
 
+                    // Set the parent view's background color to create a overlay effect.
                     ((RelativeLayout) frame.getParent()).setBackgroundColor(color);
 
                     int alpha = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
 
-                    // Have to reverse the alpha for some reason?
+                    // Setting the background's alpha seems to have the opposite
+                    // effect, 255 being fully transparent. Therefore reverse the number.
                     alpha = reverseNumber(alpha, 0, 255);
 
                     if (frame.getBackground() != null)
