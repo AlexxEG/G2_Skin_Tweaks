@@ -26,6 +26,7 @@ public class RecentAppsHook {
         if (!resparam.packageName.equals("com.android.systemui"))
             return;
 
+        // Store stock background to use if option is disabled.
         stockBackground = resparam.res.getDrawable(resparam.res.getIdentifier("status_bar_recents_background", "drawable", "com.android.systemui"));
 
         XC_LayoutInflated hook = new XC_LayoutInflated() {

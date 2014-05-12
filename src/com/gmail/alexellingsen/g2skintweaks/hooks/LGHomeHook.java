@@ -52,6 +52,7 @@ public class LGHomeHook {
                         if (mSettings.getBoolean(Prefs.ENABLE_APPLICATIONS_SHORTCUT, false)) {
                             final Activity activity = (Activity) XposedHelpers.getObjectField(param.thisObject, "mActivity");
                             final Object mAppInfo = XposedHelpers.getObjectField(param.thisObject, "mAppInfo");
+                            // Get the intent from mAppInfo to get the app's package.
                             final Intent intent = (Intent) XposedHelpers.getObjectField(mAppInfo, "intent");
 
                             icon.setOnClickListener(new View.OnClickListener() {
