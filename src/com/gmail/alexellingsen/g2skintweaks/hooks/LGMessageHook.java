@@ -52,6 +52,11 @@ public class LGMessageHook {
                     if (!folder.exists())
                         return;
 
+                    File noMediaFile = new File(folder, ".nomedia");
+
+                    if (!noMediaFile.exists())
+                        noMediaFile.createNewFile();
+
                     File file = new File(folder, "background.png");
 
                     if (!file.exists())
