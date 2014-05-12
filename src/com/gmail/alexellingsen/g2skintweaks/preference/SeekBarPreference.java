@@ -17,7 +17,6 @@ public class SeekBarPreference extends Preference {
 
     private Context mContext;
     private int mMax;
-    // ToDo: Make 'min' work
     private int mMin;
     private String mSummaryFormat;
     private int mValue;
