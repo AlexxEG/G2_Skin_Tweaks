@@ -97,7 +97,7 @@ public class MainActivity extends PreferenceActivity {
 
         Intent addIntent = new Intent();
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "G2 Skin Tweaks");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
                 Intent.ShortcutIconResource.fromContext(getApplicationContext(),
                         R.drawable.ic_launcher)
