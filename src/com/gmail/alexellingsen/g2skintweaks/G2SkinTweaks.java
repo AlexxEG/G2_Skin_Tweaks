@@ -46,9 +46,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
 
         LGHomeHook.init(settings);
-        LGLockScreen.init(settings);
+        LGLockScreenHook.init(settings);
         LGMessageHook.init(settings);
-        LGMessageBubbles.init(settings);
+        LGMessageBubblesHook.init(settings);
         RecentAppsHook.init(settings);
     }
 
@@ -57,8 +57,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
 
         LGHomeHook.handleInitPackageResources(resparam);
-        LGLockScreen.handleInitPackageResources(resparam, modRes);
-        LGMessageBubbles.handleInitPackageResources(resparam, modRes);
+        LGLockScreenHook.handleInitPackageResources(resparam, modRes);
+        LGMessageBubblesHook.handleInitPackageResources(resparam, modRes);
         LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
 
@@ -82,7 +82,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         LGHomeHook.handleLoadPackage(lpparam);
-        LGLockScreen.handleLoadPackage(lpparam);
+        LGLockScreenHook.handleLoadPackage(lpparam);
         LGMessageHook.handleLoadPackage(lpparam);
         RecentAppsHook.handleLoadPackage(lpparam);
 

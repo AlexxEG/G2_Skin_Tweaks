@@ -8,7 +8,7 @@ import com.gmail.alexellingsen.g2skintweaks.R;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
-public class LGMessageBubbles {
+public class LGMessageBubblesHook {
 
     private static final String[] LEFT_BUBBLES = new String[]{
             "bubble_inbox_bg_01",

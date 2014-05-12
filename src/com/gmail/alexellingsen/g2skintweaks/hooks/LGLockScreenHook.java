@@ -14,7 +14,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
-public class LGLockScreen {
+public class LGLockScreenHook {
 
     private static final String PACKAGE = "com.android.keyguard";
     private static final String USE_PACKAGE = "com.lge.lockscreen";
