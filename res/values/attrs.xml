@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Theme">
+        <!-- Default style for SeekBarPreference. -->
+        <attr name="seekBarPreferenceStyle" format="reference"/>
+    </declare-styleable>
+
+    <!-- Base attributes available to SeekBarPreference. -->
+    <declare-styleable name="SeekBarPreference">
+        <!-- The format able summary displaying the current value. -->
+        <attr name="summaryFormat" format="string"/>
+        <!-- The current value. -->
+        <attr name="value" format="integer"/>
+        <!-- Maximum value. -->
+        <attr name="max" format="integer"/>
+        <!-- Minimum value. -->
+        <attr name="min" format="integer"/>
+    </declare-styleable>
+
+</resources>

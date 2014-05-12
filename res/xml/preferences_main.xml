@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:g2skintweaks="http://schemas.android.com/apk/res/com.gmail.alexellingsen.g2skintweaks">
 
     <PreferenceCategory android:title="@string/information_header">
         <Preference
@@ -37,11 +38,14 @@
                     android:summary="@string/pref_recent_apps_opacity_summary"
                     android:title="@string/pref_recent_apps_opacity"/>
 
-                <Preference
+                <com.gmail.alexellingsen.g2skintweaks.preference.SeekBarPreference
                     android:dependency="pref_recent_apps_opacity"
                     android:icon="@null"
-                    android:key="set_recent_apps_opacity"
-                    android:title="@string/pref_recent_apps_opacity_value"/>
+                    android:key="pref_recent_apps_opacity_value"
+                    android:summary="@string/pref_current_value_summary"
+                    android:title="@string/pref_recent_apps_opacity_value"
+                    g2skintweaks:max="255"
+                    g2skintweaks:summaryFormat="@string/pref_current_value_summary"/>
             </PreferenceCategory>
 
         </PreferenceScreen>
@@ -199,11 +203,14 @@
                             android:key="pref_bubble_transparency"
                             android:title="@string/pref_transparency"/>
 
-                        <Preference
+                        <com.gmail.alexellingsen.g2skintweaks.preference.SeekBarPreference
                             android:dependency="pref_bubble_transparency"
                             android:icon="@null"
-                            android:key="set_bubble_transparency"
-                            android:title="@string/pref_transparency_value"/>
+                            android:key="pref_bubble_transparency_value"
+                            android:summary="@string/pref_current_value_summary"
+                            android:title="@string/pref_transparency_value"
+                            g2skintweaks:max="255"
+                            g2skintweaks:summaryFormat="@string/pref_current_value_summary"/>
 
                     </PreferenceCategory>
 
@@ -243,12 +250,15 @@
                             android:summary="@string/pref_conversation_list_bg_color_value_summary"
                             android:title="@string/pref_conversation_list_bg_color_value"/>
 
-                        <Preference
+                        <com.gmail.alexellingsen.g2skintweaks.preference.SeekBarPreference
                             android:dependency="pref_conversation_list_bg_color"
                             android:icon="@null"
                             android:key="pref_conversation_list_bg_color_alpha"
                             android:summary="@string/pref_conversation_list_bg_color_alpha_summary"
-                            android:title="@string/pref_conversation_list_bg_color_alpha"/>
+                            android:title="@string/pref_conversation_list_bg_color_alpha"
+                            g2skintweaks:max="255"
+                            g2skintweaks:summaryFormat="@string/pref_conversation_list_bg_color_alpha_summary"
+                            g2skintweaks:value="0"/>
                     </PreferenceCategory>
 
                     <PreferenceCategory android:title="@string/category_colors">

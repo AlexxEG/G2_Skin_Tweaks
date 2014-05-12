@@ -1,9 +1,6 @@
 package com.gmail.alexellingsen.g2skintweaks;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -12,12 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.*;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
@@ -184,11 +177,6 @@ public class MainActivity extends PreferenceActivity {
         }
 
         private void setup() {
-            // ToDo: Improve this
-            findPreference(RECENT_APPS_OPACITY).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255)));
-            findPreference(BUBBLE_TRANSPARENCY).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)));
-            findPreference(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255)));
-
             String[] entries = getResources().getStringArray(R.array.custom_bubbles);
             String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
                     Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
@@ -198,9 +186,7 @@ public class MainActivity extends PreferenceActivity {
             }
         }
 
-        private final String BUBBLE_TRANSPARENCY = "set_bubble_transparency";
         private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
-        private final String RECENT_APPS_OPACITY = "set_recent_apps_opacity";
         private final String REQUEST_ROOT = "request_root";
         private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
@@ -211,18 +197,10 @@ public class MainActivity extends PreferenceActivity {
 
             if (preference instanceof PreviewColorPreference) {
                 showColorPicker((PreviewColorPreference) preference);
-            } else if (preference.getKey().equals(RECENT_APPS_OPACITY)) {
-                int i = settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255);
-
-                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
             } else if (preference.getKey().equals(REQUEST_ROOT)) {
                 RootFunctions.requestRoot();
             } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
                 pickImage(getActivity());
-            } else if (preference.getKey().equals(BUBBLE_TRANSPARENCY)) {
-                int i = settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255);
-
-                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
             } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
                 Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
 
@@ -232,10 +210,6 @@ public class MainActivity extends PreferenceActivity {
                 } else {
                     startActivity(intent);
                 }
-            } else if (preference.getKey().equals(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA)) {
-                int i = settings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
-
-                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, i, 255);
             }
 
             return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -275,53 +249,6 @@ public class MainActivity extends PreferenceActivity {
             });
 
             colorPicker.show(getFragmentManager(), "cal");
-        }
-
-        private void showSeekBarDialog(final Preference preference, final int resText, final String key, int value, int max) {
-            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.seek_bar_dialog, null);
-            final SeekBar sb = (SeekBar) layout.findViewById(R.id.seek_bar_dialog_seek_bar);
-            final TextView tv = (TextView) layout.findViewById(R.id.seek_bar_dialog_text_view);
-
-            tv.setText(value + "");
-
-            sb.setMax(max);
-            sb.setProgress(value);
-            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    tv.setText(progress + "");
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setView(layout)
-                    .setTitle(R.string.title_set_value)
-                    .setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            settings.putInt(key, sb.getProgress());
-                            preference.setSummary(getString(resText, sb.getProgress()));
-                            dialog.dismiss();
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
         }
     }
 
