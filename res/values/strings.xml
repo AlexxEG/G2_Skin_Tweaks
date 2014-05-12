@@ -10,6 +10,7 @@
     <string name="bubble_square">Square Bubble</string>
     <string name="cancel">Cancel</string>
     <string name="category_background">Background</string>
+    <string name="category_background_color">Background Color</string>
     <string name="category_bubbles">Bubbles</string>
     <string name="category_colors">Colors</string>
     <string name="category_conversation_list_customization">Conversation list customization</string>
@@ -48,8 +49,15 @@
     <string name="pref_conversation_color_top">Top Line Color</string>
     <string name="pref_conversation_color_top_summary">Select the color for the top line.</string>
     <string name="pref_conversation_list_bg">Enable background</string>
+    <string name="pref_conversation_list_bg_color">Enable background color</string>
+    <string name="pref_conversation_list_bg_color_summary">Will be used as color overlay if background is enabled.</string>
+    <string name="pref_conversation_list_bg_color_value">Background color</string>
+    <string name="pref_conversation_list_bg_color_value_summary">Use a light color the make dark text more visible, and visa versa.</string>
+    <string name="pref_conversation_list_bg_color_alpha">Background color alpha</string>
+    <string name="pref_conversation_list_bg_color_alpha_summary">Set the background color\'s alpha.</string>
     <string name="pref_conversation_list_bg_select">Select background</string>
     <string name="pref_conversation_list_bg_select_summary">Click to browse for background.</string>
+    <string name="pref_current_value_summary">Current value: %1$s</string>
     <string name="pref_custom_bubbles">Custom bubble(s)</string>
     <string name="pref_custom_colors">Custom colors</string>
     <string name="pref_date_offset">Date offset</string>
@@ -70,7 +78,6 @@
     <string name="pref_recent_apps_opacity">Custom opacity</string>
     <string name="pref_recent_apps_opacity_summary">Enable custom opacity for the Recent Apps list.</string>
     <string name="pref_recent_apps_opacity_value">Custom opacity value</string>
-    <string name="pref_recent_apps_opacity_value_summary">Current value: %1$s</string>
     <string name="pref_remove_dividers">Remove dividers</string>
     <string name="pref_remove_dividers_summary">Removes dividers from LG Switches.</string>
     <string name="pref_replace_switch">Enable replacement switch</string>
@@ -79,7 +86,6 @@
     <string name="pref_smaller_text_summary">Enable smaller text size when pinch zooming in LG Messenger app.</string>
     <string name="pref_transparency">Transparency</string>
     <string name="pref_transparency_value">Transparency value</string>
-    <string name="pref_transparency_value_summary">Current value: %1$s</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="set_background_complete">Background was set!</string>

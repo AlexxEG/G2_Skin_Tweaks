@@ -20,6 +20,9 @@ public class Prefs {
     public static final String CUSTOM_BUBBLE_6 = "pref_custom_bubble_6";
     public static final String CONVERSATION_COLOR_BOTTOM = "pref_conversation_color_bottom";
     public static final String CONVERSATION_COLOR_TOP = "pref_conversation_color_top";
+    public static final String CONVERSATION_LIST_BG_COLOR = "pref_conversation_list_bg_color";
+    public static final String CONVERSATION_LIST_BG_COLOR_ALPHA = "pref_conversation_list_bg_color_alpha";
+    public static final String CONVERSATION_LIST_BG_COLOR_VALUE = "pref_conversation_list_bg_color_value";
     public static final String DATE_SIZE_OFFSET_MESSAGES = "pref_date_offset_size_messages";
     public static final String ENABLE_AOSP_PATTERN_DOTS = "pref_aosp_pattern_dots";
     public static final String ENABLE_APPLICATIONS_SHORTCUT = "pref_applications_shortcut";

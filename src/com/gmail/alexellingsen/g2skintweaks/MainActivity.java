@@ -185,10 +185,9 @@ public class MainActivity extends PreferenceActivity {
 
         private void setup() {
             // ToDo: Improve this
-            findPreference(RECENT_APPS_OPACITY).setSummary(getString(R.string.pref_recent_apps_opacity_value_summary, settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255)));
-            findPreference(BUBBLE_TRANSPARENCY).setSummary(getString(R.string.pref_transparency_value_summary, settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)));
-
-            setupColorPickerPreferences();
+            findPreference(RECENT_APPS_OPACITY).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255)));
+            findPreference(BUBBLE_TRANSPARENCY).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255)));
+            findPreference(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA).setSummary(getString(R.string.pref_current_value_summary, settings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255)));
 
             String[] entries = getResources().getStringArray(R.array.custom_bubbles);
             String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
@@ -196,24 +195,6 @@ public class MainActivity extends PreferenceActivity {
 
             for (String key : keys) {
                 findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
-            }
-        }
-
-        private void setupColorPickerPreferences() {
-            String[] keys = new String[]{Prefs.CONVERSATION_COLOR_BOTTOM, Prefs.CONVERSATION_COLOR_TOP,
-                    Prefs.BUBBLE_COLOR_LEFT, Prefs.BUBBLE_COLOR_RIGHT, Prefs.SMS_TEXT_COLOR_LEFT, Prefs.SMS_TEXT_COLOR_RIGHT};
-
-            // Show color picker on click
-            for (final String key : keys) {
-                final PreviewColorPreference pcp = (PreviewColorPreference) findPreference(key);
-
-                pcp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        showColorPicker(pcp, key, settings.getInt(key, Color.BLACK));
-                        return true;
-                    }
-                });
             }
         }
 
@@ -228,10 +209,12 @@ public class MainActivity extends PreferenceActivity {
             if (preference == null || preference.getKey() == null)
                 return super.onPreferenceTreeClick(preferenceScreen, preference);
 
-            if (preference.getKey().equals(RECENT_APPS_OPACITY)) {
+            if (preference instanceof PreviewColorPreference) {
+                showColorPicker((PreviewColorPreference) preference);
+            } else if (preference.getKey().equals(RECENT_APPS_OPACITY)) {
                 int i = settings.getInt(Prefs.RECENT_APPS_OPACITY_VALUE, 255);
 
-                showSeekBarDialog(preference, R.string.pref_recent_apps_opacity_value_summary, Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
+                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.RECENT_APPS_OPACITY_VALUE, i, 255);
             } else if (preference.getKey().equals(REQUEST_ROOT)) {
                 RootFunctions.requestRoot();
             } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
@@ -239,7 +222,7 @@ public class MainActivity extends PreferenceActivity {
             } else if (preference.getKey().equals(BUBBLE_TRANSPARENCY)) {
                 int i = settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255);
 
-                showSeekBarDialog(preference, R.string.pref_transparency_value_summary, Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
+                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.BUBBLE_TRANSPARENCY_VALUE, i, 255);
             } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
                 Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
 
@@ -249,6 +232,10 @@ public class MainActivity extends PreferenceActivity {
                 } else {
                     startActivity(intent);
                 }
+            } else if (preference.getKey().equals(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA)) {
+                int i = settings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
+
+                showSeekBarDialog(preference, R.string.pref_current_value_summary, Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, i, 255);
             }
 
             return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -267,9 +254,9 @@ public class MainActivity extends PreferenceActivity {
             return mColorChoices;
         }
 
-        private void showColorPicker(final PreviewColorPreference preference, final String key, int defaultColor) {
+        private void showColorPicker(final PreviewColorPreference preference) {
             int[] mColor = getColorChoice();
-            int mSelectedColor = settings.getInt(key, defaultColor);
+            int mSelectedColor = settings.getInt(preference.getKey(), Color.BLACK);
 
             ColorPickerDialog colorPicker = ColorPickerDialog.newInstance(
                     R.string.color_picker_default_title,
@@ -281,7 +268,7 @@ public class MainActivity extends PreferenceActivity {
             colorPicker.setOnColorSelectedListener(new ColorPickerSwatch.OnColorSelectedListener() {
                 @Override
                 public void onColorSelected(int color) {
-                    settings.putInt(key, color);
+                    settings.putInt(preference.getKey(), color);
 
                     preference.setColor(color);
                 }

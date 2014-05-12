@@ -229,6 +229,28 @@
                             android:title="@string/pref_conversation_list_bg_select"/>
                     </PreferenceCategory>
 
+                    <PreferenceCategory android:title="@string/category_background_color">
+                        <CheckBoxPreference
+                            android:icon="@null"
+                            android:key="pref_conversation_list_bg_color"
+                            android:summary="@string/pref_conversation_list_bg_color_summary"
+                            android:title="@string/pref_conversation_list_bg_color"/>
+
+                        <com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference
+                            android:dependency="pref_conversation_list_bg_color"
+                            android:icon="@null"
+                            android:key="pref_conversation_list_bg_color_value"
+                            android:summary="@string/pref_conversation_list_bg_color_value_summary"
+                            android:title="@string/pref_conversation_list_bg_color_value"/>
+
+                        <Preference
+                            android:dependency="pref_conversation_list_bg_color"
+                            android:icon="@null"
+                            android:key="pref_conversation_list_bg_color_alpha"
+                            android:summary="@string/pref_conversation_list_bg_color_alpha_summary"
+                            android:title="@string/pref_conversation_list_bg_color_alpha"/>
+                    </PreferenceCategory>
+
                     <PreferenceCategory android:title="@string/category_colors">
                         <CheckBoxPreference
                             android:icon="@null"
