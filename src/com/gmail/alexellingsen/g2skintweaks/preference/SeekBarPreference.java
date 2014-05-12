@@ -119,9 +119,11 @@ public class SeekBarPreference extends Preference {
     private void showSeekBarDialog() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.seek_bar_dialog, null);
-        final SeekBar sb = (SeekBar) layout.findViewById(R.id.seek_bar_dialog_seek_bar);
+        TextView tvTitle = (TextView) layout.findViewById(R.id.seek_bar_dialog_title);
         final TextView tv = (TextView) layout.findViewById(R.id.seek_bar_dialog_text_view);
+        final SeekBar sb = (SeekBar) layout.findViewById(R.id.seek_bar_dialog_seek_bar);
 
+        tvTitle.setText(getTitle());
         tv.setText(getValue() + "");
 
         sb.setMax(getMax() - getMin());
@@ -146,8 +148,7 @@ public class SeekBarPreference extends Preference {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setView(layout)
-                .setTitle(R.string.title_set_value)
-                .setPositiveButton(mContext.getString(R.string.save), new DialogInterface.OnClickListener() {
+                .setPositiveButton(mContext.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int value = sb.getProgress() + getMin();
@@ -157,7 +158,7 @@ public class SeekBarPreference extends Preference {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton(mContext.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                .setNegativeButton(mContext.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

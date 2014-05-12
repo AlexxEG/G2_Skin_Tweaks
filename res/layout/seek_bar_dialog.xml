@@ -5,16 +5,30 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/seek_bar_dialog_text_view"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_marginBottom="12dip"
+        android:layout_marginBottom="6dip"
+        android:layout_marginLeft="16dip"
         android:layout_marginRight="16dip"
-        android:layout_marginTop="16dip"
-        android:gravity="top|right"
-        android:text="@null"/>
+        android:layout_marginTop="16dip">
+
+        <TextView
+            android:id="@+id/seek_bar_dialog_title"
+            style="?android:textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dip"
+            android:text="@null"/>
+
+        <TextView
+            android:id="@+id/seek_bar_dialog_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:gravity="bottom|right"
+            android:text="@null"/>
+    </FrameLayout>
 
     <SeekBar
         android:id="@+id/seek_bar_dialog_seek_bar"
