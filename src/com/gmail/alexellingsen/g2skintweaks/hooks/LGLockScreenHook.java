@@ -19,11 +19,8 @@ public class LGLockScreenHook {
     private static final String PACKAGE = "com.android.keyguard";
     private static final String USE_PACKAGE = "com.lge.lockscreen";
 
+    private static XModuleResources mModRes;
     private static SettingsHelper mSettings;
-
-    private static Bitmap mBitmap1;
-    private static Bitmap mBitmap2;
-    private static Bitmap mBitmap3;
 
     public static void init(SettingsHelper settings) {
         mSettings = settings;
@@ -34,13 +31,7 @@ public class LGLockScreenHook {
             return;
         }
 
-        Drawable d1 = modRes.getDrawable(R.drawable.indicator_code_lock_point_area_default_holo);
-        Drawable d2 = modRes.getDrawable(R.drawable.indicator_code_lock_point_area_green_holo);
-        Drawable d3 = modRes.getDrawable(R.drawable.indicator_code_lock_point_area_red_holo);
-
-        mBitmap1 = drawableToBitmap(d1);
-        mBitmap2 = drawableToBitmap(d2);
-        mBitmap3 = drawableToBitmap(d3);
+        mModRes = modRes;
     }
 
     private static Bitmap drawableToBitmap(Drawable drawable) {
@@ -86,7 +77,14 @@ public class LGLockScreenHook {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         if (mSettings.getBoolean(Prefs.ENABLE_AOSP_PATTERN_DOTS, false)) {
-                            // Set bitmaps to custom bitmaps.
+                            Drawable d1 = mModRes.getDrawable(R.drawable.indicator_code_lock_point_area_default_holo);
+                            Drawable d2 = mModRes.getDrawable(R.drawable.indicator_code_lock_point_area_green_holo);
+                            Drawable d3 = mModRes.getDrawable(R.drawable.indicator_code_lock_point_area_red_holo);
+
+                            Bitmap mBitmap1 = drawableToBitmap(d1);
+                            Bitmap mBitmap2 = drawableToBitmap(d2);
+                            Bitmap mBitmap3 = drawableToBitmap(d3);
+
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleDefault", mBitmap1);
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleGreen", mBitmap2);
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleRed", mBitmap3);
