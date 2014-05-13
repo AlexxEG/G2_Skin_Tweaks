@@ -516,6 +516,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                             ImageView divider = (ImageView) liparam.view.findViewById(
                                     liparam.res.getIdentifier("switchImage", "id", "com.android.settings"));
+                            
                             divider.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -532,10 +533,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             View divider = liparam.view.findViewById(
                                     liparam.res.getIdentifier("switchDivider", "id", "com.android.settings"));
 
-                            if (divider != null)
-                                divider.setVisibility(View.INVISIBLE);
-                            else
-                                XposedBridge.log("Didn't find divider 'preference_header_switch_item'");
+                            divider.setVisibility(View.INVISIBLE);
                         }
                     }
             );
