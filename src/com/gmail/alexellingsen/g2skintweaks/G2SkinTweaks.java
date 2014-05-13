@@ -520,6 +520,25 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         }
                     }
             );
+
+            resparam.res.hookLayout(
+                    "com.android.settings",
+                    "layout",
+                    "preference_header_switch_item",
+
+                    new XC_LayoutInflated() {
+                        @Override
+                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+                            View divider = liparam.view.findViewById(
+                                    liparam.res.getIdentifier("switchDivider", "id", "com.android.settings"));
+
+                            if (divider != null)
+                                divider.setVisibility(View.INVISIBLE);
+                            else
+                                XposedBridge.log("Didn't find divider 'preference_header_switch_item'");
+                        }
+                    }
+            );
         } catch (Throwable e) {
             XposedBridge.log(e);
         }
