@@ -25,10 +25,6 @@ public class LGLockScreenHook {
     private static Bitmap mBitmap2;
     private static Bitmap mBitmap3;
 
-    private static Bitmap mStockBitmap1;
-    private static Bitmap mStockBitmap2;
-    private static Bitmap mStockBitmap3;
-
     public static void init(SettingsHelper settings) {
         mSettings = settings;
     }
@@ -89,23 +85,11 @@ public class LGLockScreenHook {
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        // Store stock bitmaps to be used later.
-                        if (mStockBitmap1 == null || mStockBitmap2 == null || mStockBitmap3 == null) {
-                            mStockBitmap1 = (Bitmap) XposedHelpers.getObjectField(param.thisObject, "mBitmapCircleDefault");
-                            mStockBitmap2 = (Bitmap) XposedHelpers.getObjectField(param.thisObject, "mBitmapCircleGreen");
-                            mStockBitmap3 = (Bitmap) XposedHelpers.getObjectField(param.thisObject, "mBitmapCircleRed");
-                        }
-
                         if (mSettings.getBoolean(Prefs.ENABLE_AOSP_PATTERN_DOTS, false)) {
                             // Set bitmaps to custom bitmaps.
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleDefault", mBitmap1);
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleGreen", mBitmap2);
                             XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleRed", mBitmap3);
-                        } else {
-                            // Set bitmaps back to normal, not sure if this is needed.
-                            XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleDefault", mStockBitmap1);
-                            XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleGreen", mStockBitmap2);
-                            XposedHelpers.setObjectField(param.thisObject, "mBitmapCircleRed", mStockBitmap3);
                         }
                     }
                 }
