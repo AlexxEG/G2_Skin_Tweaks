@@ -516,7 +516,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                             ImageView divider = (ImageView) liparam.view.findViewById(
                                     liparam.res.getIdentifier("switchImage", "id", "com.android.settings"));
-                            
+
                             divider.setVisibility(View.INVISIBLE);
                         }
                     }

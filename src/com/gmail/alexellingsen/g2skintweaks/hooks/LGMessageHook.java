@@ -3,8 +3,8 @@ package com.gmail.alexellingsen.g2skintweaks.hooks;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
@@ -75,7 +75,7 @@ public class LGMessageHook {
                     int color = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_VALUE, Color.TRANSPARENT);
 
                     // Set the parent view's background color to create a overlay effect.
-                    ((RelativeLayout) frame.getParent()).setBackgroundColor(color);
+                    ((ViewGroup) frame.getParent()).setBackgroundColor(color);
 
                     int alpha = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
 
