@@ -366,6 +366,18 @@
     <PreferenceCategory android:title="@string/category_shortcuts">
         <Preference
             android:icon="@null"
+            android:key="reboot"
+            android:persistent="false"
+            android:title="@string/reboot"/>
+
+        <Preference
+            android:icon="@null"
+            android:key="soft_reboot"
+            android:persistent="false"
+            android:title="@string/soft_reboot"/>
+
+        <Preference
+            android:icon="@null"
             android:key="shortcut_xposed_installer"
             android:persistent="false"
             android:title="@string/shortcut_xposed_installer"/>

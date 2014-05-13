@@ -189,7 +189,9 @@ public class MainActivity extends PreferenceActivity {
         }
 
         private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
+        private final String REBOOT = "reboot";
         private final String REQUEST_ROOT = "request_root";
+        private final String SOFT_REBOOT = "soft_reboot";
         private final String XPOSED_INSTALLER = "shortcut_xposed_installer";
 
         @Override
@@ -203,6 +205,10 @@ public class MainActivity extends PreferenceActivity {
                 RootFunctions.requestRoot();
             } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
                 pickImage(getActivity());
+            } else if (preference.getKey().equals(REBOOT)) {
+                RootFunctions.reboot();
+            } else if (preference.getKey().equals(SOFT_REBOOT)) {
+                RootFunctions.softReboot();
             } else if (preference.getKey().equals(XPOSED_INSTALLER)) {
                 Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(XPOSED_INSTALLER_PACKAGE);
 

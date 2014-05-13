@@ -97,6 +97,18 @@ public class RootFunctions {
         }
     }
 
+    public static void softReboot() {
+        ArrayList<String> cmds = new ArrayList<String>();
+
+        cmds.add("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote");
+
+        try {
+            runCmds(cmds);
+        } catch (Throwable e) {
+            Log.e("myTag", "Error", e);
+        }
+    }
+
     public static void turnOffRearPowerLed(Context context) {
         ArrayList<String> cmds = new ArrayList<String>();
 
@@ -171,6 +183,18 @@ public class RootFunctions {
             settings.putString(Prefs.CACHED_BACKLIGHT1_PATH, paths[0]);
             settings.putString(Prefs.CACHED_BACKLIGHT2_PATH, paths[1]);
         } catch (Exception e) {
+            Log.e("myTag", "Error", e);
+        }
+    }
+
+    public static void reboot() {
+        ArrayList<String> cmds = new ArrayList<String>();
+
+        cmds.add("reboot");
+
+        try {
+            runCmds(cmds);
+        } catch (Throwable e) {
             Log.e("myTag", "Error", e);
         }
     }

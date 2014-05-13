@@ -85,10 +85,12 @@
     <string name="pref_smaller_text_summary">Enable smaller text size when pinch zooming in LG Messenger app.</string>
     <string name="pref_transparency">Transparency</string>
     <string name="pref_transparency_value">Transparency value</string>
+    <string name="reboot">Reboot</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="set_background_complete">Background was set!</string>
     <string name="shortcut_xposed_installer">Xposed Installer</string>
+    <string name="soft_reboot">Soft Reboot</string>
     <string name="title_bubble_customization">Bubble customization</string>
     <string name="title_bubble_customization_summary">Set colors &amp; transparency.</string>
     <string name="title_custom_bubbles">Custom bubble(s)</string>
