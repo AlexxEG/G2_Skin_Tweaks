@@ -13,13 +13,35 @@ import java.util.List;
 
 public class RootFunctions {
 
+    private static String execute(List<String> cmds) throws IOException, InterruptedException {
+        Process process = Runtime.getRuntime().exec("su");
+        DataOutputStream os = new DataOutputStream(process.getOutputStream());
+
+        if (cmds != null) {
+            for (String tmpCmd : cmds) {
+                os.writeBytes(tmpCmd + "\n");
+            }
+        }
+
+        os.writeBytes("exit\n");
+        os.flush();
+
+        String input = readToEnd(process.getInputStream());
+
+        os.close();
+
+        process.waitFor();
+
+        return input;
+    }
+
     private static boolean filesExists(String file1, String file2) {
         ArrayList<String> cmds = new ArrayList<String>();
 
         cmds.add("[[ -f " + file1 + " && -f " + file2 + " ]] && echo \"Found\" || echo \"Not found\"");
 
         try {
-            String result = runCmds(cmds);
+            String result = execute(cmds);
 
             if (result.trim().equals("Found")) {
                 return true;
@@ -50,28 +72,6 @@ public class RootFunctions {
         }).start();
     }
 
-    private static String runCmds(List<String> cmds) throws IOException, InterruptedException {
-        Process process = Runtime.getRuntime().exec("su");
-        DataOutputStream os = new DataOutputStream(process.getOutputStream());
-
-        if (cmds != null) {
-            for (String tmpCmd : cmds) {
-                os.writeBytes(tmpCmd + "\n");
-            }
-        }
-
-        os.writeBytes("exit\n");
-        os.flush();
-
-        String input = readToEnd(process.getInputStream());
-
-        os.close();
-
-        process.waitFor();
-
-        return input;
-    }
-
     private static String readToEnd(InputStream stream) {
         StringBuilder sb = new StringBuilder();
 
@@ -91,7 +91,7 @@ public class RootFunctions {
 
     public static void requestRoot() {
         try {
-            runCmds(null);
+            execute(null);
         } catch (Exception e) {
             Log.e("myTag", "Error", e);
         }
@@ -103,7 +103,7 @@ public class RootFunctions {
         cmds.add("setprop ctl.restart surfaceflinger; setprop ctl.restart zygote");
 
         try {
-            runCmds(cmds);
+            execute(cmds);
         } catch (Throwable e) {
             Log.e("myTag", "Error", e);
         }
@@ -130,7 +130,7 @@ public class RootFunctions {
         cmds.add("echo 0 > $rear_right");
 
         try {
-            runCmds(cmds);
+            execute(cmds);
         } catch (Exception e) {
             Log.e("myTag", "Error", e);
         }
@@ -157,7 +157,7 @@ public class RootFunctions {
         cmds.add("echo 71 > $rear_right");
 
         try {
-            runCmds(cmds);
+            execute(cmds);
         } catch (Exception e) {
             Log.e("myTag", "Error", e);
         }
@@ -176,7 +176,7 @@ public class RootFunctions {
         cmds.add("echo $find_right$rear_right");
 
         try {
-            String[] paths = runCmds(cmds).split("\\r?\\n");
+            String[] paths = execute(cmds).split("\\r?\\n");
 
             SettingsHelper settings = new SettingsHelper(context);
 
@@ -193,7 +193,7 @@ public class RootFunctions {
         cmds.add("reboot");
 
         try {
-            runCmds(cmds);
+            execute(cmds);
         } catch (Throwable e) {
             Log.e("myTag", "Error", e);
         }
