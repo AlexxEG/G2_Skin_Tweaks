@@ -144,7 +144,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
                         }
 
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
                             TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
 
@@ -164,7 +164,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             }
                         }
 
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             if (originalFontColor != 1) {
                                 Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
                                 TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
@@ -191,7 +191,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             // When this method is called, it means it's safe to set the TextPaint color,
                             // and it should reset itself in the 'setTextPaintPropertyByTheme' method.
                             Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
@@ -469,7 +469,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_COLOR, false)) {
+                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             return;
                         }
 

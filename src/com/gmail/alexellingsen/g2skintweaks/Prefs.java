@@ -27,8 +27,8 @@ public class Prefs {
     public static final String DONT_TURN_SCREEN_ON_SMS = "pref_dont_turn_screen_on_sms";
     public static final String ENABLE_AOSP_PATTERN_DOTS = "pref_aosp_pattern_dots";
     public static final String ENABLE_APPLICATIONS_SHORTCUT = "pref_applications_shortcut";
-    public static final String ENABLE_CONVERSATION_COLOR = "pref_conversation_text_color";
     public static final String ENABLE_CONVERSATION_LIST_BG = "pref_conversation_list_bg";
+    public static final String ENABLE_CONVERSATION_TEXT_COLOR = "pref_conversation_text_color";
     public static final String ENABLE_CUSTOM_BUBBLE = "pref_custom_bubbles";
     public static final String ENABLE_CUSTOM_BUBBLE_COLOR = "pref_custom_bubble_colors";
     public static final String ENABLE_DEBUGGING = "pref_enable_debugging";
