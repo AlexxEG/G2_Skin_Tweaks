@@ -8,7 +8,7 @@
     <string name="ask_for_root_summary">Recommended, can produce weird results until root is granted.</string>
     <string name="bubble_hangouts">Hangouts Bubble</string>
     <string name="bubble_square">Square Bubble</string>
-    <string name="category_background">Background</string>
+    <string name="category_background">Background Image</string>
     <string name="category_background_color">Background Color</string>
     <string name="category_bubbles">Bubbles</string>
     <string name="category_colors">Colors</string>
@@ -47,15 +47,15 @@
     <string name="pref_conversation_color_bottom_summary">Select the color for the bottom line.</string>
     <string name="pref_conversation_color_top">Top Line Color</string>
     <string name="pref_conversation_color_top_summary">Select the color for the top line.</string>
-    <string name="pref_conversation_list_bg">Enable background</string>
+    <string name="pref_conversation_list_bg">Enable background image</string>
     <string name="pref_conversation_list_bg_color">Enable background color</string>
     <string name="pref_conversation_list_bg_color_summary">Will be used as color overlay if background is enabled.</string>
     <string name="pref_conversation_list_bg_color_value">Background color</string>
     <string name="pref_conversation_list_bg_color_value_summary">Use a light color the make dark text more visible, and visa versa.</string>
     <string name="pref_conversation_list_bg_color_alpha">Background color alpha</string>
     <string name="pref_conversation_list_bg_color_alpha_summary">Set the background color\'s alpha. Current value: %1$s</string>
-    <string name="pref_conversation_list_bg_select">Select background</string>
-    <string name="pref_conversation_list_bg_select_summary">Click to browse for background.</string>
+    <string name="pref_conversation_list_bg_select">Select background image</string>
+    <string name="pref_conversation_list_bg_select_summary">Click to browse for background image.</string>
     <string name="pref_current_value_summary">Current value: %1$s</string>
     <string name="pref_custom_bubbles">Custom bubble(s)</string>
     <string name="pref_custom_colors">Custom colors</string>
