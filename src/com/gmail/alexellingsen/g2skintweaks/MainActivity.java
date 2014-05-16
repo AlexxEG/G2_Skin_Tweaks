@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference;
+import com.gmail.alexellingsen.g2skintweaks.preference.PreviewImagePreference;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch;
@@ -27,6 +29,7 @@ public class MainActivity extends PreferenceActivity {
     private static final String INSTALL_SHORTCUT_ACTION = "com.android.launcher.action.INSTALL_SHORTCUT";
     private static final String XPOSED_INSTALLER_PACKAGE = "de.robv.android.xposed.installer";
 
+    private MainFragment mainFragment;
     private static SettingsHelper settings = null;
 
     @Override
@@ -35,7 +38,7 @@ public class MainActivity extends PreferenceActivity {
 
         settings = new SettingsHelper(this);
 
-        MainFragment mainFragment = new MainFragment();
+        mainFragment = new MainFragment();
 
         getFragmentManager()
                 .beginTransaction()
@@ -51,6 +54,7 @@ public class MainActivity extends PreferenceActivity {
         if (requestCode == PICK_IMAGE) {
             cropImage(this, data.getData());
         } else if (requestCode == CROP_IMAGE) {
+            mainFragment.updateBackgroundImage();
             Toast.makeText(this, getString(R.string.set_background_complete), Toast.LENGTH_LONG).show();
         }
     }
@@ -189,16 +193,6 @@ public class MainActivity extends PreferenceActivity {
             }
         }
 
-        private void setup() {
-            String[] entries = getResources().getStringArray(R.array.custom_bubbles);
-            String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
-                    Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
-
-            for (String key : keys) {
-                findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
-            }
-        }
-
         private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
         private final String REBOOT = "reboot";
         private final String REQUEST_ROOT = "request_root";
@@ -214,8 +208,6 @@ public class MainActivity extends PreferenceActivity {
                 showColorPicker((PreviewColorPreference) preference);
             } else if (preference.getKey().equals(REQUEST_ROOT)) {
                 RootFunctions.requestRoot();
-            } else if (preference.getKey().equals(CONVERSATION_LIST_BG)) {
-                pickImage(getActivity());
             } else if (preference.getKey().equals(REBOOT)) {
                 RootFunctions.reboot();
             } else if (preference.getKey().equals(SOFT_REBOOT)) {
@@ -247,6 +239,34 @@ public class MainActivity extends PreferenceActivity {
             return mColorChoices;
         }
 
+        private Drawable getConversationListBackground() {
+            File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+
+            if (!folder.exists()) {
+                return null;
+            }
+
+            File file = new File(folder, "background.png");
+
+            if (!file.exists()) {
+                return null;
+            }
+
+            return Drawable.createFromPath(file.getPath());
+        }
+
+        private void setup() {
+            String[] entries = getResources().getStringArray(R.array.custom_bubbles);
+            String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
+                    Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
+
+            for (String key : keys) {
+                findPreference(key).setSummary(entries[Integer.parseInt(settings.getString(key, "0"))]);
+            }
+
+            updateBackgroundImage();
+        }
+
         private void showColorPicker(final PreviewColorPreference preference) {
             int[] mColor = getColorChoice();
             int mSelectedColor = settings.getInt(preference.getKey(), Color.BLACK);
@@ -268,6 +288,21 @@ public class MainActivity extends PreferenceActivity {
             });
 
             colorPicker.show(getFragmentManager(), "cal");
+        }
+
+        public void updateBackgroundImage() {
+            PreviewImagePreference preference = (PreviewImagePreference) findPreference(CONVERSATION_LIST_BG);
+
+            Drawable drawable = getConversationListBackground();
+
+            preference.setDrawable(drawable);
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    pickImage(getActivity());
+                    return true;
+                }
+            });
         }
     }
 
