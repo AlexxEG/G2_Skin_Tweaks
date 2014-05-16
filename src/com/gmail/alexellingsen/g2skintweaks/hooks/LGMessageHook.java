@@ -1,10 +1,13 @@
 package com.gmail.alexellingsen.g2skintweaks.hooks;
 
+import android.app.ListActivity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
@@ -12,7 +15,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.io.File;
 
@@ -22,6 +25,7 @@ public class LGMessageHook {
 
     private static SettingsHelper mSettings;
     private static LinearLayout frame;
+    private static LinearLayout emptyTextLayout;
 
     public static void init(SettingsHelper settings) {
         mSettings = settings;
@@ -34,44 +38,57 @@ public class LGMessageHook {
         resparam.res.hookLayout(PACKAGE, "layout", "conversation_list_screen", new XC_LayoutInflated() {
             @Override
             public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                frame = (LinearLayout) liparam.view.findViewById(liparam.res.getIdentifier("converation_screen", "id", PACKAGE));
+                frame = (LinearLayout) liparam.view.findViewById(
+                        liparam.res.getIdentifier("converation_screen", "id", PACKAGE));
+                emptyTextLayout = (LinearLayout) liparam.view.findViewById(
+                        liparam.res.getIdentifier("emptyText", "id", PACKAGE));
             }
         });
     }
 
-    public static void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) {
+    public static void handleLoadPackage(final LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 
         XC_MethodHook hook = new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false)) {
+                boolean enableConversationListBG = mSettings.getBoolean(
+                        Prefs.ENABLE_CONVERSATION_LIST_BG, false);
+
+                if (enableConversationListBG) {
                     File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
 
-                    if (!folder.exists())
+                    if (!folder.exists()) {
                         return;
+                    }
 
                     // Create .nomedia file to hide background image from gallery
                     File noMediaFile = new File(folder, ".nomedia");
 
-                    if (!noMediaFile.exists())
+                    if (!noMediaFile.exists()) {
                         noMediaFile.createNewFile();
+                    }
 
                     File file = new File(folder, "background.png");
 
-                    if (!file.exists())
+                    if (!file.exists()) {
                         return;
+                    }
 
                     Drawable d = Drawable.createFromPath(file.getPath());
 
-                    if (d == null)
+                    if (d == null) {
                         return;
+                    }
 
                     frame.setBackground(d);
                 }
 
-                if (mSettings.getBoolean(Prefs.CONVERSATION_LIST_BG_COLOR, false)) {
+                boolean enableConversationListBGColor = mSettings.getBoolean(
+                        Prefs.CONVERSATION_LIST_BG_COLOR, false);
+
+                if (enableConversationListBGColor) {
                     int color = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_VALUE, Color.TRANSPARENT);
 
                     // Set the parent view's background color to create a overlay effect.
@@ -83,8 +100,22 @@ public class LGMessageHook {
                     // effect, 255 being fully transparent. Therefore reverse the number.
                     alpha = reverseNumber(alpha, 0, 255);
 
-                    if (frame.getBackground() != null)
-                        frame.getBackground().setAlpha(alpha);
+                    if (frame.getBackground() == null) {
+                        frame.setBackgroundColor(Color.WHITE);
+                    }
+
+                    frame.getBackground().setAlpha(alpha);
+                }
+
+                if (enableConversationListBG || enableConversationListBGColor) {
+                    // Remove color from ListView which are blocking background color on Sprint devices.
+                    if (Devices.getDevice() == Devices.SPRINT) {
+                        ListView lv = ((ListActivity) param.thisObject).getListView();
+
+                        lv.setBackgroundColor(Color.TRANSPARENT);
+
+                        emptyTextLayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             }
         };
@@ -100,7 +131,7 @@ public class LGMessageHook {
         return (max + min) - num;
     }
 
-    public static void hookConversationListBackgroundOther(XC_LoadPackage.LoadPackageParam lpparam, XC_MethodHook hook) {
+    public static void hookConversationListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
         XposedHelpers.findAndHookMethod(
                 PACKAGE + ".ui.ConversationListFragment",
                 lpparam.classLoader,
@@ -113,7 +144,7 @@ public class LGMessageHook {
         );
     }
 
-    public static void hookConversationListBackgroundSprint(XC_LoadPackage.LoadPackageParam lpparam, XC_MethodHook hook) {
+    public static void hookConversationListBackgroundSprint(LoadPackageParam lpparam, XC_MethodHook hook) {
         XposedHelpers.findAndHookMethod(
                 PACKAGE + ".ui.ConversationList",
                 lpparam.classLoader,
@@ -121,6 +152,25 @@ public class LGMessageHook {
                 "android.os.Bundle",
 
                 hook
+        );
+
+        // If a option that changes background is enable, turn all the
+        // list item transparent so that the background can be seen.
+        XposedHelpers.findAndHookMethod(
+                PACKAGE + ".ui.ConversationListItem",
+                lpparam.classLoader,
+                "updateBackground",
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        // Remove background from each list item so background can be seen.
+                        if (mSettings.getBoolean(Prefs.CONVERSATION_LIST_BG_COLOR, false) ||
+                                mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false)) {
+                            ((View) param.thisObject).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                }
         );
     }
 
