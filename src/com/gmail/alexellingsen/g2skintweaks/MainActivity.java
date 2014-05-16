@@ -109,6 +109,17 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private static void pickImage(Activity activity) {
+        File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+
+        if (!folder.exists()) {
+            try {
+                folder.mkdir();
+            } catch (Throwable e) {
+                Toast.makeText(activity, "Couldn't create folder.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_IMAGE);
