@@ -33,7 +33,7 @@ public class PreviewColorPreference extends Preference {
     }
 
     private void init() {
-        setWidgetLayoutResource(R.layout.preference_color_preview);
+        setWidgetLayoutResource(R.layout.preference_image_view);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class PreviewImagePreference extends Preference {
     public PreviewImagePreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        setWidgetLayoutResource(R.layout.preference_color_preview);
+        setWidgetLayoutResource(R.layout.preference_image_view);
     }
 
     public PreviewImagePreference(Context context, AttributeSet attrs) {
