@@ -22,7 +22,7 @@
     <string name="category_text_size">Text Size</string>
     <string name="category_transparency">Transparency</string>
     <string name="category_tweaks">Tweaks</string>
-    <string name="custom_bubbles_note">Text wont always fit correctly inside any bubble. If it doesn\'t, try to move the bubble to another slot.</string>
+    <string name="custom_bubbles_note">Text wont always fit correctly inside any bubble. If it doesn\'t, try to move the bubble to another slot.\n\nBubble slot 4 is recommended.</string>
     <string name="default_string">Default</string>
     <string name="enable_debugging">Enable Debugging</string>
     <string name="information">Some options requires you kill the relevant app process before it takes effect.</string>
@@ -44,9 +44,9 @@
     <string name="pref_bubble_slot_5">Bubble slot 5</string>
     <string name="pref_bubble_slot_6">Bubble slot 6</string>
     <string name="pref_conversation_color_bottom">Bottom Line Color</string>
-    <string name="pref_conversation_color_bottom_summary">Select the color for the bottom line.</string>
+    <string name="pref_conversation_color_bottom_summary">Select the color for the subject line.</string>
     <string name="pref_conversation_color_top">Top Line Color</string>
-    <string name="pref_conversation_color_top_summary">Select the color for the top line.</string>
+    <string name="pref_conversation_color_top_summary">Select the color for the sender name line.</string>
     <string name="pref_conversation_list_bg">Enable background image</string>
     <string name="pref_conversation_list_bg_color">Enable background color</string>
     <string name="pref_conversation_list_bg_color_summary">Will be used as color overlay if background is enabled.</string>
@@ -59,6 +59,7 @@
     <string name="pref_current_value_summary">Current value: %1$s</string>
     <string name="pref_custom_bubbles">Custom bubble(s)</string>
     <string name="pref_custom_colors">Custom colors</string>
+    <string name="pref_custom_text_colors">Custom text colors</string>
     <string name="pref_date_offset">Date offset</string>
     <string name="pref_date_offset_summary">Set the date size to the current zoom level - given offset.</string>
     <string name="pref_dont_turn_screen_on_sms">Don\'t turn on screen on SMS</string>
