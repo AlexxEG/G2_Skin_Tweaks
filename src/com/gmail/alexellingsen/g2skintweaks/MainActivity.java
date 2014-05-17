@@ -20,6 +20,7 @@ import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MainActivity extends PreferenceActivity {
@@ -113,15 +114,9 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private static void pickImage(Activity activity) {
-        File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
-
-        if (!folder.exists()) {
-            try {
-                folder.mkdir();
-            } catch (Throwable e) {
-                Toast.makeText(activity, "Couldn't create folder.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (!prepareFolder()) {
+            Toast.makeText(activity, "Couldn't create folder.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -144,6 +139,32 @@ public class MainActivity extends PreferenceActivity {
 
         intent.putExtra("output", path);
         activity.startActivityForResult(intent, CROP_IMAGE);
+    }
+
+    private static boolean prepareFolder() {
+        File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+
+        if (!folder.mkdir()) {
+            try {
+                folder.mkdir();
+            } catch (Throwable e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        File noMediaFile = new File(folder, ".nomedia");
+
+        if (!noMediaFile.exists()) {
+            try {
+                noMediaFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static class MainFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
