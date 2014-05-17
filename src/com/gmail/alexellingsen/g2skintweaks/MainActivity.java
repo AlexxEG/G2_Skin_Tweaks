@@ -144,13 +144,9 @@ public class MainActivity extends PreferenceActivity {
     private static boolean prepareFolder() {
         File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
 
-        if (!folder.exists()) {
-            try {
-                folder.mkdir();
-            } catch (Throwable e) {
-                e.printStackTrace();
-                return false;
-            }
+        if (!folder.exists() && !folder.mkdir()) {
+            // Folder doesn't exists & can't create it.
+            return false;
         }
 
         File noMediaFile = new File(folder, ".nomedia");
