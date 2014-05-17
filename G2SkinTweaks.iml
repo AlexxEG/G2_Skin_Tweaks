@@ -15,7 +15,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="XposedBridgeApi-42" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="XposedBridgeApi-54" level="project" />
   </component>
 </module>
 
