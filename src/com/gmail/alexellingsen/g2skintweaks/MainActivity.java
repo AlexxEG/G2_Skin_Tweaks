@@ -144,7 +144,7 @@ public class MainActivity extends PreferenceActivity {
     private static boolean prepareFolder() {
         File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
 
-        if (!folder.mkdir()) {
+        if (!folder.exists()) {
             try {
                 folder.mkdir();
             } catch (Throwable e) {
