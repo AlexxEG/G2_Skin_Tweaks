@@ -30,7 +30,7 @@
     <string name="launcher_customization">Launcher Customization</string>
     <string name="messenger_customization">Messenger Customization</string>
     <string name="pref_aosp_pattern_dots">Enable AOSP like pattern dots</string>
-    <string name="pref_aosp_pattern_dots_summary">Only a slight, slight difference.</string>
+    <string name="pref_aosp_pattern_dots_summary">Removes inner circle around dot, and turn the outer circle white.</string>
     <string name="pref_applications_shortcut">Applications info shortcut</string>
     <string name="pref_applications_shortcut_summary">Click the icon in the App Info dialog to open the app in Applications.</string>
     <string name="pref_bubble_color_left">Incoming bubble color</string>
