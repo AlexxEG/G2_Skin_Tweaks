@@ -131,10 +131,6 @@ public class LGMessageHook {
         }
     }
 
-    private static int reverseNumber(int num, int min, int max) {
-        return (max + min) - num;
-    }
-
     public static void hookConversationListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
         XposedHelpers.findAndHookMethod(
                 PACKAGE + ".ui.ConversationListFragment",
@@ -178,4 +174,7 @@ public class LGMessageHook {
         );
     }
 
+    private static int reverseNumber(int num, int min, int max) {
+        return (max + min) - num;
+    }
 }
