@@ -13,7 +13,7 @@
     <string name="category_bubbles">Bubbles</string>
     <string name="category_colors">Colors</string>
     <string name="category_conversation_list_customization">Conversation list customization</string>
-    <string name="category_conversation_list_customization_summary">Set background, text size &amp; colors.</string>
+    <string name="category_conversation_list_customization_summary">Set background &amp; text colors.</string>
     <string name="category_messages_customization">Message list customization</string>
     <string name="category_messages_customization_summary">Set text size &amp; colors.</string>
     <string name="category_recent_apps">Recent Apps</string>
