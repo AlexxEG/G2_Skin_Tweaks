@@ -50,6 +50,10 @@ public class LGMessageHook {
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 
+        hookConversationListBackground(lpparam);
+    }
+
+    private static void hookConversationListBackground(LoadPackageParam lpparam) {
         XC_MethodHook hook = new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
