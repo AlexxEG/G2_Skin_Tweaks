@@ -221,5 +221,11 @@ pip-log.txt
 ## IntelliJ
 #############
 
+.idea/
+
+#############
+## Android
+#############
+
 out/
 *.apk
