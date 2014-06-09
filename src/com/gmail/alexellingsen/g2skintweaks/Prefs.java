@@ -38,6 +38,7 @@ public class Prefs {
     public static final String ENABLE_SMALLER_TEXT_MESSAGES = "pref_smaller_text_messages";
     public static final String ENABLE_SMS_TEXT_COLOR = "pref_sms_text_colors";
     public static final String MINIMUM_ZOOM_LEVEL_MESSAGES = "pref_minimum_zoom_messages";
+    public static final String MOVE_CLEAR_NOTIFICATIONS_BTN = "pref_move_clear_notifications_btn";
     public static final String POWER_LED_TIME = "pref_power_led_time";
     public static final String RECENT_APPS_OPACITY = "pref_recent_apps_opacity";
     public static final String RECENT_APPS_OPACITY_VALUE = "pref_recent_apps_opacity_value";

@@ -50,6 +50,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         LGMessageHook.init(settings);
         LGMessageBubblesHook.init(settings);
         RecentAppsHook.init(settings);
+        StatusBarHook.init(settings);
     }
 
     @Override
@@ -61,6 +62,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         LGMessageBubblesHook.handleInitPackageResources(resparam, modRes);
         LGMessageHook.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
+        StatusBarHook.handleInitPackageResources(resparam, modRes);
 
         if (resparam.packageName.equals("com.android.settings")) {
             boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
@@ -85,6 +87,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         LGLockScreenHook.handleLoadPackage(lpparam);
         LGMessageHook.handleLoadPackage(lpparam);
         RecentAppsHook.handleLoadPackage(lpparam);
+        StatusBarHook.handleLoadPackage(lpparam);
 
         if (Devices.getDevice() == Devices.SPRINT) {
             hookPaintSetColorSprint(lpparam);

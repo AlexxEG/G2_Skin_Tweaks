@@ -71,6 +71,8 @@
     <string name="pref_messages_text_color_right_summary">Select the color for the outgoing text.</string>
     <string name="pref_minimum_text_size">Minimum text size</string>
     <string name="pref_minimum_text_size_summary">The minimum text size allowed.</string>
+    <string name="pref_move_clear_notifications_btn">Move \'Clear\' button in notifications panel.</string>
+    <string name="pref_move_clear_notifications_btn_summary">Moves the \'Clear\' button next to options button in the notifications panel. Reboot required.</string>
     <string name="pref_power_led_off">Turn Power LED off</string>
     <string name="pref_power_led_off_summary">Use this if the Power LED gets stuck in \'ON\' state.</string>
     <string name="pref_power_led_time">Power LED time</string>

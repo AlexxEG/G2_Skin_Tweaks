@@ -29,6 +29,12 @@
                     android:key="pref_replace_switch"
                     android:summary="@string/pref_replace_switch_summary"
                     android:title="@string/pref_replace_switch"/>
+
+                <CheckBoxPreference
+                    android:icon="@null"
+                    android:key="pref_move_clear_notifications_btn"
+                    android:summary="@string/pref_move_clear_notifications_btn_summary"
+                    android:title="@string/pref_move_clear_notifications_btn"/>
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/category_recent_apps">
