@@ -25,6 +25,8 @@ public class StatusBarHook {
     private static ImageView mClearButton;
     private static SettingsHelper mSettings;
 
+    private static int mClearDrawableID = -1;
+
     public static void init(SettingsHelper settings) {
         mSettings = settings;
     }
@@ -113,8 +115,11 @@ public class StatusBarHook {
      * Injects the 'ic_clear_noti' drawable to SystemUI resources, then returns it.
      */
     private static Drawable getClearNotificationsDrawable(InitPackageResourcesParam resparam, XModuleResources modRes) {
-        int id = resparam.res.addResource(modRes, R.drawable.ic_clear_noti);
+        // Only insert the drawable if it's not already there.
+        if (mClearDrawableID == -1) {
+            mClearDrawableID = resparam.res.addResource(modRes, R.drawable.ic_clear_noti);
+        }
 
-        return resparam.res.getDrawable(id);
+        return resparam.res.getDrawable(mClearDrawableID);
     }
 }
