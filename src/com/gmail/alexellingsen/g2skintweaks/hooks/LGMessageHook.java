@@ -113,7 +113,7 @@ public class LGMessageHook {
 
                 if (enableConversationListBG || enableConversationListBGColor) {
                     // Remove color from ListView which are blocking background color on Sprint devices.
-                    if (Devices.getDevice() == Devices.SPRINT) {
+                    if (Devices.isAnyDevice(Devices.SPRINT, Devices.VERIZON)) {
                         ListView lv = ((ListActivity) param.thisObject).getListView();
 
                         lv.setBackgroundColor(Color.TRANSPARENT);
@@ -124,10 +124,14 @@ public class LGMessageHook {
             }
         };
 
-        if (Devices.getDevice() == Devices.SPRINT) {
-            hookConversationListBackgroundSprint(lpparam, hook);
-        } else {
-            hookConversationListBackgroundOther(lpparam, hook);
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                hookConversationListBackgroundSprint(lpparam, hook);
+                break;
+            case OTHER:
+                hookConversationListBackgroundOther(lpparam, hook);
+                break;
         }
     }
 

@@ -21,6 +21,7 @@ import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.util.ArrayList;
+import java.util.zip.DeflaterInputStream;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
@@ -89,7 +90,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         RecentAppsHook.handleLoadPackage(lpparam);
         StatusBarHook.handleLoadPackage(lpparam);
 
-        if (Devices.getDevice() == Devices.SPRINT) {
+        if (Devices.isAnyDevice(Devices.SPRINT, Devices.VERIZON)) {
             hookPaintSetColorSprint(lpparam);
         }
 
@@ -102,10 +103,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void hookConversationListItem(final LoadPackageParam lpparam) {
-        if (Devices.getDevice() == Devices.SPRINT) {
-            hookConversationListItemSprint(lpparam);
-        } else {
-            hookConversationListItemOther(lpparam);
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                hookConversationListItemSprint(lpparam);
+                break;
+            case OTHER:
+                hookConversationListItemOther(lpparam);
+                break;
         }
     }
 
@@ -303,10 +308,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
         final String dateTextViewName;
 
-        if (Devices.getDevice() == Devices.SPRINT) {
-            dateTextViewName = "mBodySubTextView";
-        } else {
-            dateTextViewName = "mSmallTextView";
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                dateTextViewName = "mBodySubTextView";
+                break;
+            default:
+                dateTextViewName = "mSmallTextView";
+                break;
         }
 
         // Create hooks
@@ -395,10 +404,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             }
         };
 
-        if (Devices.getDevice() == Devices.SPRINT) {
-            hookMessageListItemSprint(findClass, hook, resizeHook);
-        } else {
-            hookMessageListItemOther(findClass, hook, resizeHook);
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                hookMessageListItemSprint(findClass, hook, resizeHook);
+                break;
+            case OTHER:
+                hookMessageListItemOther(findClass, hook, resizeHook);
+                break;
         }
     }
 
@@ -567,10 +580,14 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     private void setMinFontSize(LoadPackageParam lpparam) {
-        if (Devices.getDevice() == Devices.SPRINT) {
-            setMinFontSizeSprint(lpparam);
-        } else {
-            setMinFontSizeOther(lpparam);
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                setMinFontSizeSprint(lpparam);
+                break;
+            case OTHER:
+                setMinFontSizeOther(lpparam);
+                break;
         }
     }
 
