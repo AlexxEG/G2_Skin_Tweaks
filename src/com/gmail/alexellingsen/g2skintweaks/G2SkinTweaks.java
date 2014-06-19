@@ -21,7 +21,6 @@ import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.util.ArrayList;
-import java.util.zip.DeflaterInputStream;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
