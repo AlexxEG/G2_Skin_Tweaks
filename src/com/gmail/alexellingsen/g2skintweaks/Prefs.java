@@ -37,6 +37,7 @@ public class Prefs {
     public static final String ENABLE_REPLACE_SWITCH = "pref_replace_switch";
     public static final String ENABLE_SMALLER_TEXT_MESSAGES = "pref_smaller_text_messages";
     public static final String ENABLE_SMS_TEXT_COLOR = "pref_sms_text_colors";
+    public static final String HIDE_LOCKSCREEN_SHORTCUT_TITLES = "pref_hide_lockscreen_shortcut_titles";
     public static final String MINIMUM_ZOOM_LEVEL_MESSAGES = "pref_minimum_zoom_messages";
     public static final String MOVE_CLEAR_NOTIFICATIONS_BTN = "pref_move_clear_notifications_btn";
     public static final String POWER_LED_TIME = "pref_power_led_time";

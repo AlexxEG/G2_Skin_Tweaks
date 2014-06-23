@@ -14,6 +14,7 @@
     <string name="category_colors">Colors</string>
     <string name="category_conversation_list_customization">Conversation list customization</string>
     <string name="category_conversation_list_customization_summary">Set background &amp; text colors.</string>
+    <string name="category_lg_lockscreen">Lockscreen Customization</string>
     <string name="category_messages_customization">Message list customization</string>
     <string name="category_messages_customization_summary">Set text size &amp; colors.</string>
     <string name="category_recent_apps">Recent Apps</string>
@@ -65,6 +66,7 @@
     <string name="pref_dont_turn_screen_on_sms">Don\'t turn on screen on SMS</string>
     <string name="pref_flash_power_led">Flash Power LED</string>
     <string name="pref_flash_power_led_summary">Reactivate Power LED. Requires root.</string>
+    <string name="pref_hide_lockscreen_shortcut_titles">Remove app names from Lockscreen</string>
     <string name="pref_messages_text_color_left">Incoming text color</string>
     <string name="pref_messages_text_color_left_summary">Select the color for the incoming text</string>
     <string name="pref_messages_text_color_right">Outgoing text color</string>
@@ -100,6 +102,7 @@
     <string name="title_custom_bubbles_summary">Set custom bubbles for the LG Messenger app.</string>
     <string name="title_general">General</string>
     <string name="title_lg_launcher">LG Launcher</string>
+    <string name="title_lg_lockscreen">LG Lockscreen</string>
     <string name="title_messenger">LG Messenger</string>
     <string name="title_misc">Misc</string>
     <string name="turned_power_led_off">Turned power LED off</string>

@@ -1,10 +1,13 @@
 package com.gmail.alexellingsen.g2skintweaks.hooks;
 
+import android.content.Context;
 import android.content.res.XModuleResources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.R;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
@@ -31,6 +34,40 @@ public class LGLockScreenHook {
             return;
         }
 
+        handleHideShortcutText(lpparam);
+        handlePatternDots(lpparam);
+    }
+
+    private static void handleHideShortcutText(LoadPackageParam lpparam) {
+        Class<?> findClass;
+
+        try {
+            findClass = XposedHelpers.findClass(
+                    USE_PACKAGE + ".widget.draglayer.LockScreenShortcut",
+                    lpparam.classLoader
+            );
+        } catch (Throwable e) {
+            XposedBridge.log(e);
+            XposedBridge.log("Couldn't find class");
+            return;
+        }
+
+        XC_MethodHook hook = new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                if (mSettings.getBoolean(Prefs.HIDE_LOCKSCREEN_SHORTCUT_TITLES, false)) {
+                    TextView tvTitle = (TextView) XposedHelpers.getObjectField(param.thisObject, "mIconName");
+
+                    tvTitle.setVisibility(View.INVISIBLE);
+                }
+            }
+        };
+
+        XposedHelpers.findAndHookMethod(findClass, "init", Context.class, hook);
+        XposedHelpers.findAndHookMethod(findClass, "setOrientation", int.class, hook);
+    }
+
+    private static void handlePatternDots(LoadPackageParam lpparam) {
         Class<?> findClass;
 
         try {
