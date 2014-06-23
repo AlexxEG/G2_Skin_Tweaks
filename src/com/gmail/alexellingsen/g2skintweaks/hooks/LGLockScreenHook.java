@@ -26,27 +26,6 @@ public class LGLockScreenHook {
         mSettings = settings;
     }
 
-    public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
-        if (!resparam.packageName.equals(PACKAGE)) {
-            return;
-        }
-
-        mModRes = modRes;
-    }
-
-    private static Bitmap drawableToBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-
     public static void handleLoadPackage(final LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE)) {
             return;
@@ -92,5 +71,26 @@ public class LGLockScreenHook {
                     }
                 }
         );
+    }
+
+    public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
+        if (!resparam.packageName.equals(PACKAGE)) {
+            return;
+        }
+
+        mModRes = modRes;
+    }
+
+    private static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }
