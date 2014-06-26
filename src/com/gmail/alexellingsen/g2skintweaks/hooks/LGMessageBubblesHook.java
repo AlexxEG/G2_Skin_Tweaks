@@ -32,7 +32,6 @@ public class LGMessageBubblesHook {
             "bubble_reserved_bg_05",
             "bubble_reserved_bg_06"
     };
-
     private static final String[] MESSAGE_SET_BUBBLES = new String[]{
             "message_set_bubble_01",
             "message_set_bubble_02",
@@ -97,17 +96,6 @@ public class LGMessageBubblesHook {
         mResources.setReplacement(PACKAGE_NAME, "drawable", bubble, getBubbleSet(selectedBubble));
     }
 
-    private static int getSelectedBubbleIndex(String bubble) {
-        // Get last character to get bubble index
-        int i = Integer.parseInt(bubble.substring(bubble.length() - 1));
-
-        // Take any of the keys & replace the last character with our index
-        String key = Prefs.CUSTOM_BUBBLE_1.substring(0, Prefs.CUSTOM_BUBBLE_1.length() - 1) + i;
-
-        // Use our new key to get the correct bubble
-        return Integer.parseInt(mSettings.getString(key, "0"));
-    }
-
     private static XResForwarder getBubble(int index, boolean left) {
         int id;
 
@@ -142,4 +130,14 @@ public class LGMessageBubblesHook {
         return mModRes.fwd(id);
     }
 
+    private static int getSelectedBubbleIndex(String bubble) {
+        // Get last character to get bubble index
+        int i = Integer.parseInt(bubble.substring(bubble.length() - 1));
+
+        // Take any of the keys & replace the last character with our index
+        String key = Prefs.CUSTOM_BUBBLE_1.substring(0, Prefs.CUSTOM_BUBBLE_1.length() - 1) + i;
+
+        // Use our new key to get the correct bubble
+        return Integer.parseInt(mSettings.getString(key, "0"));
+    }
 }

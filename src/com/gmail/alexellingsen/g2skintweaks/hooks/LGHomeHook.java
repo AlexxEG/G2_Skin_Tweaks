@@ -9,9 +9,9 @@ import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class LGHomeHook {
 
@@ -24,7 +24,7 @@ public class LGHomeHook {
         mSettings = settings;
     }
 
-    public static void handleInitPackageResources(final XC_InitPackageResources.InitPackageResourcesParam resparam) {
+    public static void handleInitPackageResources(final InitPackageResourcesParam resparam) {
         if (!resparam.packageName.equals(PACKAGE))
             return;
 
@@ -36,7 +36,7 @@ public class LGHomeHook {
         });
     }
 
-    public static void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) {
+    public static void handleLoadPackage(LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 

@@ -66,7 +66,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     }
 
     @Override
-    public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+    public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
         LGHomeHook.handleLoadPackage(lpparam);
         LGLockScreenHook.handleLoadPackage(lpparam);
         LGMessageHook.handleLoadPackage(lpparam);
@@ -78,7 +78,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
     }
 
-    private void hookPaintSetColorSprint(final LoadPackageParam lpparam) {
+    private void hookPaintSetColorSprint(LoadPackageParam lpparam) {
         final Class<?> findClass;
 
         try {

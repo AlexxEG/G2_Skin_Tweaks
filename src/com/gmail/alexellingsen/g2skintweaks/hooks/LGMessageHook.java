@@ -55,7 +55,7 @@ public class LGMessageHook {
         });
     }
 
-    public static void handleLoadPackage(final LoadPackageParam lpparam) {
+    public static void handleLoadPackage(LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 
@@ -66,7 +66,7 @@ public class LGMessageHook {
         hookMessagingNotification(lpparam);
     }
 
-    private static void hookConversationListItem(final LoadPackageParam lpparam) {
+    private static void hookConversationListItem(LoadPackageParam lpparam) {
         switch (Devices.getDevice()) {
             case SPRINT:
             case VERIZON:
@@ -78,7 +78,7 @@ public class LGMessageHook {
         }
     }
 
-    private static void hookConversationListItemOther(final LoadPackageParam lpparam) {
+    private static void hookConversationListItemOther(LoadPackageParam lpparam) {
         final Class<?> rootClass;
         final Class<?> subClass;
 
@@ -176,7 +176,7 @@ public class LGMessageHook {
         );
     }
 
-    private static void hookConversationListItemSprint(final LoadPackageParam lpparam) {
+    private static void hookConversationListItemSprint(LoadPackageParam lpparam) {
         final Class<?> rootClass;
         final Class<?> subClass;
 
@@ -566,7 +566,7 @@ public class LGMessageHook {
         }
     }
 
-    private static void setMinFontSizeOther(final LoadPackageParam lpparam) {
+    private static void setMinFontSizeOther(LoadPackageParam lpparam) {
         final Class<?> finalClass;
         try {
             finalClass = XposedHelpers.findClass(
@@ -605,7 +605,7 @@ public class LGMessageHook {
         );
     }
 
-    private static void setMinFontSizeSprint(final LoadPackageParam lpparam) {
+    private static void setMinFontSizeSprint(LoadPackageParam lpparam) {
         final Class<?> finalClass;
 
         try {

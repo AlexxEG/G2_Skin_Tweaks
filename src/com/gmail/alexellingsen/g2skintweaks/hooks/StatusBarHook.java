@@ -85,7 +85,7 @@ public class StatusBarHook {
         }
     }
 
-    public static void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
+    public static void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(PACKAGE_NAME))
             return;
 

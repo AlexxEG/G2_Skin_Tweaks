@@ -29,13 +29,21 @@ public class LGLockScreenHook {
         mSettings = settings;
     }
 
-    public static void handleLoadPackage(final LoadPackageParam lpparam) {
+    public static void handleLoadPackage(LoadPackageParam lpparam) {
         if (!lpparam.packageName.equals(PACKAGE)) {
             return;
         }
 
         handleHideShortcutText(lpparam);
         handlePatternDots(lpparam);
+    }
+
+    public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
+        if (!resparam.packageName.equals(PACKAGE)) {
+            return;
+        }
+
+        mModRes = modRes;
     }
 
     private static void handleHideShortcutText(LoadPackageParam lpparam) {
@@ -108,14 +116,6 @@ public class LGLockScreenHook {
                     }
                 }
         );
-    }
-
-    public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
-        if (!resparam.packageName.equals(PACKAGE)) {
-            return;
-        }
-
-        mModRes = modRes;
     }
 
     private static Bitmap drawableToBitmap(Drawable drawable) {

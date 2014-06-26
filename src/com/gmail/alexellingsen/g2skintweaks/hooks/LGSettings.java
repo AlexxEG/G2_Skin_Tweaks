@@ -37,7 +37,7 @@ public class LGSettings {
         }
     }
 
-    private static void removeDividers(final InitPackageResourcesParam resparam) {
+    private static void removeDividers(InitPackageResourcesParam resparam) {
         try {
             resparam.res.hookLayout(
                     PACKAGE,
@@ -75,7 +75,7 @@ public class LGSettings {
         }
     }
 
-    private static void removeDividersEasy(final InitPackageResourcesParam resparam) {
+    private static void removeDividersEasy(InitPackageResourcesParam resparam) {
         try {
             resparam.res.hookLayout(
                     PACKAGE_EASY,
