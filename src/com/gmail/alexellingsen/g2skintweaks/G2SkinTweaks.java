@@ -86,7 +86,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     "android.graphics.Paint",
                     lpparam.classLoader);
         } catch (ClassNotFoundError e) {
-            XposedBridge.log(e);
             return;
         }
 
@@ -109,10 +108,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
 
                         for (StackTraceElement element : elements) {
-                            if (!element.getClassName().contains("Conversation")) {
-                                continue;
-                            }
-
                             if (element.getClassName().equals("com.android.mms.ui.ConversationListItem$ConversationListItemRight")
                                     && element.getMethodName().equals("onDraw")) {
                                 switch (element.getLineNumber()) {
