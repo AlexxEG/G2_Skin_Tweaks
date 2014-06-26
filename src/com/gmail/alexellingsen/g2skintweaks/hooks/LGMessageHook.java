@@ -135,7 +135,7 @@ public class LGMessageHook {
         }
     }
 
-    public static void hookConversationListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
+    private static void hookConversationListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
         XposedHelpers.findAndHookMethod(
                 PACKAGE + ".ui.ConversationListFragment",
                 lpparam.classLoader,
@@ -148,7 +148,7 @@ public class LGMessageHook {
         );
     }
 
-    public static void hookConversationListBackgroundSprint(LoadPackageParam lpparam, XC_MethodHook hook) {
+    private static void hookConversationListBackgroundSprint(LoadPackageParam lpparam, XC_MethodHook hook) {
         XposedHelpers.findAndHookMethod(
                 PACKAGE + ".ui.ConversationList",
                 lpparam.classLoader,
