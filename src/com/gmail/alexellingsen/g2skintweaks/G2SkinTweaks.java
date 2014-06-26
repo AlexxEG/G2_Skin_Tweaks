@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.hooks.*;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
@@ -17,25 +16,24 @@ import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.*;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
-import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("UnusedDeclaration")
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
     private static final int DEFAULT_MINIMUM_ZOOM = 85;
 
     private static String MODULE_PATH = null;
-    private static SettingsHelper settings;
+    private static SettingsHelper mSettings;
 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         MODULE_PATH = startupParam.modulePath;
+        mSettings = new SettingsHelper();
 
-        settings = new SettingsHelper();
-
-        boolean enableReplaceSwitch = settings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
+        boolean enableReplaceSwitch = mSettings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
 
         if (enableReplaceSwitch) {
             String packageName = "com.lge.internal";
@@ -45,12 +43,13 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
             XResources.setSystemWideReplacement(packageName, "drawable", "switch_track_holo_light", modRes.fwd(R.drawable.replacement_switch));
         }
 
-        LGHomeHook.init(settings);
-        LGLockScreenHook.init(settings);
-        LGMessageHook.init(settings);
-        LGMessageBubblesHook.init(settings);
-        RecentAppsHook.init(settings);
-        StatusBarHook.init(settings);
+        LGHomeHook.init(mSettings);
+        LGLockScreenHook.init(mSettings);
+        LGMessageHook.init(mSettings);
+        LGMessageBubblesHook.init(mSettings);
+        LGSettings.init(mSettings);
+        RecentAppsHook.init(mSettings);
+        StatusBarHook.init(mSettings);
     }
 
     @Override
@@ -61,24 +60,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         LGLockScreenHook.handleInitPackageResources(resparam, modRes);
         LGMessageBubblesHook.handleInitPackageResources(resparam, modRes);
         LGMessageHook.handleInitPackageResources(resparam);
+        LGSettings.handleInitPackageResources(resparam);
         RecentAppsHook.handleInitPackageResources(resparam);
         StatusBarHook.handleInitPackageResources(resparam, modRes);
-
-        if (resparam.packageName.equals("com.android.settings")) {
-            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
-
-            if (enableRemoveDividers) {
-                removeDividers(resparam);
-            }
-        }
-
-        if (resparam.packageName.equals("com.lge.settings.easy")) {
-            boolean enableRemoveDividers = settings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
-
-            if (enableRemoveDividers) {
-                removeDividersEasy(resparam);
-            }
-        }
     }
 
     @Override
@@ -143,7 +127,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
 
                             int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
@@ -151,19 +135,19 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             XposedHelpers.setStaticIntField(rootClass, "mFontSmall", size);
                         }
 
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
                             TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
 
                             originalFontColor = tp.getColor();
 
-                            tp.setColor(settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
+                            tp.setColor(mSettings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK));
                         }
                     }
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             if (originalFontSmall != -1) {
                                 XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
 
@@ -171,7 +155,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                             }
                         }
 
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             if (originalFontColor != 1) {
                                 Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
                                 TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
@@ -198,13 +182,13 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             // When this method is called, it means it's safe to set the TextPaint color,
                             // and it should reset itself in the 'setTextPaintPropertyByTheme' method.
                             Object conversationListItem = XposedHelpers.getObjectField(param.thisObject, "this$0");
                             TextPaint tp = (TextPaint) XposedHelpers.getObjectField(conversationListItem, "tp");
 
-                            tp.setColor(settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
+                            tp.setColor(mSettings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK));
                         }
                     }
                 }
@@ -238,7 +222,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             originalFontSmall = XposedHelpers.getStaticIntField(rootClass, "mFontSmall");
 
                             int size = XposedHelpers.getStaticIntField(rootClass, "mFontSmallScaled");
@@ -249,7 +233,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             if (originalFontSmall != -1) {
                                 XposedHelpers.setStaticIntField(rootClass, "mFontSmall", originalFontSmall);
 
@@ -282,7 +266,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        boolean dontTurnScreenOn = settings.getBoolean(Prefs.DONT_TURN_SCREEN_ON_SMS, false);
+                        boolean dontTurnScreenOn = mSettings.getBoolean(Prefs.DONT_TURN_SCREEN_ON_SMS, false);
 
                         if (dontTurnScreenOn) {
                             param.setResult(null);
@@ -326,9 +310,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, dateTextViewName);
 
                     boolean isIncomingMessage = isIncomingMessage(param);
-                    boolean enableSmsTextColor = settings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
-                    boolean enableCustomBubbleColor = settings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
-                    boolean enableTransparency = settings.getBoolean(Prefs.BUBBLE_TRANSPARENCY, false);
+                    boolean enableSmsTextColor = mSettings.getBoolean(Prefs.ENABLE_SMS_TEXT_COLOR, false);
+                    boolean enableCustomBubbleColor = mSettings.getBoolean(Prefs.ENABLE_CUSTOM_BUBBLE_COLOR, false);
+                    boolean enableTransparency = mSettings.getBoolean(Prefs.BUBBLE_TRANSPARENCY, false);
 
                     if (enableCustomBubbleColor || enableTransparency) {
                         View parent = (View) tvBody.getParent();
@@ -343,9 +327,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                         if (enableCustomBubbleColor) {
                             if (isIncomingMessage) {
-                                color = settings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
+                                color = mSettings.getInt(Prefs.BUBBLE_COLOR_LEFT, Color.WHITE);
                             } else {
-                                color = settings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
+                                color = mSettings.getInt(Prefs.BUBBLE_COLOR_RIGHT, Color.WHITE);
                             }
                         }
 
@@ -353,7 +337,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                         Drawable bd = parents.get(1).getBackground();
 
                         if (enableTransparency) {
-                            bd.setAlpha(settings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
+                            bd.setAlpha(mSettings.getInt(Prefs.BUBBLE_TRANSPARENCY_VALUE, 255));
                         } else {
                             color = Color.argb(
                                     Color.alpha(bd.getOpacity()),
@@ -367,7 +351,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     }
 
                     if (enableSmsTextColor) {
-                        int color = settings.getInt(isIncomingMessage ?
+                        int color = mSettings.getInt(isIncomingMessage ?
                                 Prefs.SMS_TEXT_COLOR_LEFT :
                                 Prefs.SMS_TEXT_COLOR_RIGHT, Color.BLACK);
 
@@ -397,7 +381,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 TextView tvBody = (TextView) XposedHelpers.getObjectField(param.thisObject, "mBodyTextView");
                 TextView tvDate = (TextView) XposedHelpers.getObjectField(param.thisObject, dateTextViewName);
 
-                int offset = settings.getInt(Prefs.DATE_SIZE_OFFSET_MESSAGES, 0);
+                int offset = mSettings.getInt(Prefs.DATE_SIZE_OFFSET_MESSAGES, 0);
 
                 tvDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvBody.getTextSize() - offset);
             }
@@ -484,7 +468,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                 new XC_MethodHook() {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        if (!settings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
+                        if (!mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
                             return;
                         }
 
@@ -499,10 +483,10 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                                     && element.getMethodName().equals("onDraw")) {
                                 switch (element.getLineNumber()) {
                                     case 789: // Top line
-                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                                        param.args[0] = mSettings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
                                         break;
                                     case 853: // Bottom line
-                                        param.args[0] = settings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+                                        param.args[0] = mSettings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
                                         break;
                                     // These are not used atm.
                                     /*case 718:
@@ -517,65 +501,6 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
                     }
                 }
         );
-    }
-
-    private void removeDividers(final InitPackageResourcesParam resparam) {
-        try {
-            resparam.res.hookLayout(
-                    "com.android.settings",
-                    "layout",
-                    "preference_widget_switch",
-
-                    new XC_LayoutInflated() {
-                        @Override
-                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                            ImageView divider = (ImageView) liparam.view.findViewById(
-                                    liparam.res.getIdentifier("switchImage", "id", "com.android.settings"));
-
-                            divider.setVisibility(View.INVISIBLE);
-                        }
-                    }
-            );
-
-            resparam.res.hookLayout(
-                    "com.android.settings",
-                    "layout",
-                    "preference_header_switch_item",
-
-                    new XC_LayoutInflated() {
-                        @Override
-                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                            View divider = liparam.view.findViewById(
-                                    liparam.res.getIdentifier("switchDivider", "id", "com.android.settings"));
-
-                            divider.setVisibility(View.INVISIBLE);
-                        }
-                    }
-            );
-        } catch (Throwable e) {
-            XposedBridge.log(e);
-        }
-    }
-
-    private void removeDividersEasy(final InitPackageResourcesParam resparam) {
-        try {
-            resparam.res.hookLayout(
-                    "com.lge.settings.easy",
-                    "layout",
-                    "easy_preference",
-
-                    new XC_LayoutInflated() {
-                        @Override
-                        public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                            ImageView divider = (ImageView) liparam.view.findViewById(
-                                    liparam.res.getIdentifier("easy_vertical_divider", "id", "com.lge.settings.easy"));
-                            divider.setVisibility(View.INVISIBLE);
-                        }
-                    }
-            );
-        } catch (Throwable e) {
-            XposedBridge.log(e);
-        }
     }
 
     private void setMinFontSize(LoadPackageParam lpparam) {
@@ -613,8 +538,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                         log("'processActionMove' ran");
 
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
-                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                            int minimumZoom = mSettings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
 
                             if (min != minimumZoom) {
                                 XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
@@ -631,6 +556,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
     private void setMinFontSizeSprint(final LoadPackageParam lpparam) {
         final Class<?> finalClass;
+
         try {
             finalClass = XposedHelpers.findClass(
                     "com.lge.mms.pinchApi.PinchDetector",
@@ -652,8 +578,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
 
                         log("'processTouchEvent' ran");
 
-                        if (settings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
-                            int minimumZoom = settings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
+                        if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
+                            int minimumZoom = mSettings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
 
                             if (min != minimumZoom) {
                                 XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", minimumZoom);
@@ -671,8 +597,8 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     private void log(String text) {
         boolean debug = false;
 
-        if (settings != null) {
-            debug = settings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
+        if (mSettings != null) {
+            debug = mSettings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
         }
 
         if (debug) {
