@@ -20,19 +20,15 @@ public class LGSettings {
     }
 
     public static void handleInitPackageResources(InitPackageResourcesParam resparam) {
-        if (resparam.packageName.equals(PACKAGE)) {
+        if (resparam.packageName.equals(PACKAGE) || resparam.packageName.equals(PACKAGE_EASY)) {
             boolean enableRemoveDividers = mSettings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
 
             if (enableRemoveDividers) {
-                removeDividers(resparam);
-            }
-        }
-
-        if (resparam.packageName.equals(PACKAGE_EASY)) {
-            boolean enableRemoveDividers = mSettings.getBoolean(Prefs.ENABLE_REMOVE_DIVIDERS, false);
-
-            if (enableRemoveDividers) {
-                removeDividersEasy(resparam);
+                if (resparam.packageName.equals(PACKAGE)) {
+                    removeDividers(resparam);
+                } else {
+                    removeDividersEasy(resparam);
+                }
             }
         }
     }

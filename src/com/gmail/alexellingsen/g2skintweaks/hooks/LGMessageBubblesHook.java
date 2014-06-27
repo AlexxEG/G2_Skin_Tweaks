@@ -10,6 +10,8 @@ import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResou
 
 public class LGMessageBubblesHook {
 
+    private static final String PACKAGE = "com.android.mms";
+
     private static final String[] LEFT_BUBBLES = new String[]{
             "bubble_inbox_bg_01",
             "bubble_inbox_bg_02",
@@ -41,18 +43,16 @@ public class LGMessageBubblesHook {
             "message_set_bubble_06"
     };
 
-    private static final String PACKAGE_NAME = "com.android.mms";
-
-    private static SettingsHelper mSettings;
     private static XModuleResources mModRes;
     private static XResources mResources;
+    private static SettingsHelper mSettings;
 
     public static void init(SettingsHelper settings) {
         mSettings = settings;
     }
 
     public static void handleInitPackageResources(InitPackageResourcesParam resparam, XModuleResources modRes) {
-        if (!resparam.packageName.equals(PACKAGE_NAME)) {
+        if (!resparam.packageName.equals(PACKAGE)) {
             return;
         }
 
@@ -84,7 +84,7 @@ public class LGMessageBubblesHook {
         if (selectedBubble == 0)
             return; // Default bubble, do nothing.
 
-        mResources.setReplacement(PACKAGE_NAME, "drawable", bubble, getBubble(selectedBubble, left));
+        mResources.setReplacement(PACKAGE, "drawable", bubble, getBubble(selectedBubble, left));
     }
 
     private static void handleBubbleSet(String bubble) {
@@ -93,7 +93,7 @@ public class LGMessageBubblesHook {
         if (selectedBubble == 0)
             return; // Default bubble, do nothing.
 
-        mResources.setReplacement(PACKAGE_NAME, "drawable", bubble, getBubbleSet(selectedBubble));
+        mResources.setReplacement(PACKAGE, "drawable", bubble, getBubbleSet(selectedBubble));
     }
 
     private static XResForwarder getBubble(int index, boolean left) {

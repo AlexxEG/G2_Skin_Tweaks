@@ -19,12 +19,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class StatusBarHook {
 
-    private static final String PACKAGE_NAME = "com.android.systemui";
-    private static final String LAYOUT_NAME = "status_bar_expanded_setting_layout";
+    private static final String PACKAGE = "com.android.systemui";
 
-    private static ImageView mClearButton;
     private static SettingsHelper mSettings;
 
+    private static ImageView mClearButton;
     private static int mClearDrawableID = -1;
 
     public static void init(SettingsHelper settings) {
@@ -32,26 +31,26 @@ public class StatusBarHook {
     }
 
     public static void handleInitPackageResources(final InitPackageResourcesParam resparam, final XModuleResources modRes) throws Throwable {
-        if (!resparam.packageName.equals(PACKAGE_NAME))
+        if (!resparam.packageName.equals(PACKAGE))
             return;
 
         if (mSettings.getBoolean(Prefs.MOVE_CLEAR_NOTIFICATIONS_BTN, false)) {
-            resparam.res.hookLayout(PACKAGE_NAME, "layout", LAYOUT_NAME, new XC_LayoutInflated() {
+            resparam.res.hookLayout(PACKAGE, "layout", "status_bar_expanded_setting_layout", new XC_LayoutInflated() {
                 @Override
                 public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                     RelativeLayout rl = (RelativeLayout) liparam.view.findViewById(
-                            resparam.res.getIdentifier("setting_layout_normal", "id", PACKAGE_NAME)
+                            resparam.res.getIdentifier("setting_layout_normal", "id", PACKAGE)
                     );
 
                     rl.setVisibility(View.GONE);
                 }
             });
 
-            resparam.res.hookLayout(PACKAGE_NAME, "layout", "status_bar_expanded_header", new XC_LayoutInflated() {
+            resparam.res.hookLayout(PACKAGE, "layout", "status_bar_expanded_header", new XC_LayoutInflated() {
                 @Override
                 public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
                     FrameLayout fl = (FrameLayout) liparam.view.findViewById(
-                            resparam.res.getIdentifier("settings_button_holder", "id", PACKAGE_NAME)
+                            resparam.res.getIdentifier("settings_button_holder", "id", PACKAGE)
                     );
 
                     LinearLayout.LayoutParams flParams = (LinearLayout.LayoutParams) fl.getLayoutParams();
@@ -62,7 +61,7 @@ public class StatusBarHook {
                     fl.setLayoutParams(flParams);
 
                     ImageView settingsButton = (ImageView) liparam.view.findViewById(
-                            resparam.res.getIdentifier("settings_button", "id", PACKAGE_NAME)
+                            resparam.res.getIdentifier("settings_button", "id", PACKAGE)
                     );
                     ImageView clearButton = new ImageView(fl.getContext());
                     FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(settingsButton.getLayoutParams());
@@ -86,12 +85,12 @@ public class StatusBarHook {
     }
 
     public static void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals(PACKAGE_NAME))
+        if (!lpparam.packageName.equals(PACKAGE))
             return;
 
         if (mSettings.getBoolean(Prefs.MOVE_CLEAR_NOTIFICATIONS_BTN, false)) {
             XposedHelpers.findAndHookMethod(
-                    "com.android.systemui.statusbar.phone.PhoneStatusBar",
+                    PACKAGE + ".statusbar.phone.PhoneStatusBar",
                     lpparam.classLoader,
                     "makeStatusBarView",
 

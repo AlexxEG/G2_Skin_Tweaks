@@ -1,13 +1,18 @@
 package com.gmail.alexellingsen.g2skintweaks.hooks;
 
 import android.app.ListActivity;
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextPaint;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -33,8 +38,9 @@ public class LGMessageHook {
     private static final int DEFAULT_MINIMUM_ZOOM = 85;
 
     private static SettingsHelper mSettings;
-    private static LinearLayout frame;
-    private static LinearLayout emptyTextLayout;
+
+    private static LinearLayout mBackgroundFrame;
+    private static LinearLayout mEmptyTextLayout;
 
     public static void init(SettingsHelper settings) {
         mSettings = settings;
@@ -47,23 +53,155 @@ public class LGMessageHook {
         resparam.res.hookLayout(PACKAGE, "layout", "conversation_list_screen", new XC_LayoutInflated() {
             @Override
             public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                frame = (LinearLayout) liparam.view.findViewById(
+                mBackgroundFrame = (LinearLayout) liparam.view.findViewById(
                         liparam.res.getIdentifier("converation_screen", "id", PACKAGE));
-                emptyTextLayout = (LinearLayout) liparam.view.findViewById(
+                mEmptyTextLayout = (LinearLayout) liparam.view.findViewById(
                         liparam.res.getIdentifier("emptyText", "id", PACKAGE));
             }
         });
     }
 
     public static void handleLoadPackage(LoadPackageParam lpparam) {
+        if (Devices.isAnyDevice(Devices.SPRINT, Devices.VERIZON)) {
+            hookPaintSetColorSprint(lpparam);
+        }
+
         if (!lpparam.packageName.equals(PACKAGE))
             return;
 
         setMinFontSize(lpparam);
         hookConversationListItem(lpparam);
-        hookConversationListBackground(lpparam);
+        handleConvoListBackground(lpparam);
         hookMessageListItem(lpparam);
         hookMessagingNotification(lpparam);
+    }
+
+    private static void handleConvoListBackground(LoadPackageParam lpparam) {
+        XC_MethodHook hook = new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                boolean enableConvoListBG = mSettings.getBoolean(
+                        Prefs.ENABLE_CONVERSATION_LIST_BG, false);
+
+                if (enableConvoListBG) {
+                    File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+
+                    if (!folder.exists()) {
+                        return;
+                    }
+
+                    // Create .nomedia file to hide background image from gallery
+                    File noMediaFile = new File(folder, ".nomedia");
+
+                    if (!noMediaFile.exists()) {
+                        boolean success = noMediaFile.createNewFile();
+
+                        if (!success) {
+                            G2SkinTweaks.log("Couldn't create .nomedia file");
+                        }
+                    }
+
+                    File file = new File(folder, "background.png");
+
+                    if (!file.exists()) {
+                        return;
+                    }
+
+                    Drawable d = Drawable.createFromPath(file.getPath());
+
+                    if (d == null) {
+                        return;
+                    }
+
+                    mBackgroundFrame.setBackground(d);
+                }
+
+                boolean enableConvoListBGColor = mSettings.getBoolean(
+                        Prefs.CONVERSATION_LIST_BG_COLOR, false);
+
+                if (enableConvoListBGColor) {
+                    int alpha = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
+                    int color = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_VALUE, Color.TRANSPARENT);
+
+                    // Set the parent view's background color to create a overlay effect.
+                    ((ViewGroup) mBackgroundFrame.getParent()).setBackgroundColor(color);
+
+                    // Setting the background's alpha seems to have the opposite
+                    // effect, 255 being fully transparent. Therefore reverse the number.
+                    alpha = reverseNumber(alpha, 0, 255);
+
+                    if (mBackgroundFrame.getBackground() == null) {
+                        mBackgroundFrame.setBackgroundColor(Color.WHITE);
+                    }
+
+                    mBackgroundFrame.getBackground().setAlpha(alpha);
+                }
+
+                if (enableConvoListBG || enableConvoListBGColor) {
+                    // Remove color from ListView which are blocking background color on Sprint devices.
+                    if (Devices.isAnyDevice(Devices.SPRINT, Devices.VERIZON)) {
+                        ListView lv = ((ListActivity) param.thisObject).getListView();
+
+                        lv.setBackgroundColor(Color.TRANSPARENT);
+
+                        mEmptyTextLayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+            }
+        };
+
+        switch (Devices.getDevice()) {
+            case SPRINT:
+            case VERIZON:
+                handleConvoListBackgroundSprint(lpparam, hook);
+                break;
+            case OTHER:
+                handleConvoListBackgroundOther(lpparam, hook);
+                break;
+        }
+    }
+
+    private static void handleConvoListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
+        XposedHelpers.findAndHookMethod(
+                PACKAGE + ".ui.ConversationListFragment",
+                lpparam.classLoader,
+                "onCreateView",
+                LayoutInflater.class,
+                ViewGroup.class,
+                Bundle.class,
+
+                hook
+        );
+    }
+
+    private static void handleConvoListBackgroundSprint(LoadPackageParam lpparam, XC_MethodHook hook) {
+        XposedHelpers.findAndHookMethod(
+                PACKAGE + ".ui.ConversationList",
+                lpparam.classLoader,
+                "onCreate",
+                Bundle.class,
+
+                hook
+        );
+
+        // If a option that changes background is enable, turn all the
+        // list item transparent so that the background can be seen.
+        XposedHelpers.findAndHookMethod(
+                PACKAGE + ".ui.ConversationListItem",
+                lpparam.classLoader,
+                "updateBackground",
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        // Remove background from each list item so background can be seen.
+                        if (mSettings.getBoolean(Prefs.CONVERSATION_LIST_BG_COLOR, false) ||
+                                mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false)) {
+                            ((View) param.thisObject).setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }
+                }
+        );
     }
 
     private static void hookConversationListItem(LoadPackageParam lpparam) {
@@ -84,11 +222,11 @@ public class LGMessageHook {
 
         try {
             rootClass = XposedHelpers.findClass(
-                    "com.android.mms.ui.ConversationListItem",
+                    PACKAGE + ".ui.ConversationListItem",
                     lpparam.classLoader);
 
             subClass = XposedHelpers.findClass(
-                    "com.android.mms.ui.ConversationListItem$ConversationListItemRight",
+                    PACKAGE + ".ui.ConversationListItem$ConversationListItemRight",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
             XposedBridge.log(e);
@@ -98,9 +236,9 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 subClass,
                 "onDrawBottomline",
-                "android.graphics.Canvas",
-                "int",
-                "boolean",
+                Canvas.class,
+                int.class,
+                boolean.class,
 
                 new XC_MethodHook() {
                     int originalFontColor = -1;
@@ -153,12 +291,12 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 subClass,
                 "onDrawFailedIcon",
-                "android.graphics.Canvas",
-                "int",
-                "boolean",
-                "int",
-                "android.graphics.drawable.Drawable",
-                "int",
+                Canvas.class,
+                int.class,
+                boolean.class,
+                int.class,
+                Drawable.class,
+                int.class,
 
                 new XC_MethodHook() {
                     @Override
@@ -182,11 +320,11 @@ public class LGMessageHook {
 
         try {
             rootClass = XposedHelpers.findClass(
-                    "com.android.mms.ui.ConversationListItem",
+                    PACKAGE + ".ui.ConversationListItem",
                     lpparam.classLoader);
 
             subClass = XposedHelpers.findClass(
-                    "com.android.mms.ui.ConversationListItem$ConversationListItemRight",
+                    PACKAGE + ".ui.ConversationListItem$ConversationListItemRight",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
             XposedBridge.log(e);
@@ -196,7 +334,7 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 subClass,
                 "onDraw",
-                "android.graphics.Canvas",
+                Canvas.class,
 
                 new XC_MethodHook() {
                     int originalFontSmall = -1;
@@ -226,137 +364,12 @@ public class LGMessageHook {
         );
     }
 
-    private static void hookConversationListBackground(LoadPackageParam lpparam) {
-        XC_MethodHook hook = new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                boolean enableConversationListBG = mSettings.getBoolean(
-                        Prefs.ENABLE_CONVERSATION_LIST_BG, false);
-
-                if (enableConversationListBG) {
-                    File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
-
-                    if (!folder.exists()) {
-                        return;
-                    }
-
-                    // Create .nomedia file to hide background image from gallery
-                    File noMediaFile = new File(folder, ".nomedia");
-
-                    if (!noMediaFile.exists()) {
-                        noMediaFile.createNewFile();
-                    }
-
-                    File file = new File(folder, "background.png");
-
-                    if (!file.exists()) {
-                        return;
-                    }
-
-                    Drawable d = Drawable.createFromPath(file.getPath());
-
-                    if (d == null) {
-                        return;
-                    }
-
-                    frame.setBackground(d);
-                }
-
-                boolean enableConversationListBGColor = mSettings.getBoolean(
-                        Prefs.CONVERSATION_LIST_BG_COLOR, false);
-
-                if (enableConversationListBGColor) {
-                    int color = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_VALUE, Color.TRANSPARENT);
-
-                    // Set the parent view's background color to create a overlay effect.
-                    ((ViewGroup) frame.getParent()).setBackgroundColor(color);
-
-                    int alpha = mSettings.getInt(Prefs.CONVERSATION_LIST_BG_COLOR_ALPHA, 255);
-
-                    // Setting the background's alpha seems to have the opposite
-                    // effect, 255 being fully transparent. Therefore reverse the number.
-                    alpha = reverseNumber(alpha, 0, 255);
-
-                    if (frame.getBackground() == null) {
-                        frame.setBackgroundColor(Color.WHITE);
-                    }
-
-                    frame.getBackground().setAlpha(alpha);
-                }
-
-                if (enableConversationListBG || enableConversationListBGColor) {
-                    // Remove color from ListView which are blocking background color on Sprint devices.
-                    if (Devices.isAnyDevice(Devices.SPRINT, Devices.VERIZON)) {
-                        ListView lv = ((ListActivity) param.thisObject).getListView();
-
-                        lv.setBackgroundColor(Color.TRANSPARENT);
-
-                        emptyTextLayout.setBackgroundColor(Color.TRANSPARENT);
-                    }
-                }
-            }
-        };
-
-        switch (Devices.getDevice()) {
-            case SPRINT:
-            case VERIZON:
-                hookConversationListBackgroundSprint(lpparam, hook);
-                break;
-            case OTHER:
-                hookConversationListBackgroundOther(lpparam, hook);
-                break;
-        }
-    }
-
-    private static void hookConversationListBackgroundOther(LoadPackageParam lpparam, XC_MethodHook hook) {
-        XposedHelpers.findAndHookMethod(
-                PACKAGE + ".ui.ConversationListFragment",
-                lpparam.classLoader,
-                "onCreateView",
-                "android.view.LayoutInflater",
-                "android.view.ViewGroup",
-                "android.os.Bundle",
-
-                hook
-        );
-    }
-
-    private static void hookConversationListBackgroundSprint(LoadPackageParam lpparam, XC_MethodHook hook) {
-        XposedHelpers.findAndHookMethod(
-                PACKAGE + ".ui.ConversationList",
-                lpparam.classLoader,
-                "onCreate",
-                "android.os.Bundle",
-
-                hook
-        );
-
-        // If a option that changes background is enable, turn all the
-        // list item transparent so that the background can be seen.
-        XposedHelpers.findAndHookMethod(
-                PACKAGE + ".ui.ConversationListItem",
-                lpparam.classLoader,
-                "updateBackground",
-
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        // Remove background from each list item so background can be seen.
-                        if (mSettings.getBoolean(Prefs.CONVERSATION_LIST_BG_COLOR, false) ||
-                                mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_LIST_BG, false)) {
-                            ((View) param.thisObject).setBackgroundColor(Color.TRANSPARENT);
-                        }
-                    }
-                }
-        );
-    }
-
     private static void hookMessageListItem(final LoadPackageParam lpparam) {
         final Class<?> findClass;
 
         try {
             findClass = XposedHelpers.findClass(
-                    "com.android.mms.ui.MessageListItem",
+                    PACKAGE + ".ui.MessageListItem",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
             XposedBridge.log(e);
@@ -477,12 +490,12 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
-                "com.android.mms.ui.MessageListAdapter$AvatarCache",
-                "com.android.mms.ui.MessageItem",
-                "android.widget.ListView",
-                "int",
-                "boolean",
-                "boolean",
+                PACKAGE + ".ui.MessageListAdapter$AvatarCache",
+                PACKAGE + ".ui.MessageItem",
+                ListView.class,
+                int.class,
+                boolean.class,
+                boolean.class,
 
                 hook
         );
@@ -500,13 +513,13 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "bind",
-                "com.android.mms.ui.MessageListAdapter$AvatarCache",
-                "com.android.mms.ui.MessageItem",
-                "android.widget.ListView",
-                "int",
-                "boolean",
-                "boolean",
-                "java.util.ArrayList",
+                PACKAGE + ".ui.MessageListAdapter$AvatarCache",
+                PACKAGE + ".ui.MessageItem",
+                ListView.class,
+                int.class,
+                boolean.class,
+                boolean.class,
+                ArrayList.class,
 
                 hook
         );
@@ -524,7 +537,7 @@ public class LGMessageHook {
 
         try {
             finalClass = XposedHelpers.findClass(
-                    "com.android.mms.transaction.MessagingNotification",
+                    PACKAGE + ".transaction.MessagingNotification",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
             XposedBridge.log(e);
@@ -535,7 +548,7 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "turnOnBacklight",
-                "android.content.Context",
+                Context.class,
 
                 new XC_MethodHook() {
                     @Override
@@ -570,7 +583,7 @@ public class LGMessageHook {
         final Class<?> finalClass;
         try {
             finalClass = XposedHelpers.findClass(
-                    "com.android.mms.pinchApi.PinchDetector",
+                    PACKAGE + ".pinchApi.PinchDetector",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
             XposedBridge.log(e);
@@ -580,7 +593,7 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "processActionMove",
-                "android.view.MotionEvent",
+                MotionEvent.class,
 
                 new XC_MethodHook() {
                     @Override
@@ -620,7 +633,7 @@ public class LGMessageHook {
         XposedHelpers.findAndHookMethod(
                 finalClass,
                 "processTouchEvent",
-                "android.view.MotionEvent",
+                MotionEvent.class,
 
                 new XC_MethodHook() {
                     @Override
@@ -638,6 +651,60 @@ public class LGMessageHook {
                         } else {
                             if (min != DEFAULT_MINIMUM_ZOOM) {
                                 XposedHelpers.setIntField(param.thisObject, "MIN_ZOOM", DEFAULT_MINIMUM_ZOOM);
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+    private static void hookPaintSetColorSprint(LoadPackageParam lpparam) {
+        final Class<?> findClass;
+
+        try {
+            findClass = XposedHelpers.findClass(
+                    "android.graphics.Paint",
+                    lpparam.classLoader);
+        } catch (XposedHelpers.ClassNotFoundError e) {
+            return;
+        }
+
+        /*Has to hook this method since code can't be injected in middle of a method.
+          Sprint's Messenger app draws top & bottom line in same method, unlike international version,
+          therefore normally only allowing one color.*/
+
+        XposedHelpers.findAndHookMethod(
+                findClass,
+                "setColor",
+                int.class,
+
+                new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        if (!mSettings.getBoolean(Prefs.ENABLE_CONVERSATION_TEXT_COLOR, false)) {
+                            return;
+                        }
+
+                        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+
+                        for (StackTraceElement element : elements) {
+                            if (element.getClassName().equals("com.android.mms.ui.ConversationListItem$ConversationListItemRight")
+                                    && element.getMethodName().equals("onDraw")) {
+                                switch (element.getLineNumber()) {
+                                    case 789: // Top line
+                                        param.args[0] = mSettings.getInt(Prefs.CONVERSATION_COLOR_TOP, Color.BLACK);
+                                        break;
+                                    case 853: // Bottom line
+                                        param.args[0] = mSettings.getInt(Prefs.CONVERSATION_COLOR_BOTTOM, Color.BLACK);
+                                        break;
+                                    // These are not used atm.
+                                    /*case 718:
+                                        param.args[0] = Color.RED;
+                                        break;*/
+                                    /*case 939: //
+                                        param.args[0] = Color.BLUE;
+                                        break;*/
+                                }
                             }
                         }
                     }

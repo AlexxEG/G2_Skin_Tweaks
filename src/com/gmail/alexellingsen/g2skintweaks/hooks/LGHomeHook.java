@@ -18,7 +18,7 @@ public class LGHomeHook {
     private static final String PACKAGE = "com.lge.launcher2";
 
     private static SettingsHelper mSettings;
-    private static ImageView icon;
+    private static ImageView mIcon;
 
     public static void init(SettingsHelper settings) {
         mSettings = settings;
@@ -31,7 +31,7 @@ public class LGHomeHook {
         resparam.res.hookLayout(PACKAGE, "layout", "lg_appinfo", new XC_LayoutInflated() {
             @Override
             public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
-                icon = (ImageView) liparam.view.findViewById(resparam.res.getIdentifier("app_icon", "id", PACKAGE));
+                mIcon = (ImageView) liparam.view.findViewById(resparam.res.getIdentifier("app_icon", "id", PACKAGE));
             }
         });
     }
@@ -55,7 +55,7 @@ public class LGHomeHook {
                             // Get the intent from mAppInfo to get the app's package.
                             final Intent intent = (Intent) XposedHelpers.getObjectField(mAppInfo, "intent");
 
-                            icon.setOnClickListener(new View.OnClickListener() {
+                            mIcon.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent appInfoIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
