@@ -13,6 +13,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPackage, IXposedHookInitPackageResources {
 
+    public static final String TAG = "G2SkinTweaks";
+
     private static String MODULE_PATH = null;
     private static SettingsHelper mSettings;
 
@@ -24,7 +26,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         }
 
         if (debug) {
-            XposedBridge.log(String.format("G2SkinTweaks: %s", text));
+            XposedBridge.log(String.format("%s: %s", TAG, text));
         }
     }
 

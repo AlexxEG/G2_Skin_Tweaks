@@ -51,7 +51,7 @@ public class RootFunctions {
                 throw new Exception("Wierd result: " + result);
             }
         } catch (Exception e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
 
         return false;
@@ -65,7 +65,7 @@ public class RootFunctions {
                 try {
                     Thread.sleep(duration);
                 } catch (InterruptedException e) {
-                    Log.e("G2SkinTweaks", "Error", e);
+                    Log.e(G2SkinTweaks.TAG, "Error", e);
                 }
                 turnOffRearPowerLed(context);
             }
@@ -83,7 +83,7 @@ public class RootFunctions {
                 sb.append((char) b);
             }
         } catch (IOException e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
 
         return sb.toString();
@@ -93,7 +93,7 @@ public class RootFunctions {
         try {
             execute(null);
         } catch (Exception e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 
@@ -105,7 +105,7 @@ public class RootFunctions {
         try {
             execute(cmds);
         } catch (Throwable e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 
@@ -132,7 +132,7 @@ public class RootFunctions {
         try {
             execute(cmds);
         } catch (Exception e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 
@@ -159,14 +159,14 @@ public class RootFunctions {
         try {
             execute(cmds);
         } catch (Exception e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 
     public static void updatePowerLedPaths(Context context) {
         ArrayList<String> cmds = new ArrayList<String>();
 
-        Log.d("G2SkinTweaks", "Updating cached paths");
+        Log.d(G2SkinTweaks.TAG, "Updating cached paths");
 
         cmds.add("find_left=$(find /sys/devices -type d -name button-backlight1)");
         cmds.add("find_right=$(find /sys/devices -type d -name button-backlight2)");
@@ -183,7 +183,7 @@ public class RootFunctions {
             settings.putString(Prefs.CACHED_BACKLIGHT1_PATH, paths[0]);
             settings.putString(Prefs.CACHED_BACKLIGHT2_PATH, paths[1]);
         } catch (Exception e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 
@@ -195,7 +195,7 @@ public class RootFunctions {
         try {
             execute(cmds);
         } catch (Throwable e) {
-            Log.e("G2SkinTweaks", "Error", e);
+            Log.e(G2SkinTweaks.TAG, "Error", e);
         }
     }
 }
