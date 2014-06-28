@@ -2,9 +2,9 @@ package com.gmail.alexellingsen.g2skintweaks.hooks;
 
 import android.view.View;
 import android.widget.ImageView;
+import com.gmail.alexellingsen.g2skintweaks.G2SkinTweaks;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 
@@ -67,7 +67,7 @@ public class LGSettings {
                     }
             );
         } catch (Throwable e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
         }
     }
 
@@ -88,7 +88,7 @@ public class LGSettings {
                     }
             );
         } catch (Throwable e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
         }
     }
 }

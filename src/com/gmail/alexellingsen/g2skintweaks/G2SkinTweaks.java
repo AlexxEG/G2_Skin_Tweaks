@@ -2,6 +2,7 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
+import android.util.Log;
 import com.gmail.alexellingsen.g2skintweaks.hooks.*;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
@@ -18,16 +19,40 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     private static String MODULE_PATH = null;
     private static SettingsHelper mSettings;
 
+    /**
+     * Writes a message to the Xposed error log regardless if debug is enabled within application.
+     *
+     * @param text The log message.
+     */
     public static void log(String text) {
-        boolean debug = false;
+        log(text, false);
+    }
 
-        if (mSettings != null) {
+    /**
+     * Writes a message to the Xposed error log. If 'ifEnabled' is TRUE, check if debug is enabled first.
+     *
+     * @param text      The log message.
+     * @param ifEnabled Only output to log if debug is enabled.
+     */
+    public static void log(String text, boolean ifEnabled) {
+        boolean debug = ifEnabled;
+
+        if (debug && mSettings != null) {
             debug = mSettings.getBoolean(Prefs.ENABLE_DEBUGGING, false);
         }
 
         if (debug) {
             XposedBridge.log(String.format("%s: %s", TAG, text));
         }
+    }
+
+    /**
+     * Logs a stack trace to the Xposed error log regardless if debug is enabled within application.
+     *
+     * @param t The Throwable object for the stack trace.
+     */
+    public static void log(Throwable t) {
+        log(Log.getStackTraceString(t), false);
     }
 
     @Override

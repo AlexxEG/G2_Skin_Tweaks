@@ -23,7 +23,6 @@ import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
@@ -97,7 +96,7 @@ public class LGMessageHook {
                         boolean success = noMediaFile.createNewFile();
 
                         if (!success) {
-                            G2SkinTweaks.log("Couldn't create .nomedia file");
+                            G2SkinTweaks.log("Couldn't create .nomedia file", true);
                         }
                     }
 
@@ -229,7 +228,7 @@ public class LGMessageHook {
                     PACKAGE + ".ui.ConversationListItem$ConversationListItemRight",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
             return;
         }
 
@@ -327,7 +326,7 @@ public class LGMessageHook {
                     PACKAGE + ".ui.ConversationListItem$ConversationListItemRight",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
             return;
         }
 
@@ -372,8 +371,7 @@ public class LGMessageHook {
                     PACKAGE + ".ui.MessageListItem",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
-
+            G2SkinTweaks.log(e);
             return;
         }
 
@@ -447,7 +445,7 @@ public class LGMessageHook {
                         tvDate.setTextColor(color);
                     }
                 } catch (Exception e) {
-                    XposedBridge.log(e);
+                    G2SkinTweaks.log(e);
                 }
             }
 
@@ -540,8 +538,7 @@ public class LGMessageHook {
                     PACKAGE + ".transaction.MessagingNotification",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
-
+            G2SkinTweaks.log(e);
             return;
         }
 
@@ -586,7 +583,7 @@ public class LGMessageHook {
                     PACKAGE + ".pinchApi.PinchDetector",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
             throw e;
         }
 
@@ -600,7 +597,7 @@ public class LGMessageHook {
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
 
-                        G2SkinTweaks.log("'processActionMove' ran");
+                        G2SkinTweaks.log("'processActionMove' ran", true);
 
                         if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             int minimumZoom = mSettings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);
@@ -626,7 +623,7 @@ public class LGMessageHook {
                     "com.lge.mms.pinchApi.PinchDetector",
                     lpparam.classLoader);
         } catch (XposedHelpers.ClassNotFoundError e) {
-            XposedBridge.log(e);
+            G2SkinTweaks.log(e);
             throw e;
         }
 
@@ -640,7 +637,7 @@ public class LGMessageHook {
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                         int min = XposedHelpers.getIntField(param.thisObject, "MIN_ZOOM");
 
-                        G2SkinTweaks.log("'processTouchEvent' ran");
+                        G2SkinTweaks.log("'processTouchEvent' ran", true);
 
                         if (mSettings.getBoolean(Prefs.ENABLE_SMALLER_TEXT_MESSAGES, false)) {
                             int minimumZoom = mSettings.getInt(Prefs.MINIMUM_ZOOM_LEVEL_MESSAGES, 30);

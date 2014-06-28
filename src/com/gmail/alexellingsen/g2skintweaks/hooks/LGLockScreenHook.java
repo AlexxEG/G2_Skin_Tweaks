@@ -8,11 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
+import com.gmail.alexellingsen.g2skintweaks.G2SkinTweaks;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
 import com.gmail.alexellingsen.g2skintweaks.R;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -55,8 +55,8 @@ public class LGLockScreenHook {
                     lpparam.classLoader
             );
         } catch (Throwable e) {
-            XposedBridge.log(e);
-            XposedBridge.log("Couldn't find class");
+            G2SkinTweaks.log(e);
+            G2SkinTweaks.log("Couldn't find class");
             return;
         }
 
@@ -84,8 +84,8 @@ public class LGLockScreenHook {
                     lpparam.classLoader
             );
         } catch (Throwable e) {
-            XposedBridge.log(e);
-            XposedBridge.log("Couldn't find class");
+            G2SkinTweaks.log(e);
+            G2SkinTweaks.log("Couldn't find class");
             return;
         }
 
