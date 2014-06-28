@@ -24,6 +24,6 @@
 
     <!-- Hex code input strings. -->
     <string name="color_picker_hex_hint">Hex color code</string>
-    <string name="color_picker_parse_error">Enter hex code couldn\'t be parsed to color.</string>
+    <string name="color_picker_parse_error">Entered hex code couldn\'t be parsed to a color.</string>
 
 </resources>
