@@ -48,7 +48,7 @@ public class RootFunctions {
             } else if (result.trim().equals("Not found")) {
                 return false;
             } else {
-                throw new Exception("Wierd result: " + result);
+                throw new Exception("Weird result: " + result);
             }
         } catch (Exception e) {
             Log.e(G2SkinTweaks.TAG, "Error", e);
