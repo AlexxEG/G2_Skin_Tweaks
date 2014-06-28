@@ -3,8 +3,8 @@ package com.gmail.alexellingsen.g2skintweaks;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
-import de.robv.android.xposed.XposedBridge;
 
 public class UpdateLedPaths extends BroadcastReceiver {
 
@@ -23,10 +23,7 @@ public class UpdateLedPaths extends BroadcastReceiver {
                 @Override
                 public void run() {
                     RootFunctions.updatePowerLedPaths(finalContext);
-
-                    if (settings.getBoolean(Prefs.ENABLE_DEBUGGING, false)) {
-                        XposedBridge.log("Updated LED paths.");
-                    }
+                    Log.e(G2SkinTweaks.TAG, "Updated LED paths");
                 }
             }).start();
         }
