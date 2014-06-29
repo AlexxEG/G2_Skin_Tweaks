@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.*;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -153,7 +154,11 @@ public class MainActivity extends PreferenceActivity {
 
         if (!noMediaFile.exists()) {
             try {
-                noMediaFile.createNewFile();
+                boolean success = noMediaFile.createNewFile();
+
+                if (!success) {
+                    Log.d(G2SkinTweaks.TAG, "Couldn't create .nomedia file");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
