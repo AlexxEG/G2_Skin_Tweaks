@@ -65,9 +65,7 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
         // Output device model for debugging purposes
         G2SkinTweaks.log("Device: " + Devices.getDevice() + " (" + Build.MODEL + ")");
 
-        boolean enableReplaceSwitch = mSettings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
-
-        if (enableReplaceSwitch) {
+        if (mSettings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false)) {
             String packageName = "com.lge.internal";
             XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, null);
 
