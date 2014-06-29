@@ -32,7 +32,7 @@ public class MainActivity extends PreferenceActivity {
     private static final String XPOSED_INSTALLER_PACKAGE = "de.robv.android.xposed.installer";
 
     private MainFragment mainFragment;
-    private static SettingsHelper settings = null;
+    private SettingsHelper settings = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +114,7 @@ public class MainActivity extends PreferenceActivity {
         getApplicationContext().sendBroadcast(addIntent);
     }
 
-    private static void pickImage(Activity activity) {
+    private void pickImage(Activity activity) {
         if (!prepareFolder()) {
             Toast.makeText(activity, "Couldn't create folder.", Toast.LENGTH_SHORT).show();
             return;
@@ -125,7 +125,7 @@ public class MainActivity extends PreferenceActivity {
         activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_IMAGE);
     }
 
-    private static void cropImage(Activity activity, Uri data) {
+    private void cropImage(Activity activity, Uri data) {
         Intent intent = new Intent("com.android.camera.action.CROP");
 
         intent.setData(data);
@@ -142,7 +142,7 @@ public class MainActivity extends PreferenceActivity {
         activity.startActivityForResult(intent, CROP_IMAGE);
     }
 
-    private static boolean prepareFolder() {
+    private boolean prepareFolder() {
         File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
 
         if (!folder.exists() && !folder.mkdir()) {
@@ -168,7 +168,7 @@ public class MainActivity extends PreferenceActivity {
         return true;
     }
 
-    public static class MainFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+    private class MainFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
         public MainFragment() {
         }
@@ -312,7 +312,7 @@ public class MainActivity extends PreferenceActivity {
             colorPicker.show(getFragmentManager(), "cal");
         }
 
-        public void updateBackgroundImage() {
+        private void updateBackgroundImage() {
             PreviewImagePreference preference = (PreviewImagePreference) findPreference(CONVERSATION_LIST_BG);
 
             Drawable drawable = getConversationListBackground();
