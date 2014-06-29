@@ -2,8 +2,10 @@ package com.gmail.alexellingsen.g2skintweaks;
 
 import android.content.res.XModuleResources;
 import android.content.res.XResources;
+import android.os.Build;
 import android.util.Log;
 import com.gmail.alexellingsen.g2skintweaks.hooks.*;
+import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -59,6 +61,9 @@ public class G2SkinTweaks implements IXposedHookZygoteInit, IXposedHookLoadPacka
     public void initZygote(StartupParam startupParam) throws Throwable {
         MODULE_PATH = startupParam.modulePath;
         mSettings = new SettingsHelper();
+
+        // Output device model for debugging purposes
+        G2SkinTweaks.log("Device: " + Devices.getDevice() + " (" + Build.MODEL + ")");
 
         boolean enableReplaceSwitch = mSettings.getBoolean(Prefs.ENABLE_REPLACE_SWITCH, false);
 
