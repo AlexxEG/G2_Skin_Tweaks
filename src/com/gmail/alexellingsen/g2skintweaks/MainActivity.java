@@ -202,7 +202,7 @@ public class MainActivity extends PreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.startsWith("pref_custom_bubble_")) {
+            if (key.startsWith(CUSTOM_BUBBLE_START)) {
                 // Display the select bubble in summary
                 String[] keys = new String[]{Prefs.CUSTOM_BUBBLE_1, Prefs.CUSTOM_BUBBLE_2, Prefs.CUSTOM_BUBBLE_3,
                         Prefs.CUSTOM_BUBBLE_4, Prefs.CUSTOM_BUBBLE_5, Prefs.CUSTOM_BUBBLE_6};
@@ -216,6 +216,7 @@ public class MainActivity extends PreferenceActivity {
         }
 
         private final String CONVERSATION_LIST_BG = "set_conversation_list_bg";
+        private final String CUSTOM_BUBBLE_START = "pref_custom_bubble_";
         private final String REBOOT = "reboot";
         private final String REQUEST_ROOT = "request_root";
         private final String SOFT_REBOOT = "soft_reboot";
