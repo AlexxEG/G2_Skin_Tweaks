@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.gmail.alexellingsen.g2skintweaks.preference.PreviewColorPreference;
 import com.gmail.alexellingsen.g2skintweaks.preference.PreviewImagePreference;
+import com.gmail.alexellingsen.g2skintweaks.utils.Common;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerDialog;
 import it.gmariotti.android.colorpicker.calendarstock.ColorPickerSwatch;
@@ -135,15 +136,16 @@ public class MainActivity extends PreferenceActivity {
         intent.putExtra("aspectY", 22);
         intent.putExtra("scale", true);
 
-        Uri path = Uri.fromFile(new File(Environment.getExternalStorageDirectory().toString() +
-                "/G2SkinTweaks/background.png"));
+        String path = String.format("%s/%s/%s", Environment.getExternalStorageDirectory().toString(),
+                Common.BACKGROUND_FOLDER, Common.BACKGROUND_FILE);
+        Uri uri = Uri.fromFile(new File(path));
 
-        intent.putExtra("output", path);
+        intent.putExtra("output", uri);
         activity.startActivityForResult(intent, CROP_IMAGE);
     }
 
     private boolean prepareFolder() {
-        File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+        File folder = new File(Environment.getExternalStorageDirectory(), Common.BACKGROUND_FOLDER);
 
         if (!folder.exists() && !folder.mkdir()) {
             // Folder doesn't exists & can't create it.
@@ -263,13 +265,13 @@ public class MainActivity extends PreferenceActivity {
         }
 
         private Drawable getConversationListBackground() {
-            File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+            File folder = new File(Environment.getExternalStorageDirectory(), Common.BACKGROUND_FOLDER);
 
             if (!folder.exists()) {
                 return null;
             }
 
-            File file = new File(folder, "background.png");
+            File file = new File(folder, Common.BACKGROUND_FILE);
 
             if (!file.exists()) {
                 return null;

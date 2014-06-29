@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.gmail.alexellingsen.g2skintweaks.G2SkinTweaks;
 import com.gmail.alexellingsen.g2skintweaks.Prefs;
+import com.gmail.alexellingsen.g2skintweaks.utils.Common;
 import com.gmail.alexellingsen.g2skintweaks.utils.Devices;
 import com.gmail.alexellingsen.g2skintweaks.utils.SettingsHelper;
 import de.robv.android.xposed.XC_MethodHook;
@@ -83,7 +84,7 @@ public class LGMessageHook {
                         Prefs.ENABLE_CONVERSATION_LIST_BG, false);
 
                 if (enableConvoListBG) {
-                    File folder = new File(Environment.getExternalStorageDirectory(), "G2SkinTweaks");
+                    File folder = new File(Environment.getExternalStorageDirectory(), Common.BACKGROUND_FOLDER);
 
                     if (!folder.exists()) {
                         return;
@@ -100,7 +101,7 @@ public class LGMessageHook {
                         }
                     }
 
-                    File file = new File(folder, "background.png");
+                    File file = new File(folder, Common.BACKGROUND_FILE);
 
                     if (!file.exists()) {
                         return;
