@@ -250,16 +250,16 @@ public class MainActivity extends PreferenceActivity {
         }
 
         private int[] getColorChoice() {
-            int[] mColorChoices = null;
-            String[] color_array = getResources().getStringArray(R.array.default_color_choice_values);
+            int[] choices = null;
+            String[] array = getResources().getStringArray(R.array.default_color_choice_values);
 
-            if (color_array != null && color_array.length > 0) {
-                mColorChoices = new int[color_array.length];
-                for (int i = 0; i < color_array.length; i++) {
-                    mColorChoices[i] = Color.parseColor(color_array[i]);
+            if (array != null && array.length > 0) {
+                choices = new int[array.length];
+                for (int i = 0; i < array.length; i++) {
+                    choices[i] = Color.parseColor(array[i]);
                 }
             }
-            return mColorChoices;
+            return choices;
         }
 
         private Drawable getConversationListBackground() {
